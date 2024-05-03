@@ -4,7 +4,7 @@ import allProjects from "../../data/projects/index";
 import { Navigation } from "../components/nav";
 import { Card } from "../components/card";
 import { Article } from "./article";
-import { Redis } from "@upstash/redis";
+// import { Redis } from "@upstash/redis";
 import { Eye } from "lucide-react";
 
 export const revalidate = 60;
@@ -13,7 +13,7 @@ export default async function ProjectsPage() {
 
   const featured = allProjects.find((project) => project.slug === "indus-web")!;
   const top2 = allProjects.find((project) => project.slug === "indus-premium")!;
-  const top3 = allProjects.find((project) => project.slug === "indus-crm")!;
+  const top3 = allProjects.find((project) => project.slug === "indus-cms")!;
   const sorted = allProjects
     .filter((p) => p.published)
     .filter(
