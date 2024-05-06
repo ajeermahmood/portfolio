@@ -4,30 +4,25 @@ import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 
 type Props = {
-	project: {
-		url?: string;
-		title: string;
-		description: string;
-		repository?: string;
-	};
+	project: any;
 
-	views: number;
+	views: any;
 };
 export const Header: React.FC<Props> = ({ project, views }) => {
 	const ref = useRef<HTMLElement>(null);
 	const [isIntersecting, setIntersecting] = useState(true);
 
 	const links: { label: string; href: string }[] = [];
-	if (project.repository) {
+	if (project.links.github) {
 		links.push({
 			label: "GitHub",
-			href: `https://github.com/${project.repository}`,
+			href: `https://github.com/ajeermahmood/${project.links.github}`,
 		});
 	}
-	if (project.url) {
+	if (project.links.website) {
 		links.push({
 			label: "Website",
-			href: project.url,
+			href: `https://${project.links.website}`,
 		});
 	}
 	useEffect(() => {
@@ -62,12 +57,12 @@ export const Header: React.FC<Props> = ({ project, views }) => {
 									: "text-zinc-600 hover:text-zinc-900"
 							} `}
 						>
-							<Eye className="w-5 h-5" />{" "}
+							{/* <Eye className="w-5 h-5" />{" "}
 							{Intl.NumberFormat("en-US", { notation: "compact" }).format(
 								views,
-							)}
+							)} */}
 						</span>
-						<Link target="_blank" href="https://twitter.com/chronark_">
+						{/* <Link target="_blank" href="https://twitter.com/chronark_">
 							<Twitter
 								className={`w-6 h-6 duration-200 hover:font-medium ${
 									isIntersecting
@@ -75,8 +70,8 @@ export const Header: React.FC<Props> = ({ project, views }) => {
 										: "text-zinc-600 hover:text-zinc-900"
 								} `}
 							/>
-						</Link>
-						<Link target="_blank" href="https://github.com/chronark">
+						</Link> */}
+						<Link target="_blank" href="https://github.com/ajeermahmood">
 							<Github
 								className={`w-6 h-6 duration-200 hover:font-medium ${
 									isIntersecting
@@ -99,14 +94,14 @@ export const Header: React.FC<Props> = ({ project, views }) => {
 					</Link>
 				</div>
 			</div>
-			<div className="container mx-auto relative isolate overflow-hidden  py-24 sm:py-32">
+			<div className="container mx-auto relative isolate overflow-hidden py-20 sm:py-20">
 				<div className="mx-auto max-w-7xl px-6 lg:px-8 text-center flex flex-col items-center">
 					<div className="mx-auto max-w-2xl lg:mx-0">
 						<h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl font-display">
 							{project.title}
 						</h1>
 						<p className="mt-6 text-lg leading-8 text-zinc-300">
-							{project.description}
+							{project.overview}
 						</p>
 					</div>
 

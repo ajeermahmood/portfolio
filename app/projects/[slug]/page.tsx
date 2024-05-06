@@ -1,10 +1,10 @@
 import { notFound } from "next/navigation";
-import { allProjects } from "contentlayer/generated";
+import allProjects from "../../../data/projects/index";
 import { Mdx } from "@/app/components/mdx";
 import { Header } from "./header";
 import "./mdx.css";
 import { ReportView } from "./view";
-import { Redis } from "@upstash/redis";
+import Image from "next/image";
 
 export const revalidate = 60;
 
@@ -13,8 +13,6 @@ type Props = {
     slug: string;
   };
 };
-
-const redis = Redis.fromEnv();
 
 export async function generateStaticParams(): Promise<Props["params"][]> {
   return allProjects
@@ -32,16 +30,36 @@ export default async function PostPage({ params }: Props) {
     notFound();
   }
 
-  const views =
-    (await redis.get<number>(["pageviews", "projects", slug].join(":"))) ?? 0;
+  const views = allProjects;
 
   return (
     <div className="bg-zinc-50 min-h-screen">
       <Header project={project} views={views} />
-      <ReportView slug={project.slug} />
+      {/* <ReportView slug={project.slug} /> */}
 
       <article className="px-4 py-12 mx-auto prose prose-zinc prose-quoteless">
-        <Mdx code={project.body.code} />
+        {/* <Mdx code={project.description} /> */}
+        {project.images.length != 0 ? (
+          <h6 className="mt-0 scroll-m-20 text-base font-semibold tracking-tight">
+            Screenshots:
+          </h6>
+        ) : (
+          <></>
+        )}
+        {project.images.length != 0 ? (
+          project.images.map((img, i) => (
+            <Image
+              className="rounded-md border border-zinc-200 select-none"
+              key={i}
+              alt=""
+              src={`/images/${img}`}
+              width={1115}
+              height={800}
+            />
+          ))
+        ) : (
+          <></>
+        )}
       </article>
     </div>
   );
