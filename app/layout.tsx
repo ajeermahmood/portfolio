@@ -6,23 +6,23 @@ import { Analytics } from "./components/analytics";
 
 export const metadata: Metadata = {
   title: {
-    default: "chronark.com",
-    template: "%s | chronark.com",
+    default: "ajeer-portfolio",
+    template: "%s | ajeer-portfolio",
   },
-  description: "Co-founder of unkey.dev and founder of planetfall.io",
+  description: "Official portfolio of Ajeer Mohammed",
   openGraph: {
-    title: "chronark.com",
+    title: "ajeer-portfolio",
     description:
-      "Co-founder of unkey.dev and founder of planetfall.io",
-    url: "https://chronark.com",
-    siteName: "chronark.com",
-    images: [
-      {
-        url: "https://chronark.com/og.png",
-        width: 1920,
-        height: 1080,
-      },
-    ],
+      "Official portfolio of Ajeer Mohammed",
+    url: "https://ajeer-portfolio.vercel.app/",
+    siteName: "ajeer-portfolio",
+    // images: [
+    //   {
+    //     url: "https://chronark.com/og.png",
+    //     width: 1920,
+    //     height: 1080,
+    //   },
+    // ],
     locale: "en-US",
     type: "website",
   },
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     },
   },
   twitter: {
-    title: "Chronark",
+    title: "Ajeer Mohammed",
     card: "summary_large_image",
   },
   icons: {
