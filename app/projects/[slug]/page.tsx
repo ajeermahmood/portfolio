@@ -1,9 +1,9 @@
+import CodeComponent from "@/app/components/codeComponent";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import allProjects from "../../../data/projects/index";
 import { Header } from "./header";
 import "./mdx.css";
-import PythonCode from "@/app/components/pythonCode";
 
 export const revalidate = 60;
 
@@ -49,6 +49,18 @@ export default async function PostPage({ params }: Props) {
 
       <article className="px-4 py-12 mx-auto prose prose-zinc prose-quoteless">
         {/* <Mdx code={project.description} /> */}
+
+        {project.description != "" ? (
+          <div>
+            <h6 className="mt-0 scroll-m-20 text-base font-semibold tracking-tight">
+              {project.description}
+            </h6>
+            <br />
+          </div>
+        ) : (
+          <></>
+        )}
+
         {project.images.length != 0 ? (
           <h6 className="mt-0 scroll-m-20 text-base font-semibold tracking-tight">
             Screenshots:
@@ -56,19 +68,41 @@ export default async function PostPage({ params }: Props) {
         ) : (
           <></>
         )}
-        {project.images.length != 0 ? (
-          project.images.map((img, i) => (
-            <Image
-              className="rounded-md border border-zinc-200 select-none"
-              key={i}
-              alt=""
-              src={`/images/${img}`}
-              width={1115}
-              height={800}
-            />
-          ))
+
+        {project.mobile ? (
+          <div className="flex flex-wrap justify-between">
+            {project.images.length != 0 ? (
+              project.images.map((img, i) => (
+                <Image
+                  className="rounded-md border border-zinc-200 select-none max-w-72"
+                  key={i}
+                  alt=""
+                  src={`/images/${img}`}
+                  width={591}
+                  height={1280}
+                />
+              ))
+            ) : (
+              <></>
+            )}
+          </div>
         ) : (
-          <></>
+          <div>
+            {project.images.length != 0 ? (
+              project.images.map((img, i) => (
+                <Image
+                  className="rounded-md border border-zinc-200 select-none"
+                  key={i}
+                  alt=""
+                  src={`/images/${img}`}
+                  width={1115}
+                  height={800}
+                />
+              ))
+            ) : (
+              <></>
+            )}
+          </div>
         )}
 
         {project.code?.length != 0 ? (
@@ -81,10 +115,18 @@ export default async function PostPage({ params }: Props) {
                 <h5 className="mt-0 scroll-m-20 text-lg font-semibold tracking-tight">
                   {i + 1}. {c.title}
                 </h5>
-                {/* <pre>
-                  <code>{c.code}</code>
-                </pre> */}
-                <PythonCode code={c.code} />
+                {c.features.length != 0 ? (
+                  <ul>
+                    {c.features.map((f) => (
+                      <li>
+                        <b>{f.title}:</b> {f.desc}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <></>
+                )}
+                <CodeComponent code={c.code} lang={c.lang} />
                 <h6 className="mt-8 scroll-m-20 text-base font-semibold tracking-tight">
                   {c.description}
                 </h6>

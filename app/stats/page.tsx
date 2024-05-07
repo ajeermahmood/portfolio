@@ -5,12 +5,12 @@ import { Card } from "../components/card";
 import Link from "next/link";
 
 const socials = [
-  {
-    icon: <Mail size={20} />,
-    href: "mailto:ajeermahmood@outlook.com",
-    label: "Email",
-    handle: "ajeermahmood@outlook.com",
-  },
+  // {
+  //   icon: <Mail size={20} />,
+  //   href: "mailto:ajeermahmood@outlook.com",
+  //   label: "Email",
+  //   handle: "ajeermahmood@outlook.com",
+  // },
   {
     icon: <Linkedin size={20} />,
     href: "https://linkedin.com/in/ajeermahmood/",
@@ -87,7 +87,7 @@ export default function Example() {
         </h2>
       </div>
       <div className="container block text-center pb-10 px-4 mx-auto max-w-screen-lg">
-        <div className="grid w-full grid-cols-1 gap-7 mx-auto sm:grid-cols-3 lg:gap-8">
+        <div className="grid w-full grid-cols-1 gap-7 mx-auto sm:grid-cols-2 lg:gap-8">
           {socials.map((s) => (
             <Card>
               <Link
