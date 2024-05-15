@@ -645,6 +645,67 @@ module.exports = [
     published: true,
     date: "2024-04-02",
   },
+  ////////////////////////////////
+  {
+    slug: "object-detection",
+    title: "Real-Time Object Detection (YOLO)",
+    overview:
+      "This project showcases a real-time object detection web application built using Python, Flask, Socket.IO, and OpenCV. Leveraging the YOLO (You Only Look Once) deep learning framework, the application can detect objects within images sent from a client interface in real-time. The backend, developed in Python, processes the images, detects objects, and sends the results back to the client via Socket.IO. The client interface, implemented using Next.js and Firebase for authentication, provides a seamless user experience for interacting with the object detection functionality. This project demonstrates the integration of machine learning models into web applications for real-time processing and interaction.",
+    links: {
+      website: "",
+      github: "object_detector_py",
+    },
+    images: [],
+    code: [
+      {
+        title: "Backend Python Usage Overview: Real-Time Object Detection",
+        description: `Utilizing Flask and Flask-SocketIO, this Python backend integrates a YOLO (You Only Look Once) deep learning model with OpenCV for real-time object detection. Upon receiving base64-encoded image data via WebSocket connections, the backend decodes, processes, and analyzes the images. Detected objects, complete with bounding box coordinates and confidence scores, are promptly communicated back to the client interface via Socket.IO for instantaneous visualization. Robust error handling ensures smooth operation, while performance optimizations, including image resizing and asynchronous processing, enhance scalability and responsiveness.`,
+        features: [],
+        code: `from flask import Flask, jsonify, request\nfrom flask_socketio import SocketIO, emit\nimport cv2\nimport numpy as np
+        \n# from flask_cors import CORS\nimport base64\nfrom PIL import Image\nimport io\nimport json
+        \napp = Flask(__name__)\napp.config["SECRET_KEY"] = "secret"\nsocketio = SocketIO(app)\nsocketio.init_app(app, cors_allowed_origins="*")\n# CORS(app, origins="http://localhost:4200")
+        \n# Load YOLO\nnet = cv2.dnn.readNet("assets/yolov3.weights", "assets/yolov3.cfg")\nclasses = []\nwith open("assets/coco.names", "r") as f:\n     classes = [line.strip() for line in f.readlines()]\nlayer_names = net.getLayerNames()\noutput_layers = [layer_names[i - 1] for i in net.getUnconnectedOutLayers()]
+        \n# Function to perform object detection on an image\ndef detect_objects(image):\n# Resize and normalize image\n    img = cv2.resize(image, None, fx=0.4, fy=0.4)\n    height, width, channels = img.shape
+        \n    # Detect objects\n    blob = cv2.dnn.blobFromImage(img, 0.00392, (416, 416), (0, 0, 0), True, crop=False)\n    net.setInput(blob)\n    outs = net.forward(output_layers)
+        \n    # Process detections\n    class_names_detected = []\n    confidences = []\n    boxes = []
+        \n    for out in outs:\n        for detection in out:\n            scores = detection[5:]\n            class_id = np.argmax(scores)\n            confidence = scores[class_id]
+        \n            if confidence > 0.5:\n                # Object detected\n                center_x = int(detection[0] * width)\n                center_y = int(detection[1] * height)\n                w = int(detection[2] * width)\n                h = int(detection[3] * height)
+        \n                # Rectangle coordinates\n                x = int(center_x - w / 2)\n                y = int(center_y - h / 2)
+        \n                boxes.append([x, y, w, h])\n                confidences.append(float(confidence))
+        \n                if classes[class_id] not in class_names_detected:\n                   class_names_detected.append(classes[class_id])
+        \n    return boxes, confidences, class_names_detected
+        \n# Take in base64 string and return PIL image\ndef stringToImage(base64_string):\n    imgdata = base64.b64decode(base64_string)\n    return Image.open(io.BytesIO(imgdata))
+        \n# convert PIL Image to an RGB image( technically a numpy array ) that's compatible with opencv\ndef toRGB(image):\n    return cv2.cvtColor(np.array(image), cv2.COLOR_BGR2RGB)
+        \n@socketio.on("connect")\ndef handle_connect():\n    origin = request.headers.get("Origin")\n    print("New connection from origin:", origin)
+        \n@socketio.on("image")\ndef handle_image(data):\n    try:\n        print("getting data.....")\n        base64Image = data["img"]
+        \n        # Decode base64 image\n        image_decoded = stringToImage(base64Image)\n        img_colored = toRGB(image_decoded)
+        \n        # Perform object detection\n        boxes, confidences, items = detect_objects(img_colored)
+        \n        # Emit detected objects\n        emit(\n            "detected_objects",\n            {"boxes": boxes, "confidences": confidences, "items": items},\n        )
+        \n    except Exception as e:\n        print("Error:", e)
+        \nif __name__ == "__main__":\n    socketio.run(app, debug=True, host="localhost")`,
+        lang: "python",
+      },
+    ],
+    mobile: false,
+    description: "",
+    features: ["", "", ""],
+    built_with: [
+      {
+        name: "",
+        link: "",
+      },
+      {
+        name: "",
+        link: "",
+      },
+      {
+        name: "",
+        link: "",
+      },
+    ],
+    published: true,
+    date: "2024-04-02",
+  },
   {
     slug: "tenant-portal",
     title: "Tenant App (Flutter)",

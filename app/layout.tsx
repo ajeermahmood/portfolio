@@ -9,20 +9,13 @@ export const metadata: Metadata = {
     default: "ajeer-portfolio",
     template: "%s | ajeer-portfolio",
   },
-  description: "Official portfolio of Ajeer Mohammed",
+  description: "Portfolio of Ajeer Mohammed",
   openGraph: {
     title: "ajeer-portfolio",
     description:
-      "Official portfolio of Ajeer Mohammed",
+      "Portfolio of Ajeer Mohammed",
     url: "https://ajeer-portfolio.vercel.app/",
     siteName: "ajeer-portfolio",
-    // images: [
-    //   {
-    //     url: "https://chronark.com/og.png",
-    //     width: 1920,
-    //     height: 1080,
-    //   },
-    // ],
     locale: "en-US",
     type: "website",
   },
