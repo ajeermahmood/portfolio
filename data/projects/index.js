@@ -901,4 +901,47 @@ module.exports = [
     published: true,
     date: "2022-10-15",
   },
+  {
+    slug: "web-element-scraper",
+    title: "Web Element Scraper (NPM Package)",
+    overview:
+      "Element Scraper is a lightweight Node.js package designed to simplify web scraping tasks by extracting text content from HTML elements on web pages. Built on top of Puppeteer and Cheerio, Element Scraper offers a user-friendly interface for effortlessly retrieving desired information from websites. Whether you're extracting article titles, product names, or any other text-based data, Element Scraper streamlines the process, making web scraping accessible to developers of all skill levels. Simplify your scraping workflow and unlock valuable insights from the web with Element Scraper.",
+    links: {
+      website: "",
+      github: "web-element-scraper",
+    },
+    images: [],
+    code: [
+      {
+        title: "npm install web-element-scraper",
+        description:
+          "Element Scraper is a lightweight Node.js package designed to simplify web scraping tasks by extracting text content from HTML elements on web pages. Built on top of Puppeteer and Cheerio, Element Scraper offers a user-friendly interface for effortlessly retrieving desired information from websites. Whether you're extracting article titles, product names, or any other text-based data, Element Scraper streamlines the process, making web scraping accessible to developers of all skill levels. Simplify your scraping workflow and unlock valuable insights from the web with Element Scraper.",
+        features: [],
+        code: `const scrape = require('web-element-scraper');
+        \nasync function exampleScrape() {\n  try {\n    const url = 'https://example.com';\n    const element = 'h1'; // The element you want to scrape\n    const titles = await scrape(url, element);\n    console.log(titles); // Output the scraped text content
+        \n  } catch (error) {\n    console.error('An error occurred:', error);\n  }\n}
+        \nexampleScrape();`,
+        lang: "javascript",
+      },
+    ],
+    mobile: false,
+    description: "",
+    features: ["", "", ""],
+    built_with: [
+      {
+        name: "",
+        link: "",
+      },
+      {
+        name: "",
+        link: "",
+      },
+      {
+        name: "",
+        link: "",
+      },
+    ],
+    published: true,
+    date: "2024-05-16",
+  },
 ];
