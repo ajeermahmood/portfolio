@@ -944,4 +944,48 @@ module.exports = [
     published: true,
     date: "2024-05-16",
   },
+  {
+    slug: "nodejs-performance-profiler",
+    title: "Node.js Performance Profiler (NPM Package)",
+    overview:
+      "Node.js Performance Profiler is a lightweight npm package designed to facilitate the profiling of Node.js applications. With easy-to-use methods, it provides insights into memory and CPU usage, as well as elapsed time since execution start. The profiler conveniently logs results to a specified file, enabling developers to analyze and optimize their applications' performance effortlessly.",
+    links: {
+      website: "",
+      github: "nodejs-performance-profiler",
+    },
+    images: [],
+    code: [
+      {
+        title: "npm install nodejs-performance-profiler",
+        description:
+          "The provided code exemplifies the utilization of the Node.js Performance Profiler library to analyze the performance of Node.js applications. After initializing the profiler, it captures memory usage, CPU usage, and uptime metrics. These metrics are then displayed in the console for real-time insights. Additionally, the profiler logs the gathered results to a designated file, facilitating comprehensive performance evaluation and optimization strategies.",
+        features: [],
+        code: `const PerformanceProfiler = require("nodejs-performance-profiler");
+        \n// Initialize the profiler\nconst profiler = new PerformanceProfiler();
+        \n// Perform operations to profile\nconst memoryUsage = profiler.getMemoryUsage();\nconst cpuUsage = profiler.getCpuUsage();\nconst upTime = profiler.getUpTime();
+        \n// console results\nconsole.log(memoryUsage, cpuUsage, upTime);
+        \n// Log profiling results to a file\nprofiler.logResults("performance.txt");`,
+        lang: "javascript",
+      },
+    ],
+    mobile: false,
+    description: "",
+    features: ["", "", ""],
+    built_with: [
+      {
+        name: "",
+        link: "",
+      },
+      {
+        name: "",
+        link: "",
+      },
+      {
+        name: "",
+        link: "",
+      },
+    ],
+    published: true,
+    date: "2024-05-16",
+  },
 ];
