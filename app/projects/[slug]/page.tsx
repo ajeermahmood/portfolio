@@ -61,6 +61,40 @@ export default async function PostPage({ params }: Props) {
           <></>
         )}
 
+        {project.slug === "nextjs-ai-chatbot" ? (
+          <>
+            <h6 className="italic mt-0 scroll-m-20 text-base font-semibold tracking-tight">
+              Next.js code available in{" "}
+              <a
+                href="https://github.com/ajeermahmood/nextjs-ai-chatbot"
+                target="_blank"
+                className="text-sky-800"
+              >
+                Github.
+              </a>
+            </h6>
+          </>
+        ) : (
+          <></>
+        )}
+
+        {project.features.length != 0 ? (
+          <>
+            <h2 className="mt-10 scroll-m-20 border-b border-b-zinc-800 pb-1 text-3xl font-semibold tracking-tight first:mt-0">
+              Features
+            </h2>
+            <ul>
+              {project.features.map((f) => (
+                <li>
+                  <b>{f.title}:</b> {f.desc}
+                </li>
+              ))}
+            </ul>
+          </>
+        ) : (
+          <></>
+        )}
+
         {project.images.length != 0 ? (
           <h6 className="mt-0 scroll-m-20 text-base font-semibold tracking-tight">
             Screenshots:
@@ -108,7 +142,9 @@ export default async function PostPage({ params }: Props) {
         {project.code?.length != 0 ? (
           <div>
             <h2 className="mt-10 scroll-m-20 border-b border-b-zinc-800 pb-1 text-3xl font-semibold tracking-tight first:mt-0">
-              Usage
+              {project.slug === "nextjs-ai-chatbot"
+                ? "Audio Generation Example"
+                : "Usage"}
             </h2>
             {project.code?.map((c, i) => (
               <div key={i} className={`${i > 0 ? "mt-10" : ""}`}>

@@ -11,9 +11,9 @@ export const revalidate = 60;
 export default async function ProjectsPage() {
   const views: any = allProjects;
 
-  const featured = allProjects.find((project) => project.slug === "indus-web")!;
-  const top2 = allProjects.find((project) => project.slug === "indus-premium")!;
-  const top3 = allProjects.find((project) => project.slug === "indus-cms")!;
+  const featured = allProjects.find((project) => project.slug === "nextjs-ai-chatbot")!;
+  const top2 = allProjects.find((project) => project.slug === "stable-diffusion-python")!;
+  const top3 = allProjects.find((project) => project.slug === "image-segmentation-app")!;
   const sorted = allProjects
     .filter((p) => p.published)
     .filter(

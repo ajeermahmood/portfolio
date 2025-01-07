@@ -1,5 +1,233 @@
 module.exports = [
   {
+    slug: "image-segmentation-app",
+    title: "Motion Tracker & Image Segmentation Desktop App",
+    overview:
+      "The Motion Tracker & Image Segmentation App is a versatile desktop application built with Next.js and Electron.js, designed for seamless operation on both Windows and Mac. This app leverages MediaPipe Holistic to provide advanced motion tracking capabilities, enabling users to interact with the application through body movements. It supports dynamic backgrounds, motion-based tasks, and offers image capture and sharing functionality.",
+    links: {
+      github: "image-segmentation-app",
+    },
+    images: [
+      "img-segm/img_1.png",
+      "img-segm/img_2.png",
+      "img-segm/img_3.png",
+      "img-segm/img_4.png",
+    ],
+    code: [],
+    mobile: false,
+    description:
+      "This innovative application combines cutting-edge image segmentation and motion tracking technology to provide an interactive desktop experience. By utilizing MediaPipe Holistic, the app can detect and track full-body movements with high accuracy. Users can set custom backgrounds, perform motion-triggered tasks, and capture or share their interactions in real-time. Its robust architecture, powered by Next.js and Electron.js, ensures a smooth and responsive user experience across platforms.",
+    features: [
+      {
+        title: "Advanced Motion Tracking",
+        desc: "Tracks full-body motions, including hands, face, and pose, using MediaPipe Holistic. Enables real-time interaction based on body movements.",
+      },
+      {
+        title: "Custom Backgrounds",
+        desc: "Allows users to select and set any image as the application background. Enhances personalization and creativity.",
+      },
+      {
+        title: "Dynamic Task Execution",
+        desc: "Performs specific tasks triggered by motion patterns.",
+      },
+      {
+        title: "Image Capture & Sharing",
+        desc: "Capture images of motion-tracked interactions with ease. Built-in sharing functionality for seamless content distribution.",
+      },
+      {
+        title: "Cross-Platform Support",
+        desc: "Developed with Electron.js, ensuring compatibility on both Windows and Mac systems.",
+      },
+      {
+        title: "Smooth Performance",
+        desc: "Utilizes Next.js for a responsive interface and optimized application behavior.",
+      },
+    ],
+    built_with: [
+      {
+        name: "",
+        link: "",
+      },
+      {
+        name: "",
+        link: "",
+      },
+      {
+        name: "",
+        link: "",
+      },
+    ],
+    published: true,
+    date: "2024-11-25",
+  },
+  {
+    slug: "stable-diffusion-python",
+    title: "AI Portrait Generator with Stable Diffusion",
+    overview:
+      "The AI Portrait Generator is a Python-based application that combines the power of Stable Diffusion and advanced AI frameworks to create stunning portrait images. By taking an input image and a descriptive text prompt, the app generates personalized, high-quality portraits tailored to the user’s vision.",
+    links: {
+      github: "stable-diffusion-python",
+    },
+    images: ["st-df/output.png"],
+    code: [],
+    mobile: false,
+    description:
+      "This innovative application uses the runwayml/stable-diffusion-v1-5 model for generating realistic and artistic portraits. It leverages powerful libraries such as torch, transformers, diffusers, and accelerate to ensure efficient and seamless image processing. With additional support from Pillow for image handling, the app provides a user-friendly interface for crafting AI-driven portrait art.",
+    features: [
+      {
+        title: "Input Flexibility",
+        desc: "Accepts an input image and a descriptive prompt to guide the portrait generation.",
+      },
+      {
+        title: "High-Quality Outputs",
+        desc: "Generates realistic, detailed, and visually appealing portrait images.",
+      },
+      {
+        title: "Model Integration",
+        desc: "Powered by the Stable Diffusion v1-5 model for state-of-the-art image synthesis.",
+      },
+      {
+        title: "Efficient Processing",
+        desc: "Optimized with torch, diffusers, and accelerate for rapid and resource-efficient image generation.",
+      },
+      {
+        title: "Customizable Portraits",
+        desc: "Outputs are tailored to the input prompt, allowing for creative and personalized results.",
+      },
+      {
+        title: "User-Friendly Image Handling",
+        desc: "Utilizes Pillow for easy input and output image management.",
+      },
+    ],
+    built_with: [
+      {
+        name: "",
+        link: "",
+      },
+      {
+        name: "",
+        link: "",
+      },
+      {
+        name: "",
+        link: "",
+      },
+    ],
+    published: true,
+    date: "2024-11-15",
+  },
+  {
+    slug: "nextjs-ai-chatbot",
+    title: "Ai Medical Rep Chatbot",
+    overview:
+      "The AI Medical Rep Chatbot is a cutting-edge digital assistant designed to support healthcare professionals (HCPs) by providing accurate and detailed information about a company’s medical products. Acting as a virtual medical representative, it delivers an interactive and user-friendly experience to address queries, explain product details, and enhance HCP engagement with real-time voice and avatar integration.",
+    links: {
+      github: "nextjs-ai-chatbot",
+    },
+    images: ["ai-chatbot-nextjs/img_1.png", "ai-chatbot-nextjs/img_2.png"],
+    code: [
+      {
+        title: "Flask-Based Audio Generation Service with gTTS",
+        description:
+          "This backend application, built with Python Flask, serves as the audio generation engine for the AI Medical Rep Chatbot. Leveraging the Google Text-to-Speech (gTTS) library, it dynamically converts text-based product information and responses into high-quality audio files.",
+        features: [
+          {
+            title: "Text-to-Speech Conversion",
+            desc: "Transforms chatbot responses into clear and natural-sounding audio.",
+          },
+          {
+            title: "Seamless Integration",
+            desc: "Designed to integrate effortlessly with the chatbot's real-time voice interaction feature.",
+          },
+          {
+            title: "Multilingual Support",
+            desc: "Generates audio in multiple languages to cater to a global audience.",
+          },
+          {
+            title: "Efficient API Service",
+            desc: "Exposes endpoints for on-demand audio generation, ensuring fast and reliable performance.",
+          },
+        ],
+        code: `from flask import Flask, request, jsonify, send_file
+from flask_cors import CORS
+
+from gtts import gTTS
+import os
+import uuid
+
+app = Flask(__name__)
+
+# Enable CORS
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})  # Replace with your frontend URL
+
+# Directory to save audio files
+AUDIO_DIR = 'audio'
+if not os.path.exists(AUDIO_DIR):
+    os.makedirs(AUDIO_DIR)
+
+
+@app.route('/talk', methods=['POST'])
+def talk():
+    data = request.json
+    text = data['text']
+
+    v4_uuid = uuid.uuid4()
+
+    # Generate speech using gTTS
+    audio_file_path = os.path.join(AUDIO_DIR, "{}.mp3".format(v4_uuid) )
+    tts = gTTS(text=text, lang='en')
+    tts.save(audio_file_path)
+
+    return jsonify({"audio_url": "http://127.0.0.1:5000/audio/{}.mp3".format(v4_uuid)})
+
+# Serve the generated audio file
+@app.route('/audio/<filename>')
+def serve_audio(filename):
+    return send_file(os.path.join(AUDIO_DIR, filename), as_attachment=True)
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)`,
+        lang: "python",
+      },
+    ],
+    mobile: false,
+    description: `The solution has been crafted for global clients such as Novartis, Merck, and other leading pharmaceutical companies, aiming to enhance product education and streamline communication with HCPs. To provide a reliable, interactive, and AI-powered platform that empowers HCPs with real-time access to product knowledge, fostering informed decision-making and improved patient care.`,
+    features: [
+      {
+        title: "Comprehensive Q&A Support",
+        desc: "Provides instant, accurate responses to all product-related questions and queries. Offers detailed explanations regarding product use, benefits, and guidelines.",
+      },
+      {
+        title: "Real-time Voice & Avatar Interaction",
+        desc: "Lifelike voice interactions for a conversational experience.",
+      },
+      {
+        title: "Advanced Technology Stack",
+        desc: "Frontend: Built using Next.js for a seamless, responsive, and modern user interface. Backend: Powered by Python and Node.js, ensuring scalability, high performance, and robust AI-driven query handling.",
+      },
+      {
+        title: "Global Adaptability",
+        desc: "Tailored to meet the diverse needs of global pharmaceutical clients.",
+      },
+    ],
+    built_with: [
+      {
+        name: "",
+        link: "",
+      },
+      {
+        name: "",
+        link: "",
+      },
+      {
+        name: "",
+        link: "",
+      },
+    ],
+    published: true,
+    date: "2024-10-20",
+  },
+  {
     slug: "indus-web",
     title: "Official Website Of Indus Real Estate LLC (Dubai)",
     overview:
@@ -20,7 +248,7 @@ module.exports = [
     code: [],
     mobile: false,
     description: ``,
-    features: ["", "", ""],
+    features: [],
     built_with: [
       {
         name: "",
@@ -63,7 +291,7 @@ module.exports = [
     code: [],
     mobile: false,
     description: "",
-    features: ["", "", ""],
+    features: [],
     built_with: [
       {
         name: "",
@@ -108,7 +336,7 @@ module.exports = [
     code: [],
     mobile: false,
     description: "",
-    features: ["", "", ""],
+    features: [],
     built_with: [
       {
         name: "",
@@ -211,7 +439,7 @@ module.exports = [
     ],
     mobile: false,
     description: "",
-    features: ["", "", ""],
+    features: [],
     built_with: [
       {
         name: "",
@@ -247,7 +475,7 @@ module.exports = [
     code: [],
     mobile: true,
     description: "",
-    features: ["", "", ""],
+    features: [],
     built_with: [
       {
         name: "",
@@ -279,7 +507,7 @@ module.exports = [
     mobile: false,
     description:
       "This is an old project, Due to some internal issues the project got shutdown. Please checkout the github for the code.",
-    features: ["", "", ""],
+    features: [],
     built_with: [
       {
         name: "",
@@ -564,7 +792,7 @@ module.exports = [
     ],
     mobile: false,
     description: "",
-    features: ["", "", ""],
+    features: [],
     built_with: [
       {
         name: "",
@@ -627,7 +855,7 @@ module.exports = [
     ],
     mobile: false,
     description: "",
-    features: ["", "", ""],
+    features: [],
     built_with: [
       {
         name: "",
@@ -688,7 +916,7 @@ module.exports = [
     ],
     mobile: false,
     description: "",
-    features: ["", "", ""],
+    features: [],
     built_with: [
       {
         name: "",
@@ -720,7 +948,7 @@ module.exports = [
     mobile: true,
     description:
       "No screenshots available (Please check github repository for further details)",
-    features: ["", "", ""],
+    features: [],
     built_with: [
       {
         name: "",
@@ -841,7 +1069,7 @@ module.exports = [
     ],
     mobile: false,
     description: "",
-    features: ["", "", ""],
+    features: [],
     built_with: [
       {
         name: "",
@@ -883,7 +1111,7 @@ module.exports = [
     code: [],
     mobile: false,
     description: "",
-    features: ["", "", ""],
+    features: [],
     built_with: [
       {
         name: "",
@@ -926,7 +1154,7 @@ module.exports = [
     ],
     mobile: false,
     description: "",
-    features: ["", "", ""],
+    features: [],
     built_with: [
       {
         name: "",
@@ -970,7 +1198,7 @@ module.exports = [
     ],
     mobile: false,
     description: "",
-    features: ["", "", ""],
+    features: [],
     built_with: [
       {
         name: "",
