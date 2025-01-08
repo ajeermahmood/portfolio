@@ -11,16 +11,26 @@ export const revalidate = 60;
 export default async function ProjectsPage() {
   const views: any = allProjects;
 
-  const featured = allProjects.find((project) => project.slug === "nextjs-ai-chatbot")!;
-  const top2 = allProjects.find((project) => project.slug === "stable-diffusion-python")!;
-  const top3 = allProjects.find((project) => project.slug === "image-segmentation-app")!;
+  const featured = allProjects.find(
+    (project) => project.slug === "nextjs-ai-chatbot"
+  )!;
+  const top2 = allProjects.find(
+    (project) => project.slug === "stable-diffusion-python"
+  )!;
+  const top3 = allProjects.find(
+    (project) => project.slug === "image-segmentation-app"
+  )!;
+  const top4 = allProjects.find(
+    (project) => project.slug === "medical_rep_training_crm"
+  )!;
   const sorted = allProjects
     .filter((p) => p.published)
     .filter(
       (project) =>
         project.slug !== featured.slug &&
         project.slug !== top2.slug &&
-        project.slug !== top3.slug
+        project.slug !== top3.slug &&
+        project.slug !== top4.slug
     );
   // .sort(
   //   (a, b) =>
@@ -91,6 +101,13 @@ export default async function ProjectsPage() {
               </Card>
             ))}
           </div>
+        </div>
+        <div className="flex flex-col w-full gap-8 mx-auto border-t border-gray-900/10 lg:mx-0 lg:border-t-0 ">
+          {[top4].map((project) => (
+            <Card key={project.slug}>
+              <Article project={project} views={views[project.slug] ?? 0} />
+            </Card>
+          ))}
         </div>
         <div className="hidden w-full h-px md:block bg-zinc-800" />
 

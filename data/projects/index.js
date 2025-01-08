@@ -1,5 +1,160 @@
 module.exports = [
   {
+    slug: "event-app-flutter",
+    title: "Event Manager App for L’Oréal Dubai",
+    overview:
+      "A sleek and feature-rich event management mobile application for Android and iOS developed using Flutter, designed to streamline event organization and enhance attendee engagement. Built specifically for L’Oréal Dubai, the app provides a comprehensive platform to manage events, track attendance, and foster interaction.",
+    links: {
+      website: "",
+      github: "event_app_flutter",
+    },
+    images: [
+      "ev-fl-app/img_1.png",
+      "ev-fl-app/img_2.png",
+      "ev-fl-app/img_3.png",
+      "ev-fl-app/img_4.png",
+      "ev-fl-app/img_5.png",
+      "ev-fl-app/img_6.png",
+      "ev-fl-app/img_7.png",
+      "ev-fl-app/img_8.png",
+      "ev-fl-app/img_9.png",
+      "ev-fl-app/img_10.png",
+      "ev-fl-app/img_11.png",
+      "ev-fl-app/img_12.png",
+      "ev-fl-app/img_13.png",
+      "ev-fl-app/img_14.png",
+      "ev-fl-app/img_15.png",
+      "ev-fl-app/img_16.png",
+      "ev-fl-app/img_17.png",
+      "ev-fl-app/img_18.png",
+      "ev-fl-app/img_19.png",
+    ],
+    code: [],
+    mobile: true,
+    description:
+      "The Event Manager App revolutionizes how events are managed and experienced. Attendees can create accounts, log in, and participate seamlessly in various event activities. Each attendee receives a unique badge for easy identification, and the app provides detailed event agendas, speaker profiles, and session information. The app promotes engagement through interactive features such as Q&A sessions, live voting, and surveys, empowering attendees to contribute and share feedback. It also ensures attendees stay informed with push notifications about event updates. Users can view event media, including images and videos, and easily locate venues using the built-in event location feature. Tailored for L’Oréal Dubai, this application ensures efficient event organization, attendance documentation, and a memorable experience for all participants.",
+    features: [
+      {
+        title: "User Authentication",
+        desc: "Attendees can create accounts, log in, and access event features.",
+      },
+      {
+        title: "Digital Badges",
+        desc: "Automatically assigns badges to attendees for seamless identification.",
+      },
+      {
+        title: "Event Agenda & Speaker Profiles",
+        desc: "Access detailed agendas and learn about event speakers.",
+      },
+      {
+        title: "Interactive Sessions",
+        desc: "Participate in live Q&A and voting sessions.",
+      },
+      {
+        title: "Event Media Gallery",
+        desc: "View and download event images and videos.",
+      },
+      {
+        title: "Surveys",
+        desc: "Submit feedback and insights through event surveys.",
+      },
+      {
+        title: "Push Notifications",
+        desc: "Stay updated with event alerts and reminders.",
+      },
+      {
+        title: "Event Location Finder",
+        desc: "Navigate to the event venue with integrated location services.",
+      },
+    ],
+    built_with: [
+      {
+        name: "",
+        link: "",
+      },
+      {
+        name: "",
+        link: "",
+      },
+      {
+        name: "",
+        link: "",
+      },
+    ],
+    published: true,
+    date: "2024-11-02",
+  },
+  {
+    slug: "medical_rep_training_crm",
+    title: "Medical Rep Training CRM & Gamification Platform",
+    overview:
+      "A powerful CRM and gamified training platform built with Angular, PHP, and Node.js. This solution is designed to train Medical Representatives in engaging with HCPs (Healthcare Professionals) regarding ABBOTT products. It adapts training to HCP behaviors and learning styles through customizable scenarios and interactive games, fostering effective communication skills.",
+    links: {
+      website: "thcpgame.com",
+      github: "medical_rep_training_crm",
+    },
+    images: [
+      "med-rep-crm/img_1.png",
+      "med-rep-crm/img_2.png",
+      "med-rep-crm/img_3.png",
+      "med-rep-crm/img_4.png",
+      "med-rep-crm/img_5.png",
+      "med-rep-crm/img_6.png",
+      "med-rep-crm/img_7.png",
+      "med-rep-crm/img_8.png",
+      "med-rep-crm/img_9.png",
+      "med-rep-crm/img_10.png",
+      "med-rep-crm/img_11.png",
+      "med-rep-crm/img_12.png",
+    ],
+    code: [],
+    mobile: false,
+    description:
+      "The Medical Rep Training CRM & Gamification Platform bridges the gap between training and engagement by combining robust data management and gamified learning. The CRM serves as the backend hub where Global Admins, Country Admins, and Tech Admins collaborate to design training modules and manage resources. Scenarios are created using various communication channels like SMS, Email, and Face-to-Face Visits. These scenarios are then used to build games and tournaments for Medical Representatives to simulate real-life interactions with HCPs. The gamified training allows Medical Representatives to log in, enter session codes, and participate in dynamic, interactive scenarios. Designed to adapt to HCPs’ behaviors and learning preferences, the game encourages reps to refine their communication strategies. A live leaderboard adds a competitive edge, motivating players to excel.",
+    features: [
+      {
+        title: "Dual Login Gateways",
+        desc: "CRM Access: For managing scenarios, creating games, and monitoring performance. Game Access: For Medical Reps to engage in training sessions.",
+      },
+      {
+        title: "Scenario Creation & Management",
+        desc: "Design communication scenarios across multiple channels (SMS, Email, Face-to-Face).",
+      },
+      {
+        title: "Gamification Tools",
+        desc: "Build interactive games and tournaments for engaging training sessions.",
+      },
+      {
+        title: "Session Code Mechanism",
+        desc: "Players join games using unique session codes sent via email.",
+      },
+      {
+        title: "Live Leaderboard",
+        desc: "Displays real-time scores post-game to motivate participants and encourage learning.",
+      },
+      {
+        title: "Public Live Events",
+        desc: "Hosts live events for broader participation and training demonstrations.",
+      },
+    ],
+    built_with: [
+      {
+        name: "",
+        link: "",
+      },
+      {
+        name: "",
+        link: "",
+      },
+      {
+        name: "",
+        link: "",
+      },
+    ],
+    published: true,
+    date: "2024-08-06",
+  },
+  {
     slug: "image-segmentation-app",
     title: "Motion Tracker & Image Segmentation Desktop App",
     overview:
@@ -228,112 +383,45 @@ if __name__ == '__main__':
     date: "2024-10-20",
   },
   {
-    slug: "indus-web",
-    title: "Official Website Of Indus Real Estate LLC (Dubai)",
+    slug: "object-detection",
+    title: "Real-Time Object Detection (YOLO)",
     overview:
-      "Indus main website, powered by Next.js, PHP, and Node.js, delivers top-notch performance, SEO, and user engagement. With Next.js' image optimization and PHP/Node.js backend, we achieve fast load times and dynamic experiences. Prioritizing speed and scalability, we optimize all elements, from image compression to server-side rendering. With clean code and responsive layouts, our site boosts SEO, driving visibility and ranking. Continuously monitored and optimized, our site ensures an engaging user experience, spurring conversions in the real estate market.",
-    links: {
-      website: "www.indusre.com",
-      github: "indus_new_web",
-    },
-    images: [
-      "indus_web/indusre.com_1.png",
-      "indus_web/indusre.com_2.png",
-      "indus_web/indusre.com_3.png",
-      "indus_web/indusre.com_4.png",
-      "indus_web/indusre.com_5.png",
-      "indus_web/indusre.com_6.png",
-      "indus_web/indusre.com_7.png",
-    ],
-    code: [],
-    mobile: false,
-    description: ``,
-    features: [],
-    built_with: [
-      {
-        name: "",
-        link: "",
-      },
-      {
-        name: "",
-        link: "",
-      },
-      {
-        name: "",
-        link: "",
-      },
-    ],
-    published: true,
-    date: "2023-09-16",
-  },
-  {
-    slug: "indus-premium",
-    title: "Indus Website for premium properties.",
-    overview:
-      "Introducing exclusive platform for premium real estate, powered by Next.js, PHP, and Node.js. Accessible only to registered users, unique UI/UX prioritizes luxury and privacy over SEO. With lightning-fast performance and dynamic functionality, it deliver elite browsing experiences for discerning clientele.",
-    links: {
-      website: "indus-premium.vercel.app",
-      github: "melanie_new_web",
-    },
-    images: [
-      "indus_premium/indus-premium.vercel.app_1.png",
-      "indus_premium/indus-premium.vercel.app_2.png",
-      "indus_premium/indus-premium.vercel.app_3.png",
-      "indus_premium/indus-premium.vercel.app_4.png",
-      "indus_premium/indus-premium.vercel.app_5.png",
-      "indus_premium/indus-premium.vercel.app_6.png",
-      "indus_premium/indus-premium.vercel.app_7.png",
-      "indus_premium/indus-premium.vercel.app_8.png",
-      "indus_premium/indus-premium.vercel.app_9.png",
-      "indus_premium/indus-premium.vercel.app_10.png",
-      "indus_premium/indus-premium.vercel.app_11.png",
-    ],
-    code: [],
-    mobile: false,
-    description: "",
-    features: [],
-    built_with: [
-      {
-        name: "",
-        link: "",
-      },
-      {
-        name: "",
-        link: "",
-      },
-      {
-        name: "",
-        link: "",
-      },
-    ],
-    published: true,
-    date: "2023-11-03",
-  },
-  {
-    slug: "indus-cms",
-    title: "Content Management System for Website (Angular)",
-    overview:
-      "Introducing the CMS system, crafted with Angular for the frontend and backed by PHP, Node.js, and Python for the backend. With a sleek UI/UX powered by Angular Material Library, it optimizes workflow efficiency. From content management to optimization tools, every feature is designed for seamless integration and enhanced productivity.",
+      "This project showcases a real-time object detection web application built using Python, Flask, Socket.IO, and OpenCV. Leveraging the YOLO (You Only Look Once) deep learning framework, the application can detect objects within images sent from a client interface in real-time. The backend, developed in Python, processes the images, detects objects, and sends the results back to the client via Socket.IO. The client interface, implemented using Next.js and Firebase for authentication, provides a seamless user experience for interacting with the object detection functionality. This project demonstrates the integration of machine learning models into web applications for real-time processing and interaction.",
     links: {
       website: "",
-      github: "indus-cms",
+      github: "object_detector_py",
     },
-    images: [
-      "indus_cms/indusre.app_1.png",
-      "indus_cms/indusre.app_2.png",
-      "indus_cms/indusre.app_3.png",
-      "indus_cms/indusre.app_4.png",
-      "indus_cms/indusre.app_5.png",
-      "indus_cms/indusre.app_6.png",
-      "indus_cms/indusre.app_7.png",
-      "indus_cms/indusre.app_8.png",
-      "indus_cms/indusre.app_9.png",
-      "indus_cms/indusre.app_10.png",
-      "indus_cms/indusre.app_11.png",
-      "indus_cms/indusre.app_12.png",
-      "indus_cms/indusre.app_13.png",
+    images: [],
+    code: [
+      {
+        title: "Backend Python Usage Overview: Real-Time Object Detection",
+        description: `Utilizing Flask and Flask-SocketIO, this Python backend integrates a YOLO (You Only Look Once) deep learning model with OpenCV for real-time object detection. Upon receiving base64-encoded image data via WebSocket connections, the backend decodes, processes, and analyzes the images. Detected objects, complete with bounding box coordinates and confidence scores, are promptly communicated back to the client interface via Socket.IO for instantaneous visualization. Robust error handling ensures smooth operation, while performance optimizations, including image resizing and asynchronous processing, enhance scalability and responsiveness.`,
+        features: [],
+        code: `from flask import Flask, jsonify, request\nfrom flask_socketio import SocketIO, emit\nimport cv2\nimport numpy as np
+        \n# from flask_cors import CORS\nimport base64\nfrom PIL import Image\nimport io\nimport json
+        \napp = Flask(__name__)\napp.config["SECRET_KEY"] = "secret"\nsocketio = SocketIO(app)\nsocketio.init_app(app, cors_allowed_origins="*")\n# CORS(app, origins="http://localhost:4200")
+        \n# Load YOLO\nnet = cv2.dnn.readNet("assets/yolov3.weights", "assets/yolov3.cfg")\nclasses = []\nwith open("assets/coco.names", "r") as f:\n     classes = [line.strip() for line in f.readlines()]\nlayer_names = net.getLayerNames()\noutput_layers = [layer_names[i - 1] for i in net.getUnconnectedOutLayers()]
+        \n# Function to perform object detection on an image\ndef detect_objects(image):\n# Resize and normalize image\n    img = cv2.resize(image, None, fx=0.4, fy=0.4)\n    height, width, channels = img.shape
+        \n    # Detect objects\n    blob = cv2.dnn.blobFromImage(img, 0.00392, (416, 416), (0, 0, 0), True, crop=False)\n    net.setInput(blob)\n    outs = net.forward(output_layers)
+        \n    # Process detections\n    class_names_detected = []\n    confidences = []\n    boxes = []
+        \n    for out in outs:\n        for detection in out:\n            scores = detection[5:]\n            class_id = np.argmax(scores)\n            confidence = scores[class_id]
+        \n            if confidence > 0.5:\n                # Object detected\n                center_x = int(detection[0] * width)\n                center_y = int(detection[1] * height)\n                w = int(detection[2] * width)\n                h = int(detection[3] * height)
+        \n                # Rectangle coordinates\n                x = int(center_x - w / 2)\n                y = int(center_y - h / 2)
+        \n                boxes.append([x, y, w, h])\n                confidences.append(float(confidence))
+        \n                if classes[class_id] not in class_names_detected:\n                   class_names_detected.append(classes[class_id])
+        \n    return boxes, confidences, class_names_detected
+        \n# Take in base64 string and return PIL image\ndef stringToImage(base64_string):\n    imgdata = base64.b64decode(base64_string)\n    return Image.open(io.BytesIO(imgdata))
+        \n# convert PIL Image to an RGB image( technically a numpy array ) that's compatible with opencv\ndef toRGB(image):\n    return cv2.cvtColor(np.array(image), cv2.COLOR_BGR2RGB)
+        \n@socketio.on("connect")\ndef handle_connect():\n    origin = request.headers.get("Origin")\n    print("New connection from origin:", origin)
+        \n@socketio.on("image")\ndef handle_image(data):\n    try:\n        print("getting data.....")\n        base64Image = data["img"]
+        \n        # Decode base64 image\n        image_decoded = stringToImage(base64Image)\n        img_colored = toRGB(image_decoded)
+        \n        # Perform object detection\n        boxes, confidences, items = detect_objects(img_colored)
+        \n        # Emit detected objects\n        emit(\n            "detected_objects",\n            {"boxes": boxes, "confidences": confidences, "items": items},\n        )
+        \n    except Exception as e:\n        print("Error:", e)
+        \nif __name__ == "__main__":\n    socketio.run(app, debug=True, host="localhost")`,
+        lang: "python",
+      },
     ],
-    code: [],
     mobile: false,
     description: "",
     features: [],
@@ -352,7 +440,43 @@ if __name__ == '__main__':
       },
     ],
     published: true,
-    date: "2023-12-01",
+    date: "2024-04-02",
+  },
+  {
+    slug: "event-management-app",
+    title: "Event QR Reader App (Flutter)",
+    overview:
+      "Flutter-based event management app, developed with expertise in cross-platform optimization. Streamlining event planning and attendance tracking, this app integrates QR scanning and backend functionalities in PHP, Node.js, and SQL. With user-friendly interfaces for iOS and Android, it ensures seamless navigation and widespread adoption, revolutionizing event management processes.",
+    links: {
+      website: "",
+      github: "qr_code_read_app",
+    },
+    images: [
+      "e_mng/e_mng_1.webp",
+      "e_mng/e_mng_2.webp",
+      "e_mng/e_mng_3.webp",
+      "e_mng/e_mng_4.webp",
+    ],
+    code: [],
+    mobile: true,
+    description: "",
+    features: [],
+    built_with: [
+      {
+        name: "",
+        link: "",
+      },
+      {
+        name: "",
+        link: "",
+      },
+      {
+        name: "",
+        link: "",
+      },
+    ],
+    published: true,
+    date: "2024-03-15",
   },
   {
     slug: "chat-bot",
@@ -456,74 +580,6 @@ if __name__ == '__main__':
     ],
     published: true,
     date: "2024-02-23",
-  },
-  {
-    slug: "event-management-app",
-    title: "Event Management App (Flutter)",
-    overview:
-      "Flutter-based event management app, developed with expertise in cross-platform optimization. Streamlining event planning and attendance tracking, this app integrates QR scanning and backend functionalities in PHP, Node.js, and SQL. With user-friendly interfaces for iOS and Android, it ensures seamless navigation and widespread adoption, revolutionizing event management processes.",
-    links: {
-      website: "",
-      github: "qr_code_read_app",
-    },
-    images: [
-      "e_mng/e_mng_1.webp",
-      "e_mng/e_mng_2.webp",
-      "e_mng/e_mng_3.webp",
-      "e_mng/e_mng_4.webp",
-    ],
-    code: [],
-    mobile: true,
-    description: "",
-    features: [],
-    built_with: [
-      {
-        name: "",
-        link: "",
-      },
-      {
-        name: "",
-        link: "",
-      },
-      {
-        name: "",
-        link: "",
-      },
-    ],
-    published: true,
-    date: "2024-03-15",
-  },
-  {
-    slug: "property-management",
-    title: "Property Management Cloud App (Angular)",
-    overview:
-      "Introducing Property Management Cloud PWA, a cutting-edge solution for Dubai real estate. Built with Angular, PHP, Node.js, and SQL, the platform offers seamless property, unit, and lease contract management. Leveraging Firebase for push notifications and featuring a three-tier authentication system, the solution revolutionizes real estate operations with efficiency and security. With a dynamic dashboard and custom styling using SCSS, it provides intuitive navigation and a visually appealing user experience.",
-    links: {
-      website: "",
-      github: "IndusRealEstate_Customer_Portal",
-    },
-    images: ["pr_mng/pr_mng_1.jpg"],
-    code: [],
-    mobile: false,
-    description:
-      "This is an old project, Due to some internal issues the project got shutdown. Please checkout the github for the code.",
-    features: [],
-    built_with: [
-      {
-        name: "",
-        link: "",
-      },
-      {
-        name: "",
-        link: "",
-      },
-      {
-        name: "",
-        link: "",
-      },
-    ],
-    published: true,
-    date: "2022-12-27",
   },
   {
     slug: "image-optimization",
@@ -873,45 +929,27 @@ if __name__ == '__main__':
     published: true,
     date: "2024-04-02",
   },
-  ////////////////////////////////
   {
-    slug: "object-detection",
-    title: "Real-Time Object Detection (YOLO)",
+    slug: "web-element-scraper",
+    title: "Web Element Scraper (NPM Package)",
     overview:
-      "This project showcases a real-time object detection web application built using Python, Flask, Socket.IO, and OpenCV. Leveraging the YOLO (You Only Look Once) deep learning framework, the application can detect objects within images sent from a client interface in real-time. The backend, developed in Python, processes the images, detects objects, and sends the results back to the client via Socket.IO. The client interface, implemented using Next.js and Firebase for authentication, provides a seamless user experience for interacting with the object detection functionality. This project demonstrates the integration of machine learning models into web applications for real-time processing and interaction.",
+      "Element Scraper is a lightweight Node.js package designed to simplify web scraping tasks by extracting text content from HTML elements on web pages. Built on top of Puppeteer and Cheerio, Element Scraper offers a user-friendly interface for effortlessly retrieving desired information from websites. Whether you're extracting article titles, product names, or any other text-based data, Element Scraper streamlines the process, making web scraping accessible to developers of all skill levels. Simplify your scraping workflow and unlock valuable insights from the web with Element Scraper.",
     links: {
       website: "",
-      github: "object_detector_py",
+      github: "web-element-scraper",
     },
     images: [],
     code: [
       {
-        title: "Backend Python Usage Overview: Real-Time Object Detection",
-        description: `Utilizing Flask and Flask-SocketIO, this Python backend integrates a YOLO (You Only Look Once) deep learning model with OpenCV for real-time object detection. Upon receiving base64-encoded image data via WebSocket connections, the backend decodes, processes, and analyzes the images. Detected objects, complete with bounding box coordinates and confidence scores, are promptly communicated back to the client interface via Socket.IO for instantaneous visualization. Robust error handling ensures smooth operation, while performance optimizations, including image resizing and asynchronous processing, enhance scalability and responsiveness.`,
+        title: "npm install web-element-scraper",
+        description:
+          "Element Scraper is a lightweight Node.js package designed to simplify web scraping tasks by extracting text content from HTML elements on web pages. Built on top of Puppeteer and Cheerio, Element Scraper offers a user-friendly interface for effortlessly retrieving desired information from websites. Whether you're extracting article titles, product names, or any other text-based data, Element Scraper streamlines the process, making web scraping accessible to developers of all skill levels. Simplify your scraping workflow and unlock valuable insights from the web with Element Scraper.",
         features: [],
-        code: `from flask import Flask, jsonify, request\nfrom flask_socketio import SocketIO, emit\nimport cv2\nimport numpy as np
-        \n# from flask_cors import CORS\nimport base64\nfrom PIL import Image\nimport io\nimport json
-        \napp = Flask(__name__)\napp.config["SECRET_KEY"] = "secret"\nsocketio = SocketIO(app)\nsocketio.init_app(app, cors_allowed_origins="*")\n# CORS(app, origins="http://localhost:4200")
-        \n# Load YOLO\nnet = cv2.dnn.readNet("assets/yolov3.weights", "assets/yolov3.cfg")\nclasses = []\nwith open("assets/coco.names", "r") as f:\n     classes = [line.strip() for line in f.readlines()]\nlayer_names = net.getLayerNames()\noutput_layers = [layer_names[i - 1] for i in net.getUnconnectedOutLayers()]
-        \n# Function to perform object detection on an image\ndef detect_objects(image):\n# Resize and normalize image\n    img = cv2.resize(image, None, fx=0.4, fy=0.4)\n    height, width, channels = img.shape
-        \n    # Detect objects\n    blob = cv2.dnn.blobFromImage(img, 0.00392, (416, 416), (0, 0, 0), True, crop=False)\n    net.setInput(blob)\n    outs = net.forward(output_layers)
-        \n    # Process detections\n    class_names_detected = []\n    confidences = []\n    boxes = []
-        \n    for out in outs:\n        for detection in out:\n            scores = detection[5:]\n            class_id = np.argmax(scores)\n            confidence = scores[class_id]
-        \n            if confidence > 0.5:\n                # Object detected\n                center_x = int(detection[0] * width)\n                center_y = int(detection[1] * height)\n                w = int(detection[2] * width)\n                h = int(detection[3] * height)
-        \n                # Rectangle coordinates\n                x = int(center_x - w / 2)\n                y = int(center_y - h / 2)
-        \n                boxes.append([x, y, w, h])\n                confidences.append(float(confidence))
-        \n                if classes[class_id] not in class_names_detected:\n                   class_names_detected.append(classes[class_id])
-        \n    return boxes, confidences, class_names_detected
-        \n# Take in base64 string and return PIL image\ndef stringToImage(base64_string):\n    imgdata = base64.b64decode(base64_string)\n    return Image.open(io.BytesIO(imgdata))
-        \n# convert PIL Image to an RGB image( technically a numpy array ) that's compatible with opencv\ndef toRGB(image):\n    return cv2.cvtColor(np.array(image), cv2.COLOR_BGR2RGB)
-        \n@socketio.on("connect")\ndef handle_connect():\n    origin = request.headers.get("Origin")\n    print("New connection from origin:", origin)
-        \n@socketio.on("image")\ndef handle_image(data):\n    try:\n        print("getting data.....")\n        base64Image = data["img"]
-        \n        # Decode base64 image\n        image_decoded = stringToImage(base64Image)\n        img_colored = toRGB(image_decoded)
-        \n        # Perform object detection\n        boxes, confidences, items = detect_objects(img_colored)
-        \n        # Emit detected objects\n        emit(\n            "detected_objects",\n            {"boxes": boxes, "confidences": confidences, "items": items},\n        )
-        \n    except Exception as e:\n        print("Error:", e)
-        \nif __name__ == "__main__":\n    socketio.run(app, debug=True, host="localhost")`,
-        lang: "python",
+        code: `const scrape = require('web-element-scraper');
+        \nasync function exampleScrape() {\n  try {\n    const url = 'https://example.com';\n    const element = 'h1'; // The element you want to scrape\n    const titles = await scrape(url, element);\n    console.log(titles); // Output the scraped text content
+        \n  } catch (error) {\n    console.error('An error occurred:', error);\n  }\n}
+        \nexampleScrape();`,
+        lang: "javascript",
       },
     ],
     mobile: false,
@@ -932,8 +970,215 @@ if __name__ == '__main__':
       },
     ],
     published: true,
-    date: "2024-04-02",
+    date: "2024-05-16",
   },
+  {
+    slug: "nodejs-performance-profiler",
+    title: "Node.js Performance Profiler (NPM Package)",
+    overview:
+      "Node.js Performance Profiler is a lightweight npm package designed to facilitate the profiling of Node.js applications. With easy-to-use methods, it provides insights into memory and CPU usage, as well as elapsed time since execution start. The profiler conveniently logs results to a specified file, enabling developers to analyze and optimize their applications' performance effortlessly.",
+    links: {
+      website: "",
+      github: "nodejs-performance-profiler",
+    },
+    images: [],
+    code: [
+      {
+        title: "npm install nodejs-performance-profiler",
+        description:
+          "The provided code exemplifies the utilization of the Node.js Performance Profiler library to analyze the performance of Node.js applications. After initializing the profiler, it captures memory usage, CPU usage, and uptime metrics. These metrics are then displayed in the console for real-time insights. Additionally, the profiler logs the gathered results to a designated file, facilitating comprehensive performance evaluation and optimization strategies.",
+        features: [],
+        code: `const PerformanceProfiler = require("nodejs-performance-profiler");
+        \n// Initialize the profiler\nconst profiler = new PerformanceProfiler();
+        \n// Perform operations to profile\nconst memoryUsage = profiler.getMemoryUsage();\nconst cpuUsage = profiler.getCpuUsage();\nconst upTime = profiler.getUpTime();
+        \n// console results\nconsole.log(memoryUsage, cpuUsage, upTime);
+        \n// Log profiling results to a file\nprofiler.logResults("performance.txt");`,
+        lang: "javascript",
+      },
+    ],
+    mobile: false,
+    description: "",
+    features: [],
+    built_with: [
+      {
+        name: "",
+        link: "",
+      },
+      {
+        name: "",
+        link: "",
+      },
+      {
+        name: "",
+        link: "",
+      },
+    ],
+    published: true,
+    date: "2024-05-16",
+  },
+  {
+    slug: "indus-web",
+    title: "Official Website Of Indus Real Estate LLC (Dubai)",
+    overview:
+      "Indus main website, powered by Next.js, PHP, and Node.js, delivers top-notch performance, SEO, and user engagement. With Next.js' image optimization and PHP/Node.js backend, we achieve fast load times and dynamic experiences. Prioritizing speed and scalability, we optimize all elements, from image compression to server-side rendering. With clean code and responsive layouts, our site boosts SEO, driving visibility and ranking. Continuously monitored and optimized, our site ensures an engaging user experience, spurring conversions in the real estate market.",
+    links: {
+      website: "www.indusre.com",
+      github: "indus_new_web",
+    },
+    images: [
+      "indus_web/indusre.com_1.png",
+      "indus_web/indusre.com_2.png",
+      "indus_web/indusre.com_3.png",
+      "indus_web/indusre.com_4.png",
+      "indus_web/indusre.com_5.png",
+      "indus_web/indusre.com_6.png",
+      "indus_web/indusre.com_7.png",
+    ],
+    code: [],
+    mobile: false,
+    description: ``,
+    features: [],
+    built_with: [
+      {
+        name: "",
+        link: "",
+      },
+      {
+        name: "",
+        link: "",
+      },
+      {
+        name: "",
+        link: "",
+      },
+    ],
+    published: true,
+    date: "2023-09-16",
+  },
+  {
+    slug: "indus-premium",
+    title: "Indus Website for premium properties.",
+    overview:
+      "Introducing exclusive platform for premium real estate, powered by Next.js, PHP, and Node.js. Accessible only to registered users, unique UI/UX prioritizes luxury and privacy over SEO. With lightning-fast performance and dynamic functionality, it deliver elite browsing experiences for discerning clientele.",
+    links: {
+      website: "indus-premium.vercel.app",
+      github: "melanie_new_web",
+    },
+    images: [
+      "indus_premium/indus-premium.vercel.app_1.png",
+      "indus_premium/indus-premium.vercel.app_2.png",
+      "indus_premium/indus-premium.vercel.app_3.png",
+      "indus_premium/indus-premium.vercel.app_4.png",
+      "indus_premium/indus-premium.vercel.app_5.png",
+      "indus_premium/indus-premium.vercel.app_6.png",
+      "indus_premium/indus-premium.vercel.app_7.png",
+      "indus_premium/indus-premium.vercel.app_8.png",
+      "indus_premium/indus-premium.vercel.app_9.png",
+      "indus_premium/indus-premium.vercel.app_10.png",
+      "indus_premium/indus-premium.vercel.app_11.png",
+    ],
+    code: [],
+    mobile: false,
+    description: "",
+    features: [],
+    built_with: [
+      {
+        name: "",
+        link: "",
+      },
+      {
+        name: "",
+        link: "",
+      },
+      {
+        name: "",
+        link: "",
+      },
+    ],
+    published: true,
+    date: "2023-11-03",
+  },
+  {
+    slug: "indus-cms",
+    title: "Content Management System for Website (Angular)",
+    overview:
+      "Introducing the CMS system, crafted with Angular for the frontend and backed by PHP, Node.js, and Python for the backend. With a sleek UI/UX powered by Angular Material Library, it optimizes workflow efficiency. From content management to optimization tools, every feature is designed for seamless integration and enhanced productivity.",
+    links: {
+      website: "",
+      github: "indus-cms",
+    },
+    images: [
+      "indus_cms/indusre.app_1.png",
+      "indus_cms/indusre.app_2.png",
+      "indus_cms/indusre.app_3.png",
+      "indus_cms/indusre.app_4.png",
+      "indus_cms/indusre.app_5.png",
+      "indus_cms/indusre.app_6.png",
+      "indus_cms/indusre.app_7.png",
+      "indus_cms/indusre.app_8.png",
+      "indus_cms/indusre.app_9.png",
+      "indus_cms/indusre.app_10.png",
+      "indus_cms/indusre.app_11.png",
+      "indus_cms/indusre.app_12.png",
+      "indus_cms/indusre.app_13.png",
+    ],
+    code: [],
+    mobile: false,
+    description: "",
+    features: [],
+    built_with: [
+      {
+        name: "",
+        link: "",
+      },
+      {
+        name: "",
+        link: "",
+      },
+      {
+        name: "",
+        link: "",
+      },
+    ],
+    published: true,
+    date: "2023-12-01",
+  },
+
+  {
+    slug: "property-management",
+    title: "Property Management Cloud App (Angular)",
+    overview:
+      "Introducing Property Management Cloud PWA, a cutting-edge solution for Dubai real estate. Built with Angular, PHP, Node.js, and SQL, the platform offers seamless property, unit, and lease contract management. Leveraging Firebase for push notifications and featuring a three-tier authentication system, the solution revolutionizes real estate operations with efficiency and security. With a dynamic dashboard and custom styling using SCSS, it provides intuitive navigation and a visually appealing user experience.",
+    links: {
+      website: "",
+      github: "IndusRealEstate_Customer_Portal",
+    },
+    images: ["pr_mng/pr_mng_1.jpg"],
+    code: [],
+    mobile: false,
+    description:
+      "This is an old project, Due to some internal issues the project got shutdown. Please checkout the github for the code.",
+    features: [],
+    built_with: [
+      {
+        name: "",
+        link: "",
+      },
+      {
+        name: "",
+        link: "",
+      },
+      {
+        name: "",
+        link: "",
+      },
+    ],
+    published: true,
+    date: "2022-12-27",
+  },
+
+  ////////////////////////////////
+
   {
     slug: "tenant-portal",
     title: "Tenant App (Flutter)",
@@ -1128,92 +1373,5 @@ if __name__ == '__main__':
     ],
     published: true,
     date: "2022-10-15",
-  },
-  {
-    slug: "web-element-scraper",
-    title: "Web Element Scraper (NPM Package)",
-    overview:
-      "Element Scraper is a lightweight Node.js package designed to simplify web scraping tasks by extracting text content from HTML elements on web pages. Built on top of Puppeteer and Cheerio, Element Scraper offers a user-friendly interface for effortlessly retrieving desired information from websites. Whether you're extracting article titles, product names, or any other text-based data, Element Scraper streamlines the process, making web scraping accessible to developers of all skill levels. Simplify your scraping workflow and unlock valuable insights from the web with Element Scraper.",
-    links: {
-      website: "",
-      github: "web-element-scraper",
-    },
-    images: [],
-    code: [
-      {
-        title: "npm install web-element-scraper",
-        description:
-          "Element Scraper is a lightweight Node.js package designed to simplify web scraping tasks by extracting text content from HTML elements on web pages. Built on top of Puppeteer and Cheerio, Element Scraper offers a user-friendly interface for effortlessly retrieving desired information from websites. Whether you're extracting article titles, product names, or any other text-based data, Element Scraper streamlines the process, making web scraping accessible to developers of all skill levels. Simplify your scraping workflow and unlock valuable insights from the web with Element Scraper.",
-        features: [],
-        code: `const scrape = require('web-element-scraper');
-        \nasync function exampleScrape() {\n  try {\n    const url = 'https://example.com';\n    const element = 'h1'; // The element you want to scrape\n    const titles = await scrape(url, element);\n    console.log(titles); // Output the scraped text content
-        \n  } catch (error) {\n    console.error('An error occurred:', error);\n  }\n}
-        \nexampleScrape();`,
-        lang: "javascript",
-      },
-    ],
-    mobile: false,
-    description: "",
-    features: [],
-    built_with: [
-      {
-        name: "",
-        link: "",
-      },
-      {
-        name: "",
-        link: "",
-      },
-      {
-        name: "",
-        link: "",
-      },
-    ],
-    published: true,
-    date: "2024-05-16",
-  },
-  {
-    slug: "nodejs-performance-profiler",
-    title: "Node.js Performance Profiler (NPM Package)",
-    overview:
-      "Node.js Performance Profiler is a lightweight npm package designed to facilitate the profiling of Node.js applications. With easy-to-use methods, it provides insights into memory and CPU usage, as well as elapsed time since execution start. The profiler conveniently logs results to a specified file, enabling developers to analyze and optimize their applications' performance effortlessly.",
-    links: {
-      website: "",
-      github: "nodejs-performance-profiler",
-    },
-    images: [],
-    code: [
-      {
-        title: "npm install nodejs-performance-profiler",
-        description:
-          "The provided code exemplifies the utilization of the Node.js Performance Profiler library to analyze the performance of Node.js applications. After initializing the profiler, it captures memory usage, CPU usage, and uptime metrics. These metrics are then displayed in the console for real-time insights. Additionally, the profiler logs the gathered results to a designated file, facilitating comprehensive performance evaluation and optimization strategies.",
-        features: [],
-        code: `const PerformanceProfiler = require("nodejs-performance-profiler");
-        \n// Initialize the profiler\nconst profiler = new PerformanceProfiler();
-        \n// Perform operations to profile\nconst memoryUsage = profiler.getMemoryUsage();\nconst cpuUsage = profiler.getCpuUsage();\nconst upTime = profiler.getUpTime();
-        \n// console results\nconsole.log(memoryUsage, cpuUsage, upTime);
-        \n// Log profiling results to a file\nprofiler.logResults("performance.txt");`,
-        lang: "javascript",
-      },
-    ],
-    mobile: false,
-    description: "",
-    features: [],
-    built_with: [
-      {
-        name: "",
-        link: "",
-      },
-      {
-        name: "",
-        link: "",
-      },
-      {
-        name: "",
-        link: "",
-      },
-    ],
-    published: true,
-    date: "2024-05-16",
   },
 ];
