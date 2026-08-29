@@ -144,12 +144,13 @@ const about: About = {
             parents tracking their child's health, milestones and vaccinations, both sharing one
             PostgreSQL database of 15 tables across 11 edge functions. Wrote the schema contract and
             table ownership rules that let two teams work on the same database without breaking each
-            other's features, backed by about 100 test files across the two repositories.
+            other's features, backed by about 100 test files across the two repositories. Live on the
+            App Store and Google Play since July 2026 as the agency's official app for the program.
           </>,
           <>
-            Built a Shopify Hydrogen storefront of 96 routes on React Router 7, Oxygen and Sanity
-            CMS with four other engineers, and owned the architecture notes and the Oxygen deploy
-            pipeline.
+            Built a Shopify Hydrogen storefront serving more than 10,000 daily users across India,
+            96 routes on React Router 7, Oxygen and Sanity CMS with four other engineers, and owned
+            the architecture notes and the Oxygen deploy pipeline.
           </>,
           <>
             Built a competitor price monitoring app for Shopify that matches external catalogs
