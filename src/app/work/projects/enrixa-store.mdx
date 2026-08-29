@@ -2,6 +2,10 @@
 title: "Enrixa Store, a multi-tenant e-commerce platform"
 publishedAt: "2026-08-01"
 summary: "A platform where every merchant runs an isolated store on its own subdomain, and where a query that could leak one merchant's data into another fails CI instead of reaching customers."
+images:
+  - "/images/projects/enrixa-store/01.webp"
+  - "/images/projects/enrixa-store/02.webp"
+  - "/images/projects/enrixa-store/03.webp"
 stack:
   - "NestJS"
   - "Prisma"
@@ -34,7 +38,7 @@ The practical effect is that the failure mode moved from a customer support inci
 
 ## Payments and checkout
 
-The payments layer covers Razorpay and cash on delivery. Cash on delivery matters more than it sounds: for parts of the Indian market it is still the default, and it changes the order lifecycle, because an order can be placed, dispatched and then refused at the door. That path has to be modelled properly rather than treated as an edge case on top of a card flow.
+The payments layer covers Razorpay, PhonePe, bank transfer and cash on delivery. Cash on delivery matters more than it sounds: for parts of the Indian market it is still the default, and it changes the order lifecycle, because an order can be placed, dispatched and then refused at the door. That path has to be modelled properly rather than treated as an edge case on top of a card flow.
 
 ## Storefront starter
 
