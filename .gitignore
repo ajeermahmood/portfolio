@@ -36,4 +36,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-.contentlayer
+# session handoff notes, not for the public repo
+HANDOFF.md
