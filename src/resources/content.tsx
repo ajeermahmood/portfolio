@@ -49,7 +49,7 @@ const social: Social = [
 
 const home: Home = {
   path: "/",
-  image: "/images/og/home.jpg",
+  image: "/images/og/home.png",
   label: "Home",
   title: `${person.name}, ${person.role}`,
   description: `Web, mobile and AI systems, and the infrastructure behind them. Production work across India, the UAE and the United States.`,

@@ -7,6 +7,9 @@ const withMDX = mdx({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // pin the workspace root, otherwise Turbopack walks up and finds a stray
+  // lockfile outside the repository
+  turbopack: { root: import.meta.dirname },
   pageExtensions: ["ts", "tsx", "md", "mdx"],
   transpilePackages: ["next-mdx-remote"],
   images: {
