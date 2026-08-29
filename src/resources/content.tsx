@@ -1,4 +1,4 @@
-import { About, Blog, Gallery, Home, Newsletter, Person, Social, Work } from "@/types";
+import { About, Blog, Contact, Gallery, Home, Newsletter, Person, Social, Work } from "@/types";
 import { Line, Row, SmartLink, Text } from "@once-ui-system/core";
 
 const person: Person = {
@@ -374,6 +374,13 @@ const work: Work = {
   description: `Production systems built by ${person.name}`,
 };
 
+const contact: Contact = {
+  path: "/contact",
+  label: "Contact",
+  title: `Contact ${person.name}`,
+  description: `Get in touch with ${person.name}, ${person.role}, by email`,
+};
+
 const gallery: Gallery = {
   path: "/gallery",
   label: "Gallery",
@@ -382,4 +389,4 @@ const gallery: Gallery = {
   images: [],
 };
 
-export { person, social, newsletter, home, about, blog, work, gallery };
+export { person, social, newsletter, home, about, blog, work, contact, gallery };

@@ -220,6 +220,11 @@ export interface About extends BasePageConfig {
 }
 
 /**
+ * Contact page configuration.
+ */
+export interface Contact extends BasePageConfig {}
+
+/**
  * Blog page configuration.
  * @description Configuration for the Blog page, including metadata and navigation label.
  */

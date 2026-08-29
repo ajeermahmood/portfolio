@@ -22,6 +22,7 @@ const routes: RoutesConfig = {
   "/about": true,
   "/work": true,
   "/blog": true,
+  "/contact": true,
   // no photo set to show yet
   "/gallery": false,
 };
