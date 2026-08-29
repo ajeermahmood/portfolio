@@ -6,7 +6,7 @@ const person: Person = {
   lastName: "Mohammed",
   name: `Ajeer Mohammed`,
   role: "Senior Full-Stack Engineer",
-  avatar: "",
+  avatar: "/images/avatar.webp",
   email: "ajeermahmood@outlook.com",
   location: "Asia/Calcutta",
   locationLabel: "India",
@@ -52,7 +52,7 @@ const home: Home = {
   image: "/images/og/home.jpg",
   label: "Home",
   title: `${person.name}, ${person.role}`,
-  description: `Web, mobile and AI systems, and the infrastructure behind them. Five years of production work across India, the UAE and the United States.`,
+  description: `Web, mobile and AI systems, and the infrastructure behind them. Production work across India, the UAE and the United States.`,
   headline: <>I build production systems and run what they sit on</>,
   featured: {
     display: true,
@@ -69,9 +69,9 @@ const home: Home = {
   },
   subline: (
     <>
-      I'm {person.firstName}, a full-stack engineer with five years of experience building web,
-      mobile and AI systems. Right now I lead development on a multi-tenant e-commerce platform
-      <br /> and an AI shopping assistant, and I handle the deployment and operations behind both.
+      I'm {person.firstName}, a full-stack engineer who builds web, mobile and AI systems and runs
+      the infrastructure behind them. Right now I lead development on a multi-tenant e-commerce
+      <br /> platform and an AI shopping assistant, and I handle the deployment and operations for both.
     </>
   ),
 };
@@ -86,7 +86,7 @@ const about: About = {
     subItems: false,
   },
   avatar: {
-    display: false,
+    display: true,
   },
   calendar: {
     display: false,
@@ -97,8 +97,8 @@ const about: About = {
     title: "Introduction",
     description: (
       <>
-        Full-stack engineer with five years of experience building production web, mobile and AI
-        systems, and running the infrastructure behind them. Currently the lead developer on a
+        Full-stack engineer building production web, mobile and AI systems, and running the
+        infrastructure behind them. Currently the lead developer on a
         multi-tenant e-commerce platform and an AI shopping assistant, where the work covers
         architecture, planning, cost decisions and code review for a team of 4 to 6 developers.
         Past projects have shipped to a US state health department, international pharmaceutical

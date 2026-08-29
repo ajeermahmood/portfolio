@@ -1,0 +1,83 @@
+---
+title: "Making a codebase safe for coding agents"
+subtitle: "Instructions tell an agent what you want. Gates decide what actually lands."
+summary: "Three different things get called AI engineering and they are not worth the same. This is about the third one: setting up production repositories so an AI agent can work in them without anyone having to trust it."
+publishedAt: "2026-08-30"
+tag: "Agentic engineering"
+---
+
+## Three things share one name
+
+By 2026, three fairly different activities all get described as AI engineering, and they are not worth the same.
+
+The first is using an AI agent to write code. In 2026 this is table stakes. Nearly every working developer does it. Saying so on a resume adds nothing, and in an interview it invites scrutiny rather than interest.
+
+The second is building agentic systems that run in production. Tool calling, retrieval, streaming, fallback when a provider is slow. This is real engineering and there is genuine demand for it.
+
+The third gets talked about least. It is setting up a codebase so that agents can work inside it safely. Not prompting better. Changing the repository so that the consequences of an agent being wrong are contained.
+
+I have spent a fair amount of the last year on the third one, across 8 production repositories. This is what I actually did and what I would tell someone starting.
+
+## The real problem is not code quality
+
+The first instinct is to worry that agent-written code will be bad. That turns out to be the wrong thing to worry about.
+
+Agent-written code is usually fine. It compiles, it follows the local style, it often has tests. The problem is that it is produced faster than anyone can meaningfully review it, and it arrives with uniform confidence. A human contributor gives you signals. They flag the bit they were unsure about. They write a shorter description when they rushed. They ask before touching the payments code.
+
+An agent gives you none of that. Every change looks equally considered. So the reviewer, who is a person with a finite attention span, is now the entire safety system, and they are reading more code than before with fewer clues about where to look.
+
+That is the actual failure mode. Not bad code. Too much plausible code, and no signal about which part deserves attention.
+
+## Instructions are necessary and not sufficient
+
+The standard answer is an instructions file. `AGENTS.md`, `CLAUDE.md`, whatever your tooling reads. We have these across all 8 repositories, and they are worth writing.
+
+What goes in them is not style rules. Style is what a linter is for. What goes in them is the knowledge that is not visible in the code:
+
+- Which parts of the schema are shared with another repository, and therefore cannot be changed unilaterally.
+- Which patterns look reasonable and are forbidden here for a reason.
+- What the tenancy model is, and what "correct" means in a system where correct depends on which tenant is asking.
+- Where the expensive-to-reverse decisions live, and that they need a human.
+
+This helps. But an instruction is a request. It is followed most of the time, which sounds good until you consider what most of the time means across hundreds of changes. An instruction that is followed 95% of the time, applied to a rule about tenant isolation, is not a safety mechanism. It is a probability of a data leak.
+
+So instructions are how you tell an agent what you want. They are not how you decide what lands.
+
+## Gates are what actually work
+
+The thing that changed how much I trusted this setup was moving the important rules out of the instruction file and into the build.
+
+On our multi-tenant platform, the biggest risk is a query that forgets its tenant filter. It reads fine in review. It passes tests written against a single tenant. It surfaces in production when one merchant sees another merchant's orders.
+
+That rule now lives in CI. Every pull request runs a check that inspects data access for queries capable of crossing a tenant boundary, and fails the build when it finds one. A second check diffs migrations against `main` for changes that would break an already deployed tenant, across a schema that has now taken 83 migrations.
+
+The interesting part is not that this catches agent mistakes. It is that it catches mine too. I wrote the rule and I have been stopped by it. A gate that only constrains the agent is a gate you will eventually route around under deadline pressure. A gate that constrains everyone is infrastructure.
+
+We have a few more of these as scripts: an audit pass, the tenant-check, and a review-watcher that keeps an eye on what has landed. None of them are clever. They are all narrow, and being narrow is why they are trustworthy.
+
+## The rule I would keep
+
+Agents pass through the same gates the team does. No separate track, no fast lane, no special-casing.
+
+This matters more than it sounds. The tempting setup is to give agent changes a lighter path, because there are more of them and reviewing all of them is tiring. That is exactly backwards. The volume is the reason to keep the gates, not a reason to relax them.
+
+The practical test I use: if an agent's change is merged and turns out to be wrong, whose process failed? If the answer is "the reviewer should have caught it", the setup is not finished. If the answer is "the check did not exist yet, and now it does", that is a system that improves.
+
+## What this does not solve
+
+It does not solve architecture. An agent will happily build the wrong thing very competently, and no gate catches that, because the code is not defective. It is just not what should have been built. Deciding what to build is still entirely a human job and I have not seen anything to suggest otherwise.
+
+It does not remove review. It changes what review is for. Less checking that the code works, more checking that the change was worth making.
+
+And it costs real time up front. The gates took longer to write than the features they protect. That trade is only worth making on code where being wrong is expensive. On a multi-tenant platform holding other people's customer data, it is worth making. On a landing page, it is not.
+
+## Where to start
+
+If you want to try this on your own repository, the order that worked for me:
+
+1. Write down the one thing that would be most expensive to get wrong. Not a list. One thing.
+2. Work out whether a machine can detect it. Often it can, more cheaply than you expect.
+3. Put that check in CI where it blocks the merge, and make it apply to everybody.
+4. Only then write the instructions file, for the things a machine cannot check.
+
+Most people do this in the reverse order, starting with a long instructions file and hoping. The instructions file is the easy half and it is the half that does not hold.

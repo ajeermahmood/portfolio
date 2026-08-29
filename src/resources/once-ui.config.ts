@@ -21,8 +21,8 @@ const routes: RoutesConfig = {
   "/": true,
   "/about": true,
   "/work": true,
-  // no posts written yet, and no photo set to show
-  "/blog": false,
+  "/blog": true,
+  // no photo set to show yet
   "/gallery": false,
 };
 
