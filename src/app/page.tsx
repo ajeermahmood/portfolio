@@ -16,6 +16,7 @@ import { Mailchimp } from "@/components";
 import { Projects } from "@/components/work/Projects";
 import { Posts } from "@/components/blog/Posts";
 import { generateMeta } from "@/utils/seo";
+import { ContactCTA } from "@/components/ContactCTA";
 
 export async function generateMetadata() {
   return generateMeta({
@@ -127,6 +128,7 @@ export default function Home() {
       )}
       <Projects range={[2]} />
       <Mailchimp />
+      <ContactCTA />
     </Column>
   );
 }

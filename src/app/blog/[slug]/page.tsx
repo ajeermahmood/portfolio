@@ -85,6 +85,27 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
       <JsonLd
         data={{
           "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Home", item: baseURL },
+            {
+              "@type": "ListItem",
+              position: 2,
+              name: blog.label,
+              item: `${baseURL}${blog.path}`,
+            },
+            {
+              "@type": "ListItem",
+              position: 3,
+              name: post.metadata.title,
+              item: `${baseURL}${blog.path}/${post.slug}`,
+            },
+          ],
+        }}
+      />
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
           "@type": "BlogPosting",
           mainEntityOfPage: {
             "@type": "WebPage",

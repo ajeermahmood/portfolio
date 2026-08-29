@@ -52,7 +52,7 @@ const home: Home = {
   image: "/images/og/home.png",
   label: "Home",
   title: `${person.name}, ${person.role}`,
-  description: `Web, mobile and AI systems, and the infrastructure behind them. Production work across India, the UAE and the United States.`,
+  description: `Senior full-stack engineer. Multi-tenant e-commerce, AI shopping assistants and mobile apps, shipped to a US state health agency and global brands.`,
   headline: <>I build production systems and run what they sit on</>,
   featured: {
     display: true,

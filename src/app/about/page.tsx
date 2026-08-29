@@ -17,6 +17,7 @@ import TableOfContents from "@/components/about/TableOfContents";
 import styles from "@/components/about/about.module.scss";
 import React from "react";
 import { generateMeta } from "@/utils/seo";
+import { ContactCTA } from "@/components/ContactCTA";
 
 export async function generateMetadata() {
   return generateMeta({
@@ -339,6 +340,7 @@ export default function About() {
           )}
         </Column>
       </Row>
+      <ContactCTA />
     </Column>
   );
 }

@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 import { getPosts } from "@/utils/utils";
 import {
   Meta,
-  Schema,
   AvatarGroup,
   Button,
   Column,
@@ -15,12 +14,13 @@ import {
   Avatar,
   Line,
 } from "@once-ui-system/core";
-import { baseURL, about, person, work } from "@/resources";
+import { baseURL, about, person, social, work } from "@/resources";
 import { formatDate } from "@/utils/formatDate";
 import { ScrollToHash, CustomMDX } from "@/components";
 import { Metadata } from "next";
 import { Projects } from "@/components/work/Projects";
 import { generateMeta } from "@/utils/seo";
+import { JsonLd } from "@/components/JsonLd";
 
 export async function generateStaticParams(): Promise<{ slug: string }[]> {
   const posts = getPosts(["src", "app", "work", "projects"]);
@@ -86,24 +86,60 @@ export default async function Project({
     })) || [];
 
   return (
-    <Column as="section" maxWidth="m" horizontal="center" gap="l">
-      <Schema
-        as="blogPosting"
-        baseURL={baseURL}
-        path={`${work.path}/${post.slug}`}
-        title={post.metadata.title}
-        description={post.metadata.summary}
-        datePublished={post.metadata.publishedAt}
-        dateModified={post.metadata.publishedAt}
-        image={
-          post.metadata.image || `/api/og/generate?title=${encodeURIComponent(post.metadata.title)}`
-        }
-        author={{
-          name: person.name,
-          url: `${baseURL}${about.path}`,
-          image: `${baseURL}${person.avatar}`,
+    <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "Article",
+          mainEntityOfPage: {
+            "@type": "WebPage",
+            "@id": `${baseURL}${work.path}/${post.slug}`,
+          },
+          url: `${baseURL}${work.path}/${post.slug}`,
+          headline: post.metadata.title,
+          description: post.metadata.summary,
+          image: [
+            post.metadata.images?.[0]
+              ? `${baseURL}${post.metadata.images[0]}`
+              : `${baseURL}/api/og/generate?title=${encodeURIComponent(post.metadata.title)}`,
+          ],
+          datePublished: post.metadata.publishedAt,
+          dateModified: post.metadata.publishedAt,
+          inLanguage: "en",
+          ...(post.metadata.stack?.length ? { keywords: post.metadata.stack.join(", ") } : {}),
+          author: {
+            "@type": "Person",
+            name: person.name,
+            url: `${baseURL}${about.path}`,
+            image: `${baseURL}${person.avatar}`,
+            jobTitle: person.role,
+            sameAs: social.filter((s) => s.link.startsWith("http")).map((s) => s.link),
+          },
+          publisher: { "@type": "Person", name: person.name, url: baseURL },
         }}
       />
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Home", item: baseURL },
+            {
+              "@type": "ListItem",
+              position: 2,
+              name: work.label,
+              item: `${baseURL}${work.path}`,
+            },
+            {
+              "@type": "ListItem",
+              position: 3,
+              name: post.metadata.title,
+              item: `${baseURL}${work.path}/${post.slug}`,
+            },
+          ],
+        }}
+      />
+    <Column as="section" maxWidth="m" horizontal="center" gap="l">
       <Column maxWidth="s" gap="16" horizontal="center" align="center">
         <SmartLink href="/work">
           <Text variant="label-strong-m">Projects</Text>
@@ -191,5 +227,6 @@ export default async function Project({
       </Column>
       <ScrollToHash />
     </Column>
+    </>
   );
 }
