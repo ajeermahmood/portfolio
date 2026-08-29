@@ -1,0 +1,39 @@
+---
+title: "Indus lease management CRM and tenant app"
+publishedAt: "2022-12-27"
+summary: "A progressive web app covering more than 200 units, tracking lease expiry, payments, cheques and maintenance, with a Flutter app on the tenant side."
+images:
+  - "/images/projects/indus-lease-crm/01.webp"
+github: "https://github.com/ajeermahmood/IndusRealEstate_Customer_Portal"
+stack:
+  - "Angular"
+  - "PHP"
+  - "Node.js"
+  - "SQL"
+  - "Flutter"
+  - "Firebase"
+---
+
+## Overview
+
+Lease management for Indus Real Estate, covering more than 200 units in Dubai. Built as a progressive web app for the staff side, with a companion Flutter app for tenants.
+
+## The staff side
+
+The system tracks properties, units and lease contracts, and the things that hang off a lease: expiry dates, payment schedules, cheques and maintenance requests.
+
+Cheques are the part that is specific to this market. In the UAE, rent is commonly paid with a set of post-dated cheques handed over at signing, one per instalment. Each has a date, a bank, a status, and consequences if it bounces. A generic property system built around monthly card or transfer payments cannot represent that, so cheque handling is a first-class part of the data model rather than a note attached to a payment.
+
+Lease expiry drives most of the daily work. The dashboard is built around what is coming up, because a lease renewal that nobody noticed until the week it expired is a vacant unit.
+
+Authentication runs at three tiers, separating what an administrator, a staff member and a tenant can each reach. Firebase handles push notifications.
+
+## The tenant app
+
+A Flutter app for tenants covering the things they otherwise phone the office about: submitting and following maintenance requests, reading building announcements, checking their lease and unit details, and leaving feedback.
+
+Most of the value here is deflected phone calls. A tenant who can see that their maintenance request was received and assigned does not call to ask.
+
+## Status
+
+This project has since been shut down for reasons internal to the business, so there is no live deployment to link. The source is on GitHub, and there is only one screenshot left from it.

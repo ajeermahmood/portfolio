@@ -1,0 +1,73 @@
+---
+title: "Indus CMS and its image pipeline"
+publishedAt: "2023-12-01"
+summary: "The Angular CMS behind both Indus sites, with a Node.js image service that resizes, crops and converts every upload to WebP on the way in."
+images:
+  - "/images/projects/indus-cms/01.webp"
+  - "/images/projects/indus-cms/02.webp"
+  - "/images/projects/indus-cms/03.webp"
+  - "/images/projects/indus-cms/04.webp"
+  - "/images/projects/indus-cms/05.webp"
+  - "/images/projects/indus-cms/06.webp"
+  - "/images/projects/indus-cms/07.webp"
+  - "/images/projects/indus-cms/08.webp"
+  - "/images/projects/indus-cms/09.webp"
+  - "/images/projects/indus-cms/10.webp"
+  - "/images/projects/indus-cms/11.webp"
+  - "/images/projects/indus-cms/12.webp"
+  - "/images/projects/indus-cms/13.webp"
+github: "https://github.com/ajeermahmood/indus-cms"
+stack:
+  - "Angular"
+  - "Node.js"
+  - "PHP"
+  - "Python"
+  - "Sharp"
+---
+
+## Overview
+
+The content management system behind the Indus property sites. The content team uses it to manage listings, media and page content, and it feeds both the public site and the private premium portal.
+
+Angular with Angular Material on the front, PHP and Node.js behind it, with some Python for the reporting side.
+
+## The image pipeline
+
+This is the part of the CMS that mattered most, because it is what made the [70 percent load time improvement](/work/indus-property-site) on the public site possible.
+
+The problem it solves is ordinary. Agents upload photographs straight from a camera or a phone. Those files are several megabytes each, in whatever dimensions the device produced, and a listing has a dozen of them. Left alone, they go to the website at full size, and the site is slow no matter what else is optimised.
+
+Rather than ask agents to resize images before uploading, which does not work, the CMS handles it at upload. A Node.js service built on Sharp takes each upload and produces the sizes the site actually uses, converted to WebP.
+
+The core of it is two endpoints. One takes a batch and returns the resized set, one optimises a single image:
+
+```js
+const sharp = require("sharp");
+
+// resize a batch to the requested format, scale and quality
+app.post("/bulk-resize", upload.array("files[]"), async (req, res) => {
+  const options = JSON.parse(req.body.options);
+  const info = JSON.parse(req.body.img_name_and_index);
+
+  const width = Math.round(info.width * (options.scale / 100));
+  const height = Math.round((width * info.height) / info.width);
+
+  const resized = await Promise.all(
+    req.files.map((file) =>
+      sharp(Buffer.from(file.buffer))
+        .resize(width, height)
+        .toFormat(options.format, { quality: options.quality })
+        .toBuffer(),
+    ),
+  );
+
+  // returned to the client as a zip
+  return sendArchive(res, resized);
+});
+```
+
+Aspect ratio is derived from the original rather than passed in, so a batch of mixed portrait and landscape photographs comes back correctly proportioned instead of squashed to a common size. That sounds obvious and is the bug this kind of endpoint usually ships with.
+
+## Reporting
+
+The CMS also carries reporting for the content team: which listings are being viewed, which are stale, and where enquiries are coming from. This is the part that decides whether a CMS is used properly, because it tells the team which listings are worth their attention.

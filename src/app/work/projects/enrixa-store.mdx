@@ -1,0 +1,45 @@
+---
+title: "Enrixa Store, a multi-tenant e-commerce platform"
+publishedAt: "2026-08-01"
+summary: "A platform where every merchant runs an isolated store on its own subdomain, and where a query that could leak one merchant's data into another fails CI instead of reaching customers."
+stack:
+  - "NestJS"
+  - "Prisma"
+  - "PostgreSQL"
+  - "Redis"
+  - "Next.js"
+  - "TypeScript"
+---
+
+## Overview
+
+Enrixa Store is SEA Media's own e-commerce platform. Each merchant gets an isolated store on its own subdomain, sharing one deployment and one database. I am the lead developer on it and set the tenancy model, the payments layer and the release plan.
+
+As of this writing the codebase is around 135,000 lines. The data layer has 56 models and 14 enums in Prisma, and 83 SQL migrations have been applied to it. The API exposes 259 REST endpoints across 48 controllers. There are 71 test files.
+
+The backend is NestJS with Prisma over PostgreSQL and Redis. The frontend is two separate Next.js applications, one for the merchant admin and one for the customer storefront, so the two can be deployed and scaled apart from each other.
+
+## Tenant isolation as a build requirement
+
+The largest risk in a shared-database platform is a query that forgets its tenant filter. It usually looks fine in review, passes tests written against a single tenant, and only shows itself in production when one merchant sees another merchant's orders.
+
+Code review is not a reliable defence against that, because it depends on a person noticing a missing clause in a file they are skimming. So I moved the check to a place that cannot be skipped.
+
+Every pull request now runs two automated gates:
+
+- **An isolation check** that inspects data access for queries capable of crossing a tenant boundary, and fails the build when it finds one.
+- **A migration compatibility diff** against `main`, which catches schema changes that would break a deployed tenant before they are merged rather than after.
+
+The practical effect is that the failure mode moved from a customer support incident to a red build. That is the change I am most confident about on this project, and it holds across a schema that has now taken 83 migrations.
+
+## Payments and checkout
+
+The payments layer covers Razorpay and cash on delivery. Cash on delivery matters more than it sounds: for parts of the Indian market it is still the default, and it changes the order lifecycle, because an order can be placed, dispatched and then refused at the door. That path has to be modelled properly rather than treated as an edge case on top of a card flow.
+
+## Storefront starter
+
+Tenant storefronts are built from a shared starter package that consumes a published `@enrixa/types` package, so the storefronts and the API agree on their contract at compile time rather than at runtime. One tenant storefront built this way runs to about 42,000 lines on its own.
+
+## What I own
+
+Architecture and the tenancy model, the schema and its migration policy, code review for a team of 4 to 6 developers, and the deployment: Docker images, GitHub Actions pipelines, and the managed PostgreSQL and Redis instances.

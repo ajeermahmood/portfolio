@@ -1,0 +1,31 @@
+---
+title: "A Shopify Hydrogen storefront on Oxygen and Sanity"
+publishedAt: "2025-10-22"
+summary: "A 96-route storefront built with four other engineers, on React Router 7 and Hydrogen, with the content model in Sanity and deploys on Oxygen."
+stack:
+  - "Shopify Hydrogen"
+  - "React Router 7"
+  - "Oxygen"
+  - "Sanity CMS"
+  - "TypeScript"
+---
+
+## Overview
+
+A retail brand's storefront, built on Shopify Hydrogen. I worked on it with four other engineers and owned the architecture notes and the deploy pipeline. The client is not named here pending their sign-off.
+
+The codebase is around 110,000 lines across 96 routes. Product and commerce data comes from Shopify, and editorial content comes from Sanity, which means most pages assemble from two sources with different caching behaviour.
+
+## Two sources, one page
+
+The split between Shopify and Sanity is the thing that shapes this codebase. Shopify owns products, variants, inventory and the cart. Sanity owns everything the marketing team wants to change without a deploy: landing pages, editorial blocks, campaign content.
+
+A single product page pulls from both. They have different freshness requirements, because a price or a stock level going stale is a real problem and a piece of campaign copy going stale for a minute is not. Treating both as one cache tier makes the site either slower than it needs to be or wrong in ways that matter, so they are cached separately.
+
+## Deploys
+
+I owned the Oxygen deploy pipeline. Oxygen runs storefronts at the edge, which is good for the customer and unforgiving about anything in the code that assumed a Node runtime. A significant part of setting the pipeline up was making that constraint fail early and locally rather than at deploy time.
+
+## Working with four other engineers
+
+Most of my time on this went into architecture notes rather than routes. With five people on one storefront, the routes are not the hard part. The hard part is that everyone needs the same answer to where data loading belongs, what is cached and for how long, and which of the two content sources owns a given piece of a page. Writing those down was cheaper than settling them repeatedly in review.

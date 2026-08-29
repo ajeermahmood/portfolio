@@ -1,0 +1,40 @@
+---
+title: "Indus Real Estate, public property site"
+publishedAt: "2023-09-16"
+summary: "A rebuild of a Dubai real estate agency's public site that cut page load time by 70 percent, measured on first contentful paint."
+images:
+  - "/images/projects/indus-property-site/01.webp"
+  - "/images/projects/indus-property-site/02.webp"
+  - "/images/projects/indus-property-site/03.webp"
+  - "/images/projects/indus-property-site/04.webp"
+  - "/images/projects/indus-property-site/05.webp"
+  - "/images/projects/indus-property-site/06.webp"
+  - "/images/projects/indus-property-site/07.webp"
+link: "https://www.indusre.com"
+github: "https://github.com/ajeermahmood/indus_new_web"
+stack:
+  - "Next.js"
+  - "Node.js"
+  - "PHP"
+  - "SQL"
+---
+
+## Overview
+
+The public website for Indus Real Estate in Dubai. Property listings, search and filtering, and the paths that put a prospective buyer or tenant in touch with an agent.
+
+## Page load time
+
+The rebuild cut page load time by 70 percent, measured on first contentful paint.
+
+Nearly all of that came from images. A property site is mostly photographs, and the original was serving full-resolution uploads straight from the CMS at whatever size the agent happened to upload. Fixing this meant resizing and converting at upload time rather than at request time, serving WebP, and sizing images to their actual display dimensions. Server-side rendering the listing pages did the rest, because the first thing a visitor sees is a grid of properties and there is no reason to wait on JavaScript to draw it.
+
+The reason to care beyond the number: this is a site people open on a phone, on mobile data, often from a property listing link someone sent them. Load time is the difference between an enquiry and a closed tab.
+
+## Search and filtering
+
+Property search has more filters than it first appears: location, type, price range, bedrooms, furnishing, and availability. The useful part is keeping those in the URL, so an agent can send a client a link to a filtered set and it opens the way they left it.
+
+## Build
+
+Next.js on the front, with PHP and Node.js behind it over SQL. Responsive layouts throughout and server rendering for the pages that need to be indexed, since organic search is where most of the traffic starts.

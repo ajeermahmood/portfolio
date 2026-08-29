@@ -1,0 +1,60 @@
+---
+title: "L'Oréal's event app for Android and iOS"
+publishedAt: "2024-11-02"
+summary: "Agendas, badge scanning, live voting, surveys and push notifications for L'Oréal Dubai, used at more than five live events."
+images:
+  - "/images/projects/loreal-event-app/01.webp"
+  - "/images/projects/loreal-event-app/02.webp"
+  - "/images/projects/loreal-event-app/03.webp"
+  - "/images/projects/loreal-event-app/04.webp"
+  - "/images/projects/loreal-event-app/05.webp"
+  - "/images/projects/loreal-event-app/06.webp"
+  - "/images/projects/loreal-event-app/07.webp"
+  - "/images/projects/loreal-event-app/08.webp"
+  - "/images/projects/loreal-event-app/09.webp"
+  - "/images/projects/loreal-event-app/10.webp"
+  - "/images/projects/loreal-event-app/11.webp"
+  - "/images/projects/loreal-event-app/12.webp"
+  - "/images/projects/loreal-event-app/13.webp"
+  - "/images/projects/loreal-event-app/14.webp"
+  - "/images/projects/loreal-event-app/15.webp"
+  - "/images/projects/loreal-event-app/16.webp"
+  - "/images/projects/loreal-event-app/17.webp"
+  - "/images/projects/loreal-event-app/18.webp"
+  - "/images/projects/loreal-event-app/19.webp"
+  - "/images/projects/loreal-event-app/20.webp"
+  - "/images/projects/loreal-event-app/21.webp"
+  - "/images/projects/loreal-event-app/22.webp"
+  - "/images/projects/loreal-event-app/23.webp"
+github: "https://github.com/ajeermahmood/event_app_flutter"
+stack:
+  - "Flutter"
+  - "Dart"
+  - ".NET"
+  - "SQL"
+---
+
+## Overview
+
+An event app for L'Oréal Dubai, shipped on Android and iOS from one Flutter codebase, and used at more than five live events.
+
+It covers the whole day for an attendee: signing in, finding out what is on, taking part, and giving feedback afterwards.
+
+## Key features
+
+- **Accounts and digital badges.** Attendees register and are issued a badge used for identification and check-in throughout the event.
+- **Badge scanning.** A companion QR scanner app handles check-in at the door and at individual sessions, so attendance is recorded per session rather than only at the entrance.
+- **Agenda and speaker profiles.** The schedule, session detail, and who is presenting.
+- **Live Q&A and voting.** Attendees submit questions and vote from their seats during a session.
+- **Surveys.** Feedback collected in the app while the event is still running rather than by email afterwards.
+- **Push notifications.** Schedule changes and reminders, which at a multi-track event is the difference between a room being full and being empty.
+- **Media gallery.** Photos and video from the event, available to attendees during and after it.
+- **Venue navigation.** Location services for getting to the venue and around it.
+
+## Notes on building it
+
+Events are an unusual deployment target. There is one day when the app has to work, in a room full of people on congested wifi, and no useful opportunity to ship a fix while it is happening. That pushes the testing effort forward and makes the failure behaviour of every network call worth thinking about in advance.
+
+Flutter was the right choice here mainly because the audience arrives with whatever phone they own, split across both platforms, and the timeline did not allow two native builds.
+
+The backend is .NET over SQL.

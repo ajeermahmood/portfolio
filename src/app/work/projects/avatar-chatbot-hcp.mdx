@@ -1,0 +1,36 @@
+---
+title: "A talking avatar chatbot for healthcare professionals"
+publishedAt: "2024-10-20"
+summary: "A virtual medical representative that answers product questions from healthcare professionals, with generated speech and an on-screen avatar."
+images:
+  - "/images/projects/avatar-chatbot-hcp/01.webp"
+  - "/images/projects/avatar-chatbot-hcp/02.webp"
+github: "https://github.com/ajeermahmood/nextjs-ai-chatbot"
+stack:
+  - "Next.js"
+  - "Python"
+  - "Node.js"
+  - "Google TTS"
+---
+
+## Overview
+
+Built for pharmaceutical clients as an interactive piece: a chatbot that stands in for a medical representative and answers questions from healthcare professionals about a company's products.
+
+A healthcare professional asks about indications, usage, or guidelines, and gets an answer back as speech from an on-screen avatar rather than as a wall of text.
+
+## Why speech and an avatar
+
+The obvious version of this is a text chatbot, and it would have been quicker to build. The reason for the avatar is the setting. This is used at stands and in demonstrations where someone is standing up, often holding something, and not in a position to read a screen carefully. Spoken answers work in that context in a way text does not.
+
+## Build
+
+The frontend is Next.js. Behind it, a Python service handles the language model side and a separate Flask service generates the audio through Google's text-to-speech, returning it to the client to play in sync with the avatar. Node.js handles the rest of the API surface.
+
+Splitting audio generation into its own service was worth it. Speech synthesis is slow relative to everything else on the page, and it has different scaling behaviour, so keeping it separate meant it could be sized and cached on its own terms rather than holding up the response.
+
+The answers are grounded in the client's own product material rather than being left to a general model, which for anything medical is the whole point.
+
+## A note on the client
+
+The previous version of this page listed different client names for this project than my resume does. I have left the client unnamed here until I have confirmed which is correct.

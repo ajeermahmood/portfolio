@@ -1,0 +1,36 @@
+---
+title: "Enrixa AI, a shopping assistant for Shopify"
+publishedAt: "2026-05-01"
+summary: "A tool-calling agent that answers shopper questions against a live product catalog, streamed over SSE, with a chat widget that cannot collide with the store's own CSS."
+stack:
+  - "Fastify"
+  - "TypeScript"
+  - "BullMQ"
+  - "Redis"
+  - "Preact"
+  - "LLM tool calling"
+---
+
+## Overview
+
+Enrixa AI is a shopping assistant that merchants add to their Shopify storefront. A shopper asks a question in plain language, and the assistant answers using the merchant's actual catalog rather than a generic model response.
+
+It is SEA Media's second product, and I wrote the product and technical plan behind it, including the cost model and the scaling approach. The service is around 15,500 lines.
+
+## How it works
+
+The service is Fastify. Replies stream back to the browser over server-sent events, so the shopper sees an answer forming instead of waiting on a complete response. The model is given tools rather than a pre-built prompt full of catalog text, so it can look up a product, check variants, or check stock as part of answering.
+
+BullMQ workers keep the catalog and its embeddings in sync in the background. This is the part that decides whether the assistant is useful: an assistant that recommends a product the merchant stopped selling last week is worse than no assistant, so catalog freshness is a queue-backed job rather than something that happens on request.
+
+## The widget
+
+The storefront widget is Preact, rendered inside a shadow DOM.
+
+That decision is worth explaining, because it is the difference between a widget that works on every store and one that generates support tickets. Shopify themes are arbitrary CSS written by many different people. A widget injected into that page will inherit rules it never asked for, and will in turn leak its own rules into the theme. Shadow DOM gives the widget its own style scope, so neither happens. Preact keeps the bundle small enough that adding the assistant does not measurably cost the merchant page speed.
+
+## Decisions worth recording
+
+I kept a decision log on this project for choices that would be expensive to reverse: the streaming protocol, the embedding model, where the tenant boundary sits, and the fallback behaviour when a provider is slow or down. Provider fallback in particular is easy to add early and painful to retrofit, because it constrains how the rest of the service handles partial responses.
+
+The log is short. It is only for decisions where the cost of changing course later is high enough to be worth writing down the reasoning at the time.

@@ -1,0 +1,47 @@
+---
+title: "A gamified training platform for Abbott's medical reps"
+publishedAt: "2024-08-06"
+summary: "A CRM where trainers build realistic sales scenarios, and a game where more than 1,000 medical representatives play through them against a live leaderboard."
+images:
+  - "/images/projects/abbott-training-crm/01.webp"
+  - "/images/projects/abbott-training-crm/02.webp"
+  - "/images/projects/abbott-training-crm/03.webp"
+  - "/images/projects/abbott-training-crm/04.webp"
+  - "/images/projects/abbott-training-crm/05.webp"
+  - "/images/projects/abbott-training-crm/06.webp"
+  - "/images/projects/abbott-training-crm/07.webp"
+  - "/images/projects/abbott-training-crm/08.webp"
+  - "/images/projects/abbott-training-crm/09.webp"
+  - "/images/projects/abbott-training-crm/10.webp"
+  - "/images/projects/abbott-training-crm/11.webp"
+  - "/images/projects/abbott-training-crm/12.webp"
+link: "https://thcpgame.com"
+github: "https://github.com/ajeermahmood/medical_rep_training_crm"
+stack:
+  - "Angular"
+  - "PHP"
+  - "Node.js"
+  - "SQL"
+---
+
+## Overview
+
+Abbott's medical representatives have to hold useful conversations with healthcare professionals about specific products. This platform trains them for that, and it was used by over 1,000 reps worldwide.
+
+It is two connected applications. A CRM where admins build training content, and a game where reps play through it.
+
+## The CRM side
+
+Admins work at three levels: global, country, and technical. That structure exists because the product line and the regulatory position differ by country, so a global team cannot write one script that is correct everywhere, and a country team should not be rebuilding the framework each time.
+
+Trainers build scenarios across the channels a rep actually uses: SMS, email, and face-to-face visits. A scenario is a branching conversation, so the same opening can go several ways depending on what the rep chooses. Those scenarios are then assembled into games and tournaments.
+
+## The game side
+
+Reps log in through a separate gateway and join a session with a code sent to them by email. They play through scenarios and are scored on their choices.
+
+A live leaderboard shows scores as the session runs. This is the part that changes behaviour: a training module people complete once becomes a tournament people want to win, and the scenarios get replayed. The platform also supports public live events, where a session runs in front of a room.
+
+## Build
+
+Angular on the front end, PHP and Node.js behind it over SQL, split into services. Per-region admin panels, a CMS for the training content, and reporting on top.

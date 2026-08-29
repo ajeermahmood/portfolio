@@ -1,0 +1,46 @@
+---
+title: "An infant safety program for a US state health agency"
+publishedAt: "2026-02-01"
+summary: "Two repositories, an admin CMS and a parent-facing mobile app, sharing one database. The interesting part was the contract that let two teams work on that database without breaking each other."
+stack:
+  - "Next.js 16"
+  - "React 19"
+  - "Supabase"
+  - "PostgreSQL"
+  - "Flutter"
+  - "Dart"
+---
+
+## Overview
+
+A public health agency in one US state runs an infant safety program. I led a two-repository build for it: an admin CMS used by the agency's staff, and a mobile app used by parents to track their child's health, milestones and vaccinations.
+
+The client is not named here, and there are no screenshots, because this is health-sector government work and that permission is not mine to give.
+
+The CMS is Next.js 16 and React 19 on Supabase, at around 101,000 lines with 28 server actions and 11 edge functions. The mobile app is Flutter, at around 176,000 lines across 469 Dart files. Between the two there are about 100 test files.
+
+## One database, two teams
+
+Both applications read and write the same PostgreSQL database, 15 shared tables. That is the right call for this product, because a parent's record and the agency's view of that record should never be two systems drifting apart. It is also the thing most likely to go wrong.
+
+The failure mode is ordinary and expensive. The web team adds a column with a `NOT NULL` constraint. The mobile build, which ships on the app store's timetable rather than the web team's, starts failing on insert for every user still on the previous version. Nobody did anything unreasonable, and the product is broken anyway.
+
+So before either team wrote much, I wrote a schema contract and a set of table ownership rules:
+
+- Every shared table has one owning repository. That team makes its schema changes.
+- The other repository consumes the table through an agreed shape, and cannot change it unilaterally.
+- Changes go out in a widening step and a narrowing step, so a running client on the older version stays valid through the transition.
+
+This is not a novel pattern. It is just usually written down after the first outage instead of before it.
+
+## Edge functions
+
+Logic that both clients need sits in Supabase edge functions rather than being implemented twice. There are 11 of them.
+
+Worth noting: the repository README claimed 8. I counted 11 while preparing this. A stale README is a small thing until someone quotes it into a document that matters, which is exactly what nearly happened here.
+
+## Mobile
+
+The Flutter app is the larger of the two codebases, 469 Dart files with 66 test files against them. It is the parent-facing half of the product, covering health records, developmental milestones and vaccination tracking.
+
+Milestone and vaccination tracking is date arithmetic against a published schedule, which is the kind of code that looks trivial and is not. It has to stay correct across time zones, across a child's date of birth being corrected after the fact, and across a schedule that the agency can revise. That is most of what those test files are for.

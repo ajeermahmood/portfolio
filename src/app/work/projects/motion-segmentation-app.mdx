@@ -1,0 +1,37 @@
+---
+title: "A motion tracking and segmentation desktop app"
+publishedAt: "2024-11-25"
+summary: "Full-body tracking through a webcam for live product demonstrations, running as a desktop app on Windows and Mac."
+images:
+  - "/images/projects/motion-segmentation-app/01.webp"
+  - "/images/projects/motion-segmentation-app/02.webp"
+  - "/images/projects/motion-segmentation-app/03.webp"
+  - "/images/projects/motion-segmentation-app/04.webp"
+github: "https://github.com/ajeermahmood/image-segmentation-app"
+stack:
+  - "Electron"
+  - "Next.js"
+  - "React"
+  - "Redux"
+  - "MediaPipe"
+---
+
+## Overview
+
+A desktop application used for product demonstrations. It reads a webcam feed, tracks the person in front of it, separates them from their background, and lets them trigger things by moving.
+
+It runs on Windows and Mac from one codebase, built with Electron around a Next.js and React frontend, with MediaPipe Holistic doing the tracking.
+
+## Key features
+
+- **Full-body tracking.** Pose, hands and face through MediaPipe Holistic, so interaction can respond to where someone is and what they are doing rather than only to clicks.
+- **Background replacement.** Segmentation separates the subject from whatever is actually behind them, and any image can be put in its place.
+- **Motion-triggered actions.** Specific movements fire specific actions in the app.
+- **Capture and share.** Stills of the tracked view can be captured and shared on the spot.
+- **Windows and Mac.** One Electron build covering both.
+
+## Why a desktop app
+
+This runs at events on hardware someone else set up, and it needs a camera, predictable performance, and no dependency on the venue's network. A browser tab is the wrong shape for that. Electron gives it direct access to the camera and a fixed runtime, so behaviour on the day matches behaviour in testing.
+
+Redux carries the tracking state, which changes many times a second and is read by several parts of the interface at once. Keeping that in one place rather than threading it through components is what keeps the frame rate usable.

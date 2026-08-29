@@ -1,5 +1,5 @@
 import { About, Blog, Gallery, Home, Newsletter, Person, Social, Work } from "@/types";
-import { Line, Row, Text } from "@once-ui-system/core";
+import { Line, Row, SmartLink, Text } from "@once-ui-system/core";
 
 const person: Person = {
   firstName: "Ajeer",
@@ -36,6 +36,12 @@ const social: Social = [
     name: "Email",
     icon: "email",
     link: `mailto:${person.email}`,
+    essential: true,
+  },
+  {
+    name: "Resume",
+    icon: "document",
+    link: "/document/RESUME_AJEER.pdf",
     essential: true,
   },
 ];
@@ -327,6 +333,25 @@ const about: About = {
           { name: "Docker", icon: "docker" },
           { name: "Vercel", icon: "vercel" },
         ],
+        images: [],
+      },
+      {
+        title: "Open source",
+        description: (
+          <>
+            Two small npm packages.{" "}
+            <SmartLink href="https://npmjs.com/package/web-element-scraper">
+              web-element-scraper
+            </SmartLink>{" "}
+            extracts text from page elements using Puppeteer and Cheerio, for single or multiple
+            selectors.{" "}
+            <SmartLink href="https://npmjs.com/package/nodejs-performance-profiler">
+              nodejs-performance-profiler
+            </SmartLink>{" "}
+            reports memory use, CPU load and uptime for Node.js applications, to console or to file.
+          </>
+        ),
+        tags: [{ name: "Node.js", icon: "nodejs" }],
         images: [],
       },
     ],

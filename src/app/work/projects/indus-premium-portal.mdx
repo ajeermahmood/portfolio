@@ -1,0 +1,42 @@
+---
+title: "Indus premium properties, a private listings portal"
+publishedAt: "2023-11-03"
+summary: "A separate portal for high-end listings, open only to registered users, built to be private rather than to be found."
+images:
+  - "/images/projects/indus-premium-portal/01.webp"
+  - "/images/projects/indus-premium-portal/02.webp"
+  - "/images/projects/indus-premium-portal/03.webp"
+  - "/images/projects/indus-premium-portal/04.webp"
+  - "/images/projects/indus-premium-portal/05.webp"
+  - "/images/projects/indus-premium-portal/06.webp"
+  - "/images/projects/indus-premium-portal/07.webp"
+  - "/images/projects/indus-premium-portal/08.webp"
+  - "/images/projects/indus-premium-portal/09.webp"
+  - "/images/projects/indus-premium-portal/10.webp"
+  - "/images/projects/indus-premium-portal/11.webp"
+link: "https://indus-premium.vercel.app"
+github: "https://github.com/ajeermahmood/melanie_new_web"
+stack:
+  - "Next.js"
+  - "Node.js"
+  - "PHP"
+  - "SQL"
+---
+
+## Overview
+
+A second, separate site for Indus Real Estate's premium listings. Access is restricted to registered users.
+
+## Built against the opposite goal
+
+The main Indus site is built to be found. Search rankings, indexable listing pages, fast first paint for people arriving from Google.
+
+This one is built not to be. Owners of high-value properties often do not want their address, interior photographs and asking price publicly indexed, and buyers at that level are introduced by an agent rather than arriving from a search result. So the requirements invert: registration ahead of any listing detail, nothing indexable, and no public entry point into the inventory.
+
+Building the two as one site with a permission flag would have been a mistake. The caching, the rendering strategy and the metadata all want to be different, and a single codebase serving both intentions tends to leak the private half into the public one eventually.
+
+## Interface
+
+Because there is no search traffic to optimise for, the interface could be slower and heavier in the places where that buys something: larger photography, more space, fewer listings on screen at once. The result is closer to a brochure than to a search tool, which suits both the inventory and the audience.
+
+Next.js on the front with PHP and Node.js behind it over SQL, sharing the property data model with the main site.

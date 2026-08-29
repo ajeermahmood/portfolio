@@ -1,0 +1,33 @@
+---
+title: "A competitor price monitor for Shopify"
+publishedAt: "2025-12-01"
+summary: "Pulls in competitor catalogs, matches them against the merchant's own products, and reprices by rule. Nothing changes a live price until the merchant approves the dry run."
+stack:
+  - "Shopify App Remix"
+  - "Prisma"
+  - "PostgreSQL"
+  - "TypeScript"
+  - "Polaris"
+---
+
+## Overview
+
+A Shopify app that tracks what competitors charge for the products a merchant also sells, and adjusts the merchant's prices according to rules they set. It is around 21,000 lines with 16 Prisma models and 13 test files. The client is not named here pending sign-off.
+
+## Matching is the actual problem
+
+Fetching competitor prices is straightforward. Knowing which of their products corresponds to which of yours is not.
+
+The same item is listed under different titles, different SKUs, sometimes different pack sizes. Two listings that look identical to a string comparison can be a 200ml bottle and a 500ml bottle. Matching on title similarity alone produces confident, wrong matches, and a confident wrong match is worse than no match, because it feeds a repricing rule.
+
+So matching produces a candidate with a confidence level rather than a verdict, and low-confidence matches wait for a human instead of flowing into pricing.
+
+## Repricing stays behind a dry run
+
+No rule changes a live price on its own. A rule produces a proposed set of changes, the merchant sees exactly what would happen, and it applies only once they approve it.
+
+This was a deliberate constraint rather than a missing feature. Automated repricing that runs unattended has a bad failure mode: a bad match or a competitor's pricing error propagates into real prices on a real storefront within minutes, and the merchant finds out from their margin report. Keeping a person in the loop costs very little in a workflow that already runs on a daily rhythm.
+
+## Demand signals on the same screen
+
+The app also collects price-drop and back-in-stock signups from the storefront. Putting those next to competitor movements turns out to be the more useful half of the product: a merchant can see that eleven people are waiting on an item and that a competitor just went out of stock on it, and price accordingly. Those two facts usually live in separate tools.
