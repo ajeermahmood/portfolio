@@ -53,7 +53,7 @@ const home: Home = {
   label: "Home",
   title: `${person.name}, ${person.role}`,
   description: `Senior full-stack engineer. Multi-tenant e-commerce, AI shopping assistants and mobile apps, shipped to a US state health agency and global brands.`,
-  headline: <>I build production systems and run what they sit on</>,
+  headline: <>I build it, then I keep it running</>,
   featured: {
     display: true,
     title: (
@@ -69,9 +69,9 @@ const home: Home = {
   },
   subline: (
     <>
-      I'm {person.firstName}, a full-stack engineer who builds web, mobile and AI systems and runs
-      the infrastructure behind them. Right now I lead development on a multi-tenant e-commerce
-      <br /> platform and an AI shopping assistant, and I handle the deployment and operations for both.
+      I'm {person.firstName}, a full-stack engineer. Right now that means a multi-tenant
+      e-commerce platform and an AI shopping assistant, plus the pipelines, containers and
+      databases that keep them up.
     </>
   ),
 };
