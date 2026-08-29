@@ -16,14 +16,16 @@ import { baseURL, about, person, social } from "@/resources";
 import TableOfContents from "@/components/about/TableOfContents";
 import styles from "@/components/about/about.module.scss";
 import React from "react";
+import { generateMeta } from "@/utils/seo";
 
 export async function generateMetadata() {
-  return Meta.generate({
+  return generateMeta({
     title: about.title,
     description: about.description,
     baseURL: baseURL,
     image: `/api/og/generate?title=${encodeURIComponent(about.title)}`,
     path: about.path,
+    canonical: `${baseURL}${about.path}`,
   });
 }
 

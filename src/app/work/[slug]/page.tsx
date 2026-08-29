@@ -20,6 +20,7 @@ import { formatDate } from "@/utils/formatDate";
 import { ScrollToHash, CustomMDX } from "@/components";
 import { Metadata } from "next";
 import { Projects } from "@/components/work/Projects";
+import { generateMeta } from "@/utils/seo";
 
 export async function generateStaticParams(): Promise<{ slug: string }[]> {
   const posts = getPosts(["src", "app", "work", "projects"]);
@@ -43,12 +44,23 @@ export async function generateMetadata({
 
   if (!post) return {};
 
-  return Meta.generate({
+  return generateMeta({
     title: post.metadata.title,
     description: post.metadata.summary,
     baseURL: baseURL,
-    image: post.metadata.image || `/api/og/generate?title=${post.metadata.title}`,
+    type: "article",
+    publishedTime: post.metadata.publishedAt,
+    author: {
+      name: person.name,
+      url: `${baseURL}${about.path}`,
+    },
+    image:
+      post.metadata.image ||
+      post.metadata.images?.[0] ||
+      `/api/og/generate?title=${encodeURIComponent(post.metadata.title)}`,
     path: `${work.path}/${post.slug}`,
+    canonical: `${baseURL}${work.path}/${post.slug}`,
+    robots: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
   });
 }
 

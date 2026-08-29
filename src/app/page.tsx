@@ -15,13 +15,15 @@ import { home, about, person, baseURL, routes } from "@/resources";
 import { Mailchimp } from "@/components";
 import { Projects } from "@/components/work/Projects";
 import { Posts } from "@/components/blog/Posts";
+import { generateMeta } from "@/utils/seo";
 
 export async function generateMetadata() {
-  return Meta.generate({
+  return generateMeta({
     title: home.title,
     description: home.description,
     baseURL: baseURL,
     path: home.path,
+    canonical: `${baseURL}${home.path}`,
     image: home.image,
   });
 }

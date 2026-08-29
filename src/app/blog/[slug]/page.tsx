@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 import { CustomMDX, ScrollToHash } from "@/components";
 import {
   Meta,
-  Schema,
   Column,
   Heading,
   HeadingNav,
@@ -14,13 +13,15 @@ import {
   Media,
   Line,
 } from "@once-ui-system/core";
-import { baseURL, about, blog, person } from "@/resources";
+import { baseURL, about, blog, person, social } from "@/resources";
 import { formatDate } from "@/utils/formatDate";
 import { getPosts } from "@/utils/utils";
 import { Metadata } from "next";
 import React from "react";
 import { Posts } from "@/components/blog/Posts";
 import { ShareSection } from "@/components/blog/ShareSection";
+import { generateMeta } from "@/utils/seo";
+import { JsonLd } from "@/components/JsonLd";
 
 export async function generateStaticParams(): Promise<{ slug: string }[]> {
   const posts = getPosts(["src", "app", "blog", "posts"]);
@@ -44,12 +45,21 @@ export async function generateMetadata({
 
   if (!post) return {};
 
-  return Meta.generate({
+  return generateMeta({
     title: post.metadata.title,
     description: post.metadata.summary,
     baseURL: baseURL,
-    image: post.metadata.image || `/api/og/generate?title=${post.metadata.title}`,
+    type: "article",
+    publishedTime: post.metadata.publishedAt,
+    author: {
+      name: person.name,
+      url: `${baseURL}${about.path}`,
+    },
+    image:
+      post.metadata.image || `/api/og/generate?title=${encodeURIComponent(post.metadata.title)}`,
     path: `${blog.path}/${post.slug}`,
+    canonical: `${baseURL}${blog.path}/${post.slug}`,
+    robots: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
   });
 }
 
@@ -71,28 +81,46 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
     })) || [];
 
   return (
+    <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          mainEntityOfPage: {
+            "@type": "WebPage",
+            "@id": `${baseURL}${blog.path}/${post.slug}`,
+          },
+          url: `${baseURL}${blog.path}/${post.slug}`,
+          headline: post.metadata.title,
+          description: post.metadata.summary,
+          image: [
+            post.metadata.image
+              ? `${baseURL}${post.metadata.image}`
+              : `${baseURL}/api/og/generate?title=${encodeURIComponent(post.metadata.title)}`,
+          ],
+          datePublished: post.metadata.publishedAt,
+          dateModified: post.metadata.publishedAt,
+          inLanguage: "en",
+          ...(post.metadata.tag ? { keywords: post.metadata.tag } : {}),
+          author: {
+            "@type": "Person",
+            name: person.name,
+            url: `${baseURL}${about.path}`,
+            image: `${baseURL}${person.avatar}`,
+            jobTitle: person.role,
+            sameAs: social.filter((s) => s.link.startsWith("http")).map((s) => s.link),
+          },
+          publisher: {
+            "@type": "Person",
+            name: person.name,
+            url: baseURL,
+          },
+        }}
+      />
     <Row fillWidth>
       <Row maxWidth={12} m={{ hide: true }} />
       <Row fillWidth horizontal="center">
         <Column as="section" maxWidth="m" horizontal="center" gap="l" paddingTop="24">
-          <Schema
-            as="blogPosting"
-            baseURL={baseURL}
-            path={`${blog.path}/${post.slug}`}
-            title={post.metadata.title}
-            description={post.metadata.summary}
-            datePublished={post.metadata.publishedAt}
-            dateModified={post.metadata.publishedAt}
-            image={
-              post.metadata.image ||
-              `/api/og/generate?title=${encodeURIComponent(post.metadata.title)}`
-            }
-            author={{
-              name: person.name,
-              url: `${baseURL}${about.path}`,
-              image: `${baseURL}${person.avatar}`,
-            }}
-          />
           <Column maxWidth="s" gap="16" horizontal="center" align="center">
             <SmartLink href="/blog">
               <Text variant="label-strong-m">Blog</Text>
@@ -164,5 +192,6 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
         <HeadingNav fitHeight />
       </Column>
     </Row>
+    </>
   );
 }

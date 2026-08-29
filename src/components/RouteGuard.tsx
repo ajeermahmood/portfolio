@@ -10,56 +10,65 @@ interface RouteGuardProps {
   children: React.ReactNode;
 }
 
+/**
+ * Whether a route is enabled comes from static config, so it is knowable during
+ * render. Only the password check needs a request, and only for the routes
+ * listed in protectedRoutes. Deciding both in an effect meant the server
+ * rendered a spinner for every page, which left crawlers with no content.
+ */
+function isRouteEnabled(pathname: string | null): boolean {
+  if (!pathname) return false;
+
+  if (pathname in routes) {
+    return routes[pathname as keyof typeof routes];
+  }
+
+  const dynamicRoutes = ["/blog", "/work"] as const;
+  for (const route of dynamicRoutes) {
+    if (pathname.startsWith(route) && routes[route]) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
   const pathname = usePathname();
-  const [isRouteEnabled, setIsRouteEnabled] = useState(false);
-  const [isPasswordRequired, setIsPasswordRequired] = useState(false);
+
+  const routeEnabled = isRouteEnabled(pathname);
+  const passwordRequired = Boolean(
+    pathname && protectedRoutes[pathname as keyof typeof protectedRoutes],
+  );
+
   const [password, setPassword] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [error, setError] = useState<string | undefined>(undefined);
-  const [loading, setLoading] = useState(true);
+  const [checkingAuth, setCheckingAuth] = useState(passwordRequired);
 
   useEffect(() => {
-    const performChecks = async () => {
-      setLoading(true);
-      setIsRouteEnabled(false);
-      setIsPasswordRequired(false);
-      setIsAuthenticated(false);
+    if (!passwordRequired) {
+      setCheckingAuth(false);
+      return;
+    }
 
-      const checkRouteEnabled = () => {
-        if (!pathname) return false;
+    let cancelled = false;
+    setCheckingAuth(true);
+    setIsAuthenticated(false);
 
-        if (pathname in routes) {
-          return routes[pathname as keyof typeof routes];
-        }
+    fetch("/api/check-auth")
+      .then((response) => {
+        if (!cancelled && response.ok) setIsAuthenticated(true);
+      })
+      .catch(() => undefined)
+      .finally(() => {
+        if (!cancelled) setCheckingAuth(false);
+      });
 
-        const dynamicRoutes = ["/blog", "/work"] as const;
-        for (const route of dynamicRoutes) {
-          if (pathname?.startsWith(route) && routes[route]) {
-            return true;
-          }
-        }
-
-        return false;
-      };
-
-      const routeEnabled = checkRouteEnabled();
-      setIsRouteEnabled(routeEnabled);
-
-      if (protectedRoutes[pathname as keyof typeof protectedRoutes]) {
-        setIsPasswordRequired(true);
-
-        const response = await fetch("/api/check-auth");
-        if (response.ok) {
-          setIsAuthenticated(true);
-        }
-      }
-
-      setLoading(false);
+    return () => {
+      cancelled = true;
     };
-
-    performChecks();
-  }, [pathname]);
+  }, [pathname, passwordRequired]);
 
   const handlePasswordSubmit = async () => {
     const response = await fetch("/api/authenticate", {
@@ -76,19 +85,19 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
     }
   };
 
-  if (loading) {
-    return (
-      <Flex fillWidth paddingY="128" horizontal="center">
-        <Spinner />
-      </Flex>
-    );
-  }
-
-  if (!isRouteEnabled) {
+  if (!routeEnabled) {
     return <NotFound />;
   }
 
-  if (isPasswordRequired && !isAuthenticated) {
+  if (passwordRequired && !isAuthenticated) {
+    if (checkingAuth) {
+      return (
+        <Flex fillWidth paddingY="128" horizontal="center">
+          <Spinner />
+        </Flex>
+      );
+    }
+
     return (
       <Column paddingY="128" maxWidth={24} gap="24" center>
         <Heading align="center" wrap="balance">

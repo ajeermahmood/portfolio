@@ -14,7 +14,8 @@ import {
   SpacingToken,
 } from "@once-ui-system/core";
 import { Footer, Header, RouteGuard, Providers } from "@/components";
-import { baseURL, effects, fonts, style, dataStyle, home, person } from "@/resources";
+import { JsonLd } from "@/components/JsonLd";
+import { baseURL, effects, fonts, style, dataStyle, home, person, social } from "@/resources";
 
 export async function generateMetadata() {
   return Meta.generate({
@@ -45,6 +46,41 @@ export default async function RootLayout({
       )}
     >
       <head>
+        {/* feed discovery, and an explicit author link for search engines */}
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title={`${person.name}, blog`}
+          href={`${baseURL}/api/rss`}
+        />
+        <link rel="me" href={social.find((s) => s.name === "GitHub")?.link ?? ""} />
+        <JsonLd
+          data={{
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "Person",
+                "@id": `${baseURL}/#person`,
+                name: person.name,
+                url: baseURL,
+                image: `${baseURL}${person.avatar}`,
+                jobTitle: person.role,
+                email: `mailto:${person.email}`,
+                description: home.description,
+                sameAs: social.filter((s) => s.link.startsWith("http")).map((s) => s.link),
+              },
+              {
+                "@type": "WebSite",
+                "@id": `${baseURL}/#website`,
+                url: baseURL,
+                name: `${person.name}, ${person.role}`,
+                description: home.description,
+                inLanguage: "en",
+                publisher: { "@id": `${baseURL}/#person` },
+              },
+            ],
+          }}
+        />
         <script
           id="theme-init"
           dangerouslySetInnerHTML={{
