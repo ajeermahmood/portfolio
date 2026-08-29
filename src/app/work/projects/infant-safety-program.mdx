@@ -1,7 +1,14 @@
 ---
-title: "An infant safety program for a US state health agency"
+title: "W.I.N.S, an infant safety app for Alabama Public Health"
 publishedAt: "2026-02-01"
-summary: "Two repositories, an admin CMS and a parent-facing mobile app, sharing one database. The interesting part was the contract that let two teams work on that database without breaking each other."
+summary: "An admin CMS and a parent-facing mobile app for the Wiregrass Infant Net for Safety program, sharing one database. The interesting part was the contract that let two teams work on that database without breaking each other."
+images:
+  - "/images/projects/infant-safety-program/01.webp"
+  - "/images/projects/infant-safety-program/02.webp"
+  - "/images/projects/infant-safety-program/03.webp"
+  - "/images/projects/infant-safety-program/04.webp"
+  - "/images/projects/infant-safety-program/05.webp"
+link: "https://apps.apple.com/us/app/w-i-n-s-infant-safety-app/id6764753230"
 stack:
   - "Next.js 16"
   - "React 19"
@@ -13,11 +20,22 @@ stack:
 
 ## Overview
 
-A public health agency in one US state runs an infant safety program. I led a two-repository build for it: an admin CMS used by the agency's staff, and a mobile app used by parents to track their child's health, milestones and vaccinations.
+W.I.N.S, the Wiregrass Infant Net for Safety, is a program run by the Alabama Department of Public Health. I led a two-repository build for it: an admin CMS used by agency staff, and a mobile app used by parents and caregivers.
 
-The client is not named here, and there are no screenshots, because this is health-sector government work and that permission is not mine to give.
+The app is live on the App Store and Google Play, published by Previse Solutions LLC. The screenshots here are from those public listings.
 
 The CMS is Next.js 16 and React 19 on Supabase, at around 101,000 lines with 28 server actions and 11 edge functions. The mobile app is Flutter, at around 176,000 lines across 469 Dart files. Between the two there are about 100 test files.
+
+## What the app does
+
+Caregivers add their children and get a set of tools around them:
+
+- **Back seat alerts.** The app notices when a vehicle stops and prompts the caregiver to check the back seat, then follows up after five minutes. This is the feature aimed squarely at preventing hot car deaths, and it is the reason the app has to be reliable in a way a content app does not.
+- **Vaccine reminders**, tracked against the published immunisation schedule.
+- **Safe sleep games**, the educational half of the program, delivered as quizzes and instruction rather than as a leaflet.
+- **Milestones**, developmental tracking per child.
+- **Local resources and support**, connecting families to services near them.
+- **Weather alerts** and infant product recall notices.
 
 ## One database, two teams
 
@@ -41,6 +59,6 @@ Worth noting: the repository README claimed 8. I counted 11 while preparing this
 
 ## Mobile
 
-The Flutter app is the larger of the two codebases, 469 Dart files with 66 test files against them. It is the parent-facing half of the product, covering health records, developmental milestones and vaccination tracking.
+The Flutter app is the larger of the two codebases, 469 Dart files with 66 test files against them.
 
 Milestone and vaccination tracking is date arithmetic against a published schedule, which is the kind of code that looks trivial and is not. It has to stay correct across time zones, across a child's date of birth being corrected after the fact, and across a schedule that the agency can revise. That is most of what those test files are for.

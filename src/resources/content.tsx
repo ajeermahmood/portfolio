@@ -139,11 +139,11 @@ const about: About = {
             expensive to reverse.
           </>,
           <>
-            Led a two-repository build for an infant safety program run by a US state public health
-            agency. A Next.js 16 and React 19 admin CMS on Supabase, plus a Flutter app for parents
-            tracking their child's health, milestones and vaccinations, both sharing one PostgreSQL
-            database of 15 tables across 11 edge functions. Wrote the schema contract and table
-            ownership rules that let two teams work on the same database without breaking each
+            W.I.N.S, Alabama Department of Public Health: led a two-repository build for an infant
+            safety program. A Next.js 16 and React 19 admin CMS on Supabase, plus a Flutter app for
+            parents tracking their child's health, milestones and vaccinations, both sharing one
+            PostgreSQL database of 15 tables across 11 edge functions. Wrote the schema contract and
+            table ownership rules that let two teams work on the same database without breaking each
             other's features, backed by about 100 test files across the two repositories.
           </>,
           <>
