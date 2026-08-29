@@ -9,6 +9,7 @@ const person: Person = {
   avatar: "",
   email: "ajeermahmood@outlook.com",
   location: "Asia/Calcutta",
+  locationLabel: "India",
   languages: [],
   locale: "en",
 };
