@@ -13,9 +13,9 @@ import {
 } from "@/types";
 import { home, person, social } from "./content";
 
-// TODO: confirm the final personal domain. Used for SEO meta tags, schema and sitemap.
-// Vercel preview host for now.
-const baseURL: string = "https://ajeermahmood.vercel.app";
+// Used for SEO meta tags, schema and the sitemap. No trailing slash: paths are
+// appended directly.
+const baseURL: string = "https://ajeer-portfolio.vercel.app";
 
 const routes: RoutesConfig = {
   "/": true,
