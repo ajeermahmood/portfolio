@@ -72,7 +72,31 @@ function getMDXData(dir: string) {
   });
 }
 
-export function getPosts(customPath = ["", "", "", ""]) {
-  const postsDir = path.join(process.cwd(), ...customPath);
-  return getMDXData(postsDir);
+/**
+ * Content lives in exactly two directories, and both are spelled out as string
+ * literals on purpose.
+ *
+ * Building the path by spreading a caller-supplied array made it impossible for
+ * the bundler to know what would be read, so Turbopack traced the entire project
+ * into the server output, public/ included. Literals let it scope the trace to
+ * these two folders.
+ */
+const CONTENT_DIRS = {
+  "src/app/blog/posts": () => path.join(process.cwd(), "src", "app", "blog", "posts"),
+  "src/app/work/projects": () => path.join(process.cwd(), "src", "app", "work", "projects"),
+} as const;
+
+type ContentKey = keyof typeof CONTENT_DIRS;
+
+export function getPosts(segments: readonly string[]) {
+  const key = segments.join("/") as ContentKey;
+  const resolve = CONTENT_DIRS[key];
+
+  if (!resolve) {
+    throw new Error(
+      `getPosts: unknown content directory "${key}". Add it to CONTENT_DIRS as a literal path.`,
+    );
+  }
+
+  return getMDXData(resolve());
 }
