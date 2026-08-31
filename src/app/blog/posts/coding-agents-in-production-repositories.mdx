@@ -183,6 +183,12 @@ The same three details apply. Every finding names the repository and the command
 
 The repository-specific gates stay where they are. Tenant isolation cannot be factored out, and should not be.
 
+Though "cannot be factored out" turned out to be too strong. The *rule* is specific to a codebase; the *shape* of the check is not. Every multi-tenant application has some scoped client and some way of reaching around it, and the difference between one codebase and the next is a list of model names, which is configuration rather than code. Same for money: every system that handles currency has somewhere it converts to minor units, and the mistake is always the same two mistakes.
+
+So I extracted those too, into [bouncer](/work/bouncer). Five gates, configured rather than rewritten per repository. Pointing it at a real 1,209 file codebase was the useful part and not for the reason I expected: it reported 45 blocking findings, and reading every one by hand showed 32 of them were wrong. Test fixtures that contain credentials on purpose. Percentages that look exactly like currency conversions, because `Math.round(x * 100)` is genuinely both. A `postgres://postgres:postgres@localhost` in a setup script's help text.
+
+That ratio is the whole thing. A gate that is wrong a third of the time gets switched off within a month, and then it protects nothing while still sitting in the workflow file making everybody feel covered. Writing the rule is the easy half. Not crying wolf is the half that decides whether any of it survives.
+
 ## The one rule I would keep
 
 **Agents pass through the same gates the team does.** No separate track, no fast lane.
