@@ -24,7 +24,7 @@ The two usual answers are both bad. Review harder does not scale and puts the en
 
 Five gates: hardcoded secrets and code that reads like an attack, database access that reaches around the tenant-scoped client, float arithmetic on currency, migrations that break the previous version of the app during the deploy window, and documentation links that point at files which no longer exist. It is open source under MIT and this is the extracted, generalised version of gates I run across eight production repositories.
 
-It is on npm as [`bouncer-gates`](https://www.npmjs.com/package/bouncer-gates), so `npx bouncer-gates` runs it against any repository. There is a [live playground](https://bouncer.ajeermdk001.workers.dev) too: paste code into it and the real gate modules run on it, either on a Cloudflare Worker or in your own tab, and the footer tells you which.
+It is on npm as [`bouncer-gates`](https://www.npmjs.com/package/bouncer-gates), so `npx bouncer-gates` runs it against any repository. There is a [live playground](https://bouncer.ajeermdk001.workers.dev): paste code into it and the real gate modules run on it, server side on a Cloudflare Worker, with the footer naming which runtime answered. The same modules also run as a [hosted API on Railway](https://bouncer-production-9470.up.railway.app/health), for teams who want the checks over HTTP without running Node themselves.
 
 ## The interesting number is not what it caught
 
