@@ -1,0 +1,73 @@
+---
+title: "estate, a linter for your repositories"
+publishedAt: "2026-08-31"
+summary: "Checks every repository you own against declarative rules and exits non-zero, so the problems nobody notices for months fail a build instead. One Go binary, no dependencies, no dashboard."
+images:
+  - "/images/projects/estate/01.png"
+stack:
+  - "Go"
+  - "git"
+  - "CLI"
+  - "GitHub Actions"
+github: "https://github.com/ajeermahmood/estate"
+---
+
+## Overview
+
+Linters check the code inside a repository. Almost nothing checks the repository itself: whether it has somewhere to push, whether its dependency versions are recorded, whether a `.env` would be committed by the next `git add .`.
+
+`estate` is a linter for that layer. Point it at a directory of repositories and it runs a set of checks across all of them in parallel and returns an exit code, so it works the same in a terminal and in CI. Seventeen repositories on five different stacks are checked in about a quarter of a second. It is one Go binary with no dependencies, built for Linux, macOS and Windows on x86-64 and ARM64.
+
+## The first run found six months of work on one disk
+
+The check I expected least from is the one that mattered. `git-remote` asks whether a repository has any remote configured at all.
+
+A repository with no remote behaves completely normally. It commits, it branches, it reports a clean working tree. Every signal you would look at says nothing is wrong. The first real run turned one up with six months of history in it, existing on exactly one disk, and nobody had known.
+
+The other checks in that first run were the same shape. Two projects installing unpinned dependencies, one of them into a Docker image, so a build today and the same build next month get different code. Three repositories where nothing in `.gitignore` covered `.env`, meaning the next careless `git add .` would commit a key. A lint config extending three packages that were never installed, so a repository with a `lint` script had not actually checked a line of code in months.
+
+None of these are exotic. They are all invisible until something breaks.
+
+## Asking about a problem before it happens
+
+`env-ignored` is the check I would keep if I could only keep one, and it works differently from the others. It does not look for a committed secret. It asks git whether a `.env` in this repository *would* be ignored, including one that does not exist yet.
+
+Every other secret check tells you a key is already in the history, by which point rotating it is the cheap part and you are doing incident response. This one tells you the door is open before anyone walks through it. It also asks git rather than reading `.gitignore`, so a global ignore file or a rule in `.git/info/exclude` counts, exactly as git itself would decide.
+
+## Rules are Go, not a configuration language
+
+The obvious design for a policy tool is a small matcher language in YAML: this file must exist, this JSON path must match this pattern. I built the catalogue of named checks instead, and the config only turns them on and passes them arguments, the way a linter is configured rather than written.
+
+The reason is that the checks worth having cannot be expressed as file predicates. "Has somewhere to push" is git state, not a file. "Would a new `.env` be ignored" is a question about a file that does not exist. "The declared Node version is too old" has to treat `>=18.0.0`, `^18` and `18.x` as the same thing, which no regular expression survives past the next release. And "the lockfile is committed" is wrong as stated: it has to know that a project using pnpm and committing `pnpm-lock.yaml` is correct, and that a Go module with no dependencies rightly has no `go.sum`.
+
+A predicate language expresses the low value rules well and the high value ones not at all. Writing checks in Go also buys the thing that actually makes a report useful: every finding carries a fix that is a command you can run. "no git remote is configured, so this work exists only on this disk" is worth more than "require file failed".
+
+There is one escape hatch for the long tail of "this file must be here", and its shape is fixed and small on purpose.
+
+## A rule that fails everywhere is a migration, not a rule
+
+The temptation with a tool like this is to ship every check switched on and strict. That produces an all red first run, and an all red report is one people stop reading. It becomes the thing it was built to replace.
+
+So checks that most repositories would fail today ship turned down or off, and you tighten them as you fix things. The value of the report comes from most of it being green, which is what makes a red line worth looking at. For the same reason `node-eol` compares against a floor you set rather than a table of end of life dates compiled into the tool, because a table like that goes stale and then quietly misleads you.
+
+Findings can also be accepted in the config with a required reason. A linter you cannot silence gets uninstalled, and a waiver with no reason is how a policy file rots.
+
+## Never become another place you have to check
+
+The whole thing follows from one constraint. There are already several places you have to remember to look. A dashboard is one more, and it gets abandoned inside a month.
+
+So there is no daemon, no server and no web interface. It runs in the terminal you are already in, or in CI where the exit code is the real output and the human readable report is secondary. That rules out a category of features, and it is the reason the tool stays small.
+
+## What it deliberately does not do
+
+Renovate and Dependabot handle cross repository dependency updates, and they do it properly. Nx and Turborepo solve monorepos, which is a different problem. gitleaks and trufflehog scan history for secrets far more thoroughly than a cheap guard against the obvious case. mani is mature and already does config driven command running across repositories.
+
+`estate` is aimed at the part none of those cover: declarative policy across repositories on different stacks, enforced with an exit code.
+
+## Where it stands
+
+Open source under MIT. Nine checks, eight of them on by default, 102 tests, and no dependencies to download, which for something meant to run in CI is worth more than it sounds.
+
+An audit pass near the end was the useful part. It found a whole class of bug I had not thought about: when a git query failed, the result was indistinguishable from a genuine negative, so a repository git could not answer about was reported as having no remote. That is the loudest thing the tool says, and it was reachable by pressing Ctrl+C halfway through a run. Facts now report whether they could be read at all, and no check concludes something is missing until it has confirmed it was able to look.
+
+The same pass took a run from 407ms to 261ms by cutting the git processes per repository from five to three, measured with samples interleaved between the old and new binaries because the first, sloppier measurement had told me something that turned out to be noise.

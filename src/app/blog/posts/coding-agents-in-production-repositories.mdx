@@ -169,6 +169,20 @@ In practice that has meant:
 
 Five rules. Everything else is review, types and tests doing their normal jobs.
 
+## The gates that are the same in every repository
+
+Two of those five are specific to one codebase. Tenant isolation only means something where there are tenants, and the migration gate has to know which schema is shared.
+
+The other three are the same everywhere. A secret reaching the repository is the same rule in a Next.js app, a Flutter app and a Python service. So is "the lockfile is committed", and so is the quiet one underneath both: "this repository can actually be pushed somewhere".
+
+Written per repository, those drift. Across 8 repos you end up with 8 slightly different versions, two of them a year out of date, and one that was never added because the repo was created in a hurry on a Friday. The first time I checked all of them properly, one repository had no git remote configured at all. Six months of history, sitting on a single disk, and nothing anywhere would have told me.
+
+So the generic half moved out into a tool. [estate](/work/estate) runs a set of checks across every repository at once and exits non-zero, which makes it a gate in exactly the same sense as the ones above, just one level up. Adding a check adds it everywhere, rather than in the one repo you remembered to update.
+
+The same three details apply. Every finding names the repository and the command that fixes it. Waivers require a written reason. And the checks that would fail on almost every repository ship turned down rather than on, because a report that is entirely red is one people stop reading, which is the same failure as a gate that cries wolf.
+
+The repository-specific gates stay where they are. Tenant isolation cannot be factored out, and should not be.
+
 ## The one rule I would keep
 
 **Agents pass through the same gates the team does.** No separate track, no fast lane.
