@@ -1,7 +1,7 @@
-import { Column, Heading, Meta, Schema } from "@once-ui-system/core";
-import { baseURL, about, person, work } from "@/resources";
 import { Projects } from "@/components/work/Projects";
+import { about, baseURL, person, work } from "@/resources";
 import { generateMeta } from "@/utils/seo";
+import { Column, Heading, Meta, Schema } from "@once-ui-system/core";
 
 export async function generateMetadata() {
   return generateMeta({

@@ -1,4 +1,14 @@
-import { About, Blog, Contact, Gallery, Home, Newsletter, Person, Social, Work } from "@/types";
+import type {
+  About,
+  Blog,
+  Contact,
+  Gallery,
+  Home,
+  Newsletter,
+  Person,
+  Social,
+  Work,
+} from "@/types";
 import { Line, Row, SmartLink, Text } from "@once-ui-system/core";
 
 const person: Person = {
@@ -69,9 +79,9 @@ const home: Home = {
   },
   subline: (
     <>
-      I'm {person.firstName}, a full-stack engineer. Right now that means a multi-tenant
-      e-commerce platform and an AI shopping assistant, plus the pipelines, containers and
-      databases that keep them up.
+      I'm {person.firstName}, a full-stack engineer. Right now that means a multi-tenant e-commerce
+      platform and an AI shopping assistant, plus the pipelines, containers and databases that keep
+      them up.
     </>
   ),
 };
@@ -98,12 +108,12 @@ const about: About = {
     description: (
       <>
         Full-stack engineer building production web, mobile and AI systems, and running the
-        infrastructure behind them. Currently the lead developer on a
-        multi-tenant e-commerce platform and an AI shopping assistant, where the work covers
-        architecture, planning, cost decisions and code review for a team of 4 to 6 developers.
-        Past projects have shipped to a US state health department, international pharmaceutical
-        brands, and retail businesses in India, the UAE and the United States. Based in India and
-        open to relocation and remote roles.
+        infrastructure behind them. Currently the lead developer on a multi-tenant e-commerce
+        platform and an AI shopping assistant, where the work covers architecture, planning, cost
+        decisions and code review for a team of 4 to 6 developers. Past projects have shipped to a
+        US state health department, international pharmaceutical brands, and retail businesses in
+        India, the UAE and the United States. Based in India and open to relocation and remote
+        roles.
       </>
     ),
   },
@@ -144,8 +154,9 @@ const about: About = {
             parents tracking their child's health, milestones and vaccinations, both sharing one
             PostgreSQL database of 15 tables across 11 edge functions. Wrote the schema contract and
             table ownership rules that let two teams work on the same database without breaking each
-            other's features, backed by about 100 test files across the two repositories. Live on the
-            App Store and Google Play since July 2026 as the agency's official app for the program.
+            other's features, backed by about 100 test files across the two repositories. Live on
+            the App Store and Google Play since July 2026 as the agency's official app for the
+            program.
           </>,
           <>
             Built a Shopify Hydrogen storefront serving more than 10,000 daily users across India,

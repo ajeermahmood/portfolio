@@ -1,7 +1,7 @@
-import { Button, Column, Heading, Row, Text } from "@once-ui-system/core";
+import { JsonLd } from "@/components/JsonLd";
 import { baseURL, contact, person, social } from "@/resources";
 import { generateMeta } from "@/utils/seo";
-import { JsonLd } from "@/components/JsonLd";
+import { Button, Column, Heading, Row, Text } from "@once-ui-system/core";
 
 export async function generateMetadata() {
   return generateMeta({

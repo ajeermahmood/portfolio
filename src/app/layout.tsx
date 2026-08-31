@@ -4,19 +4,19 @@ import "@/resources/custom.css";
 
 import classNames from "classnames";
 
+import { Footer, Header, Providers, RouteGuard } from "@/components";
+import { JsonLd } from "@/components/JsonLd";
+import { baseURL, dataStyle, effects, fonts, home, person, social, style } from "@/resources";
 import {
   Background,
   Column,
   Flex,
   Meta,
-  Opacity,
+  type Opacity,
   RevealFx,
-  SpacingToken,
+  type SpacingToken,
 } from "@once-ui-system/core";
-import { Footer, Header, RouteGuard, Providers } from "@/components";
-import { JsonLd } from "@/components/JsonLd";
 import { Analytics } from "@vercel/analytics/next";
-import { baseURL, effects, fonts, style, dataStyle, home, person, social } from "@/resources";
 
 export async function generateMetadata() {
   return Meta.generate({

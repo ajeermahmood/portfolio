@@ -1,22 +1,22 @@
+import { Mailchimp } from "@/components";
+import { ContactCTA } from "@/components/ContactCTA";
+import { Posts } from "@/components/blog/Posts";
+import { Projects } from "@/components/work/Projects";
+import { about, baseURL, home, person, routes } from "@/resources";
+import { generateMeta } from "@/utils/seo";
 import {
-  Heading,
-  Text,
-  Button,
   Avatar,
-  RevealFx,
-  Column,
   Badge,
+  Button,
+  Column,
+  Heading,
+  Line,
+  Meta,
+  RevealFx,
   Row,
   Schema,
-  Meta,
-  Line,
+  Text,
 } from "@once-ui-system/core";
-import { home, about, person, baseURL, routes } from "@/resources";
-import { Mailchimp } from "@/components";
-import { Projects } from "@/components/work/Projects";
-import { Posts } from "@/components/blog/Posts";
-import { generateMeta } from "@/utils/seo";
-import { ContactCTA } from "@/components/ContactCTA";
 
 export async function generateMetadata() {
   return generateMeta({

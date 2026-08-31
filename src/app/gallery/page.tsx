@@ -1,7 +1,7 @@
-import { Flex, Meta, Schema } from "@once-ui-system/core";
 import GalleryView from "@/components/gallery/GalleryView";
 import { baseURL, gallery, person } from "@/resources";
 import { generateMeta } from "@/utils/seo";
+import { Flex, Meta, Schema } from "@once-ui-system/core";
 
 export async function generateMetadata() {
   return generateMeta({

@@ -1,5 +1,5 @@
-import { Button, Column, Heading, Row, Text } from "@once-ui-system/core";
 import { person } from "@/resources";
+import { Button, Column, Heading, Row, Text } from "@once-ui-system/core";
 
 /**
  * Email is the only channel worth putting a button on. A contact form needs a
