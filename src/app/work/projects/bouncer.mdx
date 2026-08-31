@@ -1,0 +1,101 @@
+---
+title: "bouncer, CI gates that let anyone contribute"
+publishedAt: "2026-08-31"
+summary: "Five checks that sit at the door of your main branch, written as pure functions so the same modules run in CI, in a Cloudflare Worker, on Railway and in the browser. Pointed at a real 1,209 file repository it went from 45 blocking findings to 13, all 13 genuine."
+images:
+  - "/images/projects/bouncer/01.png"
+stack:
+  - "JavaScript"
+  - "Astro"
+  - "Cloudflare Workers"
+  - "GitHub Actions"
+  - "Vitest"
+github: "https://github.com/ajeermahmood/bouncer"
+---
+
+## Overview
+
+More people can write code now than a year ago. A designer can produce a working page, a support lead can fix their own copy, and an agent can open twenty pull requests before lunch. Review did not get faster, so the bottleneck moved: it is no longer writing the change, it is being confident the change is safe.
+
+The two usual answers are both bad. Review harder does not scale and puts the entire safety system inside one tired person's attention. Restricting contribution to the people who already know where the mines are throws away most of what just became possible.
+
+`bouncer` is the third answer. Write the expensive mistakes down once, as code, and let the machine check every change forever. A contributor then does not need to know that `orders` is tenant-scoped or that a float cannot hold money. They will be told, by name, on the line, with what to do instead.
+
+Five gates: hardcoded secrets and code that reads like an attack, database access that reaches around the tenant-scoped client, float arithmetic on currency, migrations that break the previous version of the app during the deploy window, and documentation links that point at files which no longer exist. It is open source under MIT and this is the extracted, generalised version of gates I run across eight production repositories.
+
+## The interesting number is not what it caught
+
+Anyone can write a checker that catches the bad case. Pointed at a real 1,209 file production monorepo, an early build reported 45 blocking findings. I read all 45 by hand, which is the only way to learn anything, and **32 were false positives**.
+
+That ratio is the whole problem with tools like this. A gate that is wrong a third of the time gets switched off within a month, and then it protects nothing while still sitting in the workflow file making everybody feel covered. So the real work was not the rules, it was the exceptions.
+
+They came in three families.
+
+**Test fixtures.** Credential-shaped strings inside `.spec.ts` files were 35% of every finding, and every single one was deliberate test data. The obvious fix is to exclude test files, and it is wrong, because a real key does occasionally get pasted into a test. They now report as warnings instead. One rule stays blocking even in a test: Stripe separates live from test credentials by prefix, so an `sk_live_` in a spec file is not plausible fixture data the way a made-up password is.
+
+**Percentages.** `Math.round(x * 100)` is both the canonical money bug and the canonical way to render a percentage. Progress bars, histogram bins and an aspect-ratio trim were all being reported as currency defects. What they share, beyond the obvious `%` sign, is a division inside the rounded expression: a percentage is a part over a whole, and money conversion never divides before it scales.
+
+The subtlest one took two attempts. `Math.round((done / total) * 100)` on a progress pill kept firing, because `total` is in the money vocabulary and was overriding the percentage signal. Words like `total`, `net`, `gross` and `balance` are perfectly ordinary counting words. Only unambiguous money words get to overrule a percentage now.
+
+**Local development credentials.** `postgresql://postgres:postgres@localhost:5432/app`, in a setup script's help text. It grants nothing to whoever reads it, and flagging it teaches people the gate reports things that do not matter.
+
+After that the same repository reports 13 blocking findings and all 13 are real: four money conversions that break for zero-decimal currencies, four float parses of currency values, and five documentation links pointing at a file that was deleted. Every one of the 32 false positives is now a test asserting the gate stays quiet, named for what it actually was. Those are the most valuable tests in the suite, because each is a mistake the tool really made.
+
+## A gate must never fail open
+
+This is the one rule everything else serves, and getting it wrong is quiet.
+
+Most deploy pipelines migrate before they swap the application, so the migration gate only checks `.sql` files added relative to the base branch. History is already applied everywhere and is none of its business. But a shallow CI clone has no base ref, so nothing looks new, so the gate found nothing and printed the reassuring line: *no new migrations in this change*.
+
+It would have printed that forever. "We looked and it was fine" and "we could not look" are different answers, and only one of them is safe to merge on. The skip reason is now a string rather than a boolean, specifically so those two cases cannot render the same:
+
+```
+skip  migration-safety (cannot see history: the base ref "origin/main" is not in
+      this clone, so no migration can be identified as new)
+```
+
+The same rule runs through the rest of it. A gate that throws is a failure, not a silence, because otherwise the build goes green when the check breaks before it can find anything. An unrecognised command-line flag exits with a distinct code instead of being ignored, since silently accepting `--onyl scope` and scanning everything is how a job passes for a year while checking nothing anybody intended.
+
+## Pure functions, four runtimes
+
+A gate takes files and returns findings. No filesystem, no git, no reading the environment, no printing. All the input gathering lives in one runner.
+
+That is not tidiness. It is why one implementation of every rule runs in the CLI, inside a Cloudflare Worker behind the playground on the site, as a Node service on Railway, and directly in the browser when that endpoint is unreachable. A playground with its own copy of the regexes would drift from the real gates inside a month and start teaching visitors something false. There is nothing to drift, because there is nothing to copy.
+
+It has one real consequence, and it is a good one: a gate that needs git history takes the history as an argument. The migration gate does not run `git diff`, the runner does. That keeps the gate testable on string literals and puts every "where does this data come from" decision in a single file.
+
+## The escape hatch has to cost one sentence
+
+Any gate will eventually be wrong about a specific line. If there is no way to say "I know, and it is fine here", people route around the gate entirely and you lose the signal. If the way is too easy, it decays into a blanket ignore within a quarter.
+
+```js
+// bouncer-ok(scope): finance dashboard, spans all tenants by design
+```
+
+The reason is required by the pattern. A bare marker suppresses nothing. That single requirement gets both properties: trivial to use, impossible to use silently, and the justification ends up in the file where the next reader finds it rather than in a pull request nobody will open again.
+
+There is deliberately no config option to disable a gate across the repository. If a gate is wrong often enough to need one, the gate is wrong. File-level exclusions do exist, and the runner prints how many files each pattern removed on every single run, because an exclude list that quietly grows to cover half the codebase is the most likely way a setup like this rots.
+
+## You cannot adopt this without a baseline
+
+Switching on a new gate in a mature repository surfaces two hundred existing findings. Nobody fixes two hundred things before merging anything else, so the realistic options become not adding the gate, or adding it as a warning everyone learns to scroll past.
+
+`--baseline-write` records what is already wrong. Those stop blocking, anything new blocks immediately, and the debt stays visible and countable.
+
+The detail that decides whether that survives is what the fingerprint is keyed on. Line numbers are the obvious choice and they are fatal: adding one import at the top of a file re-reports every grandfathered finding at once, in a pull request that had nothing to do with any of them, and the team concludes the tool is broken that same day. Keyed on the rule, the path and the normalised content of the offending line, a finding survives moving around the file and starts blocking again the moment somebody edits that line, which is exactly when it is worth another look.
+
+## Four times faster, and none of it was clever
+
+Total scan time on that same repository went from 291ms to 73.6ms, median of seven runs, measured with the file reads outside the timed region because those are the runner's work and identical whatever the gates do.
+
+Three changes did nearly all of it, and all three were invisible until measured. The acknowledgement regex was being compiled once per line, per gate, roughly a million times on a repository where the string it looks for appears zero times. The scope gate was rebuilding its alias matcher inside the inner loop, per alias per line, which was 11x on that gate alone. And each gate now tests a single union of all its rules against the whole file, and then against each line, before entering the per-rule loop, because the overwhelming majority of lines contain nothing interesting and proving that thirteen times over is waste.
+
+Worker threads were considered and rejected. At 73ms the startup cost of a pool exceeds the work, so it would make the tool slower on every repository small enough to care about latency in order to help the ones large enough not to notice.
+
+## What it deliberately does not do
+
+gitleaks and trufflehog scan git history for secrets far more thoroughly than a cheap guard against the obvious case. Semgrep is a real static analysis engine with a pattern language. ESLint owns everything about the code's shape, and anything a formatter or a compiler can check should never become a gate here.
+
+Every gate documents what it misses, and those sections are the specification rather than an apology. The scope gate cannot follow a client bound inside an interactive transaction callback, which is the single most likely place a real cross-tenant leak survives a green build. It cannot know whether a written acknowledgement is still true a year later. It cannot see a tenant-owned model nobody added to the config.
+
+A tool that claims to catch everything teaches people to stop reading, and then the one it missed ships. The two things the mechanical gates cannot see are covered by a review skill in the repository instead, which is the honest division of labour: a green run here is necessary, and it is not sufficient.
