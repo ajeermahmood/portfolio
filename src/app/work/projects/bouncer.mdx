@@ -10,6 +10,7 @@ stack:
   - "Cloudflare Workers"
   - "GitHub Actions"
   - "Vitest"
+link: "https://bouncer.ajeermdk001.workers.dev"
 github: "https://github.com/ajeermahmood/bouncer"
 ---
 
@@ -22,6 +23,8 @@ The two usual answers are both bad. Review harder does not scale and puts the en
 `bouncer` is the third answer. Write the expensive mistakes down once, as code, and let the machine check every change forever. A contributor then does not need to know that `orders` is tenant-scoped or that a float cannot hold money. They will be told, by name, on the line, with what to do instead.
 
 Five gates: hardcoded secrets and code that reads like an attack, database access that reaches around the tenant-scoped client, float arithmetic on currency, migrations that break the previous version of the app during the deploy window, and documentation links that point at files which no longer exist. It is open source under MIT and this is the extracted, generalised version of gates I run across eight production repositories.
+
+It is on npm as [`bouncer-gates`](https://www.npmjs.com/package/bouncer-gates), so `npx bouncer-gates` runs it against any repository. There is a [live playground](https://bouncer.ajeermdk001.workers.dev) too: paste code into it and the real gate modules run on it, either on a Cloudflare Worker or in your own tab, and the footer tells you which.
 
 ## The interesting number is not what it caught
 
@@ -63,6 +66,10 @@ A gate takes files and returns findings. No filesystem, no git, no reading the e
 That is not tidiness. It is why one implementation of every rule runs in the CLI, inside a Cloudflare Worker behind the playground on the site, as a Node service on Railway, and directly in the browser when that endpoint is unreachable. A playground with its own copy of the regexes would drift from the real gates inside a month and start teaching visitors something false. There is nothing to drift, because there is nothing to copy.
 
 It has one real consequence, and it is a good one: a gate that needs git history takes the history as an argument. The migration gate does not run `git diff`, the runner does. That keeps the gate testable on string literals and puts every "where does this data come from" decision in a single file.
+
+The fallback also taught me something I did not expect. Cloudflare has two ways to host this, and they need different plumbing for the same route: Pages compiles a `functions/` directory by convention, and Workers ignores that directory entirely. The site went out as a Worker, so the API route was never wired up and returned the static 404 page. Nothing appeared to be wrong. The playground caught the failed request and ran the gates in the browser instead, exactly as designed, and the outage was invisible because the fallback was good.
+
+That is the real hazard of building a graceful fallback: it hides the thing it is compensating for. The only reason it surfaced at all is that the footer names which runtime answered, which I had put there to make a point about purity rather than as instrumentation. Worth remembering that a fallback without a visible indicator is a silent failure waiting to happen.
 
 ## The escape hatch has to cost one sentence
 
