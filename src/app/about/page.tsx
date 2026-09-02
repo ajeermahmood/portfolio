@@ -1,7 +1,9 @@
 import { ContactCTA } from "@/components/ContactCTA";
+import { JsonLd } from "@/components/JsonLd";
 import TableOfContents from "@/components/about/TableOfContents";
 import styles from "@/components/about/about.module.scss";
 import { about, baseURL, person, social } from "@/resources";
+import { requireRouteEnabled } from "@/utils/routes";
 import { generateMeta } from "@/utils/seo";
 import {
   Avatar,
@@ -13,7 +15,6 @@ import {
   Media,
   Meta,
   Row,
-  Schema,
   Tag,
   Text,
 } from "@once-ui-system/core";
@@ -31,6 +32,8 @@ export async function generateMetadata() {
 }
 
 export default function About() {
+  requireRouteEnabled(about.path);
+
   const structure = [
     {
       title: about.intro.title,
@@ -55,17 +58,38 @@ export default function About() {
   ];
   return (
     <Column maxWidth="m">
-      <Schema
-        as="webPage"
-        baseURL={baseURL}
-        title={about.title}
-        description={about.description}
-        path={about.path}
-        image={`/api/og/generate?title=${encodeURIComponent(about.title)}`}
-        author={{
-          name: person.name,
+      {/*
+        Server-rendered, unlike Once UI's <Schema>, which injects through
+        next/script and so never reaches the crawler. ProfilePage is the type
+        Google documents for an "about the author" page; mainEntity points at
+        the Person defined once in the root layout rather than restating it.
+      */}
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "ProfilePage",
+          "@id": `${baseURL}${about.path}`,
           url: `${baseURL}${about.path}`,
-          image: `${baseURL}${person.avatar}`,
+          name: about.title,
+          description: about.description,
+          inLanguage: "en",
+          isPartOf: { "@id": `${baseURL}/#website` },
+          mainEntity: { "@id": `${baseURL}/#person` },
+        }}
+      />
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Home", item: baseURL },
+            {
+              "@type": "ListItem",
+              position: 2,
+              name: about.label,
+              item: `${baseURL}${about.path}`,
+            },
+          ],
         }}
       />
       {about.tableOfContent.display && (

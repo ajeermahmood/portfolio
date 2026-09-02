@@ -6,7 +6,7 @@ import classNames from "classnames";
 
 import { Footer, Header, Providers, RouteGuard } from "@/components";
 import { JsonLd } from "@/components/JsonLd";
-import { baseURL, dataStyle, effects, fonts, home, person, social, style } from "@/resources";
+import { about, baseURL, dataStyle, effects, fonts, home, person, social, style } from "@/resources";
 import {
   Background,
   Column,
@@ -17,15 +17,62 @@ import {
   type SpacingToken,
 } from "@once-ui-system/core";
 import { Analytics } from "@vercel/analytics/next";
+import type { Metadata, Viewport } from "next";
 
-export async function generateMetadata() {
-  return Meta.generate({
+/**
+ * The site runs on `theme: "system"`, so the address-bar colour has to follow
+ * the same switch. These are the resolved Once UI page-background tokens for
+ * the gray neutral: --static-white in light, --function-neutral-100 in dark.
+ */
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#FFFFFF" },
+    { media: "(prefers-color-scheme: dark)", color: "#0A0A0A" },
+  ],
+};
+
+export async function generateMetadata(): Promise<Metadata> {
+  const meta = Meta.generate({
     title: home.title,
     description: home.description,
     baseURL: baseURL,
     path: home.path,
     image: home.image,
   });
+
+  return {
+    ...meta,
+    // Inherited by every route that does not set its own. Deliberately no
+    // `alternates.canonical` here: a canonical pointing at the home page would
+    // be inherited by any page that forgets to set one, which is worse than
+    // having none. Each page sets its own through generateMeta().
+    applicationName: `${person.name}, ${person.role}`,
+    authors: [{ name: person.name, url: `${baseURL}${about.path}` }],
+    creator: person.name,
+    publisher: person.name,
+    openGraph: {
+      ...(meta.openGraph ?? {}),
+      siteName: `${person.name}, ${person.role}`,
+      locale: "en_US",
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
+      },
+    },
+    // Set NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION to the token Search Console
+    // gives you for the HTML-tag verification method. Omitted when unset, so
+    // no empty tag is emitted.
+    ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+      ? { verification: { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION } }
+      : {}),
+  };
 }
 
 export default async function RootLayout({

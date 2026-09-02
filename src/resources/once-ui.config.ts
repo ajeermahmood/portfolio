@@ -15,7 +15,7 @@ import { home, person, social } from "./content";
 
 // Used for SEO meta tags, schema and the sitemap. No trailing slash: paths are
 // appended directly.
-const baseURL: string = "https://ajeer-portfolio.vercel.app";
+const baseURL: string = "https://ajeer.website";
 
 const routes: RoutesConfig = {
   "/": true,

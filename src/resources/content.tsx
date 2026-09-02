@@ -394,14 +394,14 @@ const blog: Blog = {
   path: "/blog",
   label: "Blog",
   title: "Notes on building and running systems",
-  description: `Writing by ${person.name}`,
+  description: `Notes by ${person.name} on building and running production systems: what holds up in a real repository, and what breaks once real users arrive.`,
 };
 
 const work: Work = {
   path: "/work",
   label: "Work",
   title: `Projects - ${person.name}`,
-  description: `Production systems built by ${person.name}`,
+  description: `Production work by ${person.name}: a multi-tenant e-commerce platform, an AI shopping assistant, Shopify Hydrogen storefronts and open-source CI tooling.`,
 };
 
 const contact: Contact = {

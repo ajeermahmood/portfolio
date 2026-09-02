@@ -1,7 +1,6 @@
 "use client";
 
-import NotFound from "@/app/not-found";
-import { protectedRoutes, routes } from "@/resources";
+import { protectedRoutes } from "@/resources";
 import { Button, Column, Flex, Heading, PasswordInput, Spinner } from "@once-ui-system/core";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -11,32 +10,18 @@ interface RouteGuardProps {
 }
 
 /**
- * Whether a route is enabled comes from static config, so it is knowable during
- * render. Only the password check needs a request, and only for the routes
- * listed in protectedRoutes. Deciding both in an effect meant the server
- * rendered a spinner for every page, which left crawlers with no content.
+ * Password protection for the routes listed in protectedRoutes. Only the
+ * password check needs a request; deciding it in an effect for every page meant
+ * the server rendered a spinner site-wide, which left crawlers with no content.
+ *
+ * Whether a route is enabled at all is checked server-side instead, by
+ * requireRouteEnabled() in the page itself. Doing it here returned a 200 with a
+ * "not found" body, because discarding `children` also discards the notFound()
+ * they throw.
  */
-function isRouteEnabled(pathname: string | null): boolean {
-  if (!pathname) return false;
-
-  if (pathname in routes) {
-    return routes[pathname as keyof typeof routes];
-  }
-
-  const dynamicRoutes = ["/blog", "/work"] as const;
-  for (const route of dynamicRoutes) {
-    if (pathname.startsWith(route) && routes[route]) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
 const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
   const pathname = usePathname();
 
-  const routeEnabled = isRouteEnabled(pathname);
   const passwordRequired = Boolean(
     pathname && protectedRoutes[pathname as keyof typeof protectedRoutes],
   );
@@ -84,10 +69,6 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
       setError("Incorrect password");
     }
   };
-
-  if (!routeEnabled) {
-    return <NotFound />;
-  }
 
   if (passwordRequired && !isAuthenticated) {
     if (checkingAuth) {

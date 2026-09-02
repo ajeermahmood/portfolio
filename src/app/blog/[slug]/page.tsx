@@ -4,6 +4,7 @@ import { Posts } from "@/components/blog/Posts";
 import { ShareSection } from "@/components/blog/ShareSection";
 import { about, baseURL, blog, person, social } from "@/resources";
 import { formatDate } from "@/utils/formatDate";
+import { requireRouteEnabled } from "@/utils/routes";
 import { generateMeta } from "@/utils/seo";
 import { getPosts } from "@/utils/utils";
 import {
@@ -59,11 +60,12 @@ export async function generateMetadata({
       post.metadata.image || `/api/og/generate?title=${encodeURIComponent(post.metadata.title)}`,
     path: `${blog.path}/${post.slug}`,
     canonical: `${baseURL}${blog.path}/${post.slug}`,
-    robots: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
   });
 }
 
 export default async function Blog({ params }: { params: Promise<{ slug: string | string[] }> }) {
+  requireRouteEnabled(blog.path);
+
   const routeParams = await params;
   const slugPath = Array.isArray(routeParams.slug)
     ? routeParams.slug.join("/")

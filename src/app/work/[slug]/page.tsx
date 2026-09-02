@@ -3,6 +3,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { Projects } from "@/components/work/Projects";
 import { about, baseURL, person, social, work } from "@/resources";
 import { formatDate } from "@/utils/formatDate";
+import { requireRouteEnabled } from "@/utils/routes";
 import { generateMeta } from "@/utils/seo";
 import { getPosts } from "@/utils/utils";
 import {
@@ -60,7 +61,6 @@ export async function generateMetadata({
       `/api/og/generate?title=${encodeURIComponent(post.metadata.title)}`,
     path: `${work.path}/${post.slug}`,
     canonical: `${baseURL}${work.path}/${post.slug}`,
-    robots: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
   });
 }
 
@@ -69,6 +69,8 @@ export default async function Project({
 }: {
   params: Promise<{ slug: string | string[] }>;
 }) {
+  requireRouteEnabled(work.path);
+
   const routeParams = await params;
   const slugPath = Array.isArray(routeParams.slug)
     ? routeParams.slug.join("/")

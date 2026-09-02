@@ -1,9 +1,11 @@
 import { Mailchimp } from "@/components";
 import { Posts } from "@/components/blog/Posts";
-import { baseURL, blog, newsletter, person } from "@/resources";
+import { JsonLd } from "@/components/JsonLd";
+import { baseURL, blog, newsletter } from "@/resources";
+import { requireRouteEnabled } from "@/utils/routes";
 import { generateMeta } from "@/utils/seo";
 import { getPosts } from "@/utils/utils";
-import { Column, Heading, Meta, Schema } from "@once-ui-system/core";
+import { Column, Heading } from "@once-ui-system/core";
 
 export async function generateMetadata() {
   return generateMeta({
@@ -17,20 +19,57 @@ export async function generateMetadata() {
 }
 
 export default function Blog() {
-  const postCount = getPosts(["src", "app", "blog", "posts"]).length;
+  requireRouteEnabled(blog.path);
+
+  const posts = getPosts(["src", "app", "blog", "posts"]).sort(
+    (a, b) =>
+      new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime(),
+  );
+  const postCount = posts.length;
+
   return (
     <Column maxWidth="m" paddingTop="24">
-      <Schema
-        as="blogPosting"
-        baseURL={baseURL}
-        title={blog.title}
-        description={blog.description}
-        path={blog.path}
-        image={`/api/og/generate?title=${encodeURIComponent(blog.title)}`}
-        author={{
-          name: person.name,
-          url: `${baseURL}/blog`,
-          image: `${baseURL}${person.avatar}`,
+      {/*
+        A listing page is a Blog, not a BlogPosting. Server-rendered rather than
+        through Once UI's <Schema>, which injects client-side and so is invisible
+        to the crawler.
+      */}
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "Blog",
+          "@id": `${baseURL}${blog.path}`,
+          url: `${baseURL}${blog.path}`,
+          name: blog.title,
+          description: blog.description,
+          inLanguage: "en",
+          isPartOf: { "@id": `${baseURL}/#website` },
+          author: { "@id": `${baseURL}/#person` },
+          publisher: { "@id": `${baseURL}/#person` },
+          blogPost: posts.map((post) => ({
+            "@type": "BlogPosting",
+            "@id": `${baseURL}${blog.path}/${post.slug}`,
+            url: `${baseURL}${blog.path}/${post.slug}`,
+            headline: post.metadata.title,
+            description: post.metadata.summary,
+            datePublished: post.metadata.publishedAt,
+            author: { "@id": `${baseURL}/#person` },
+          })),
+        }}
+      />
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Home", item: baseURL },
+            {
+              "@type": "ListItem",
+              position: 2,
+              name: blog.label,
+              item: `${baseURL}${blog.path}`,
+            },
+          ],
         }}
       />
       <Heading marginBottom="l" variant="heading-strong-xl" marginLeft="24">

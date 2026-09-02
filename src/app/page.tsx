@@ -1,8 +1,10 @@
 import { Mailchimp } from "@/components";
 import { ContactCTA } from "@/components/ContactCTA";
+import { JsonLd } from "@/components/JsonLd";
 import { Posts } from "@/components/blog/Posts";
 import { Projects } from "@/components/work/Projects";
 import { about, baseURL, home, person, routes } from "@/resources";
+import { requireRouteEnabled } from "@/utils/routes";
 import { generateMeta } from "@/utils/seo";
 import {
   Avatar,
@@ -14,7 +16,6 @@ import {
   Meta,
   RevealFx,
   Row,
-  Schema,
   Text,
 } from "@once-ui-system/core";
 
@@ -30,19 +31,27 @@ export async function generateMetadata() {
 }
 
 export default function Home() {
+  requireRouteEnabled(home.path);
+
   return (
     <Column maxWidth="m" gap="xl" paddingY="12" horizontal="center">
-      <Schema
-        as="webPage"
-        baseURL={baseURL}
-        path={home.path}
-        title={home.title}
-        description={home.description}
-        image={`/api/og/generate?title=${encodeURIComponent(home.title)}`}
-        author={{
-          name: person.name,
-          url: `${baseURL}${about.path}`,
-          image: `${baseURL}${person.avatar}`,
+      {/*
+        WebPage for the home URL, tied to the Person and WebSite nodes the root
+        layout defines. Replaces Once UI's <Schema>, which renders through
+        next/script and so never appeared in the HTML a crawler reads.
+      */}
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "@id": `${baseURL}/`,
+          url: baseURL,
+          name: home.title,
+          description: home.description,
+          inLanguage: "en",
+          isPartOf: { "@id": `${baseURL}/#website` },
+          about: { "@id": `${baseURL}/#person` },
+          primaryImageOfPage: `${baseURL}${home.image}`,
         }}
       />
       <Column fillWidth horizontal="center" gap="m">

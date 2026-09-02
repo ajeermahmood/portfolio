@@ -1,7 +1,28 @@
-import { baseURL, person } from "@/resources";
+import fs from "node:fs/promises";
+import path from "node:path";
+import { person } from "@/resources";
 import { ImageResponse } from "next/og";
 
 export const runtime = "nodejs";
+
+/**
+ * Satori (what ImageResponse renders with) decodes PNG, JPEG, GIF and SVG only,
+ * so it cannot use person.avatar, which is a .webp. It also cannot resolve a
+ * relative src, and pointing it at the absolute production URL made the route
+ * fetch the deployed site to render its own OG image — which fails on a
+ * preview deploy, and during a build before the domain is live.
+ *
+ * Reading a JPEG copy off disk and inlining it removes both problems.
+ */
+let avatarDataUri: string | undefined;
+
+async function getAvatarDataUri(): Promise<string> {
+  if (!avatarDataUri) {
+    const file = await fs.readFile(path.join(process.cwd(), "public/images/avatar-og.jpg"));
+    avatarDataUri = `data:image/jpeg;base64,${file.toString("base64")}`;
+  }
+  return avatarDataUri;
+}
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
@@ -21,6 +42,8 @@ export async function GET(request: Request) {
 
     throw new Error("failed to load font data");
   }
+
+  const avatar = await getAvatarDataUri();
 
   return new ImageResponse(
     <div
@@ -63,7 +86,7 @@ export async function GET(request: Request) {
           }}
         >
           <img
-            src={baseURL + person.avatar}
+            src={avatar}
             style={{
               width: "12rem",
               height: "12rem",
