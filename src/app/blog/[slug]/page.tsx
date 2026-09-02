@@ -48,7 +48,7 @@ export async function generateMetadata({
 
   return generateMeta({
     title: post.metadata.title,
-    description: post.metadata.summary,
+    description: post.metadata.description || post.metadata.summary,
     baseURL: baseURL,
     type: "article",
     publishedTime: post.metadata.publishedAt,
@@ -115,7 +115,7 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
           },
           url: `${baseURL}${blog.path}/${post.slug}`,
           headline: post.metadata.title,
-          description: post.metadata.summary,
+          description: post.metadata.description || post.metadata.summary,
           image: [
             post.metadata.image
               ? `${baseURL}${post.metadata.image}`

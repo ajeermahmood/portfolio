@@ -47,7 +47,7 @@ export async function generateMetadata({
 
   return generateMeta({
     title: post.metadata.title,
-    description: post.metadata.summary,
+    description: post.metadata.description || post.metadata.summary,
     baseURL: baseURL,
     type: "article",
     publishedTime: post.metadata.publishedAt,
@@ -99,7 +99,7 @@ export default async function Project({
           },
           url: `${baseURL}${work.path}/${post.slug}`,
           headline: post.metadata.title,
-          description: post.metadata.summary,
+          description: post.metadata.description || post.metadata.summary,
           image: [
             post.metadata.images?.[0]
               ? `${baseURL}${post.metadata.images[0]}`

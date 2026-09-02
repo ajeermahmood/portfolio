@@ -10,7 +10,8 @@ type MetaArgs = Parameters<typeof Meta.generate>[0];
  * large image thumbnails (Discover, image search) and removes Google's snippet
  * length cap. Without it Google falls back to a short snippet and a thumbnail.
  */
-const DEFAULT_ROBOTS = "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1";
+const DEFAULT_ROBOTS =
+  "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1";
 
 const SITE_NAME = `${person.name}, ${person.role}`;
 

@@ -13,7 +13,15 @@ type Metadata = {
   title: string;
   subtitle?: string;
   publishedAt: string;
+  /** Shown on the listing cards and at the top of the page. */
   summary: string;
+  /**
+   * Meta description and JSON-LD description, when the summary runs longer than
+   * the ~155 characters Google will show. Falls back to summary when unset, so
+   * only the long ones need it. Kept separate so tightening the snippet does
+   * not shorten the copy on the card.
+   */
+  description?: string;
   image?: string;
   images: string[];
   tag?: string;
@@ -46,6 +54,7 @@ function readMDXFile(filePath: string) {
     subtitle: data.subtitle || "",
     publishedAt: data.publishedAt,
     summary: data.summary || "",
+    description: data.description || "",
     image: data.image || "",
     images: data.images || [],
     tag: data.tag || [],

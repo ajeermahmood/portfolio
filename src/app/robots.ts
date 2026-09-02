@@ -29,7 +29,6 @@ export default function robots(): MetadataRoute.Robots {
           // robots.txt, so blocking it would drop those preview images.
           "/api/authenticate",
           "/api/check-auth",
-          "/api/og/proxy",
           ...protectedPaths(),
         ],
       },
