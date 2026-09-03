@@ -1,10 +1,13 @@
-import { baseURL, protectedRoutes, routes as routesConfig } from "@/resources";
+import { baseURL, routes as routesConfig } from "@/resources";
 import { getPosts } from "@/utils/utils";
 import type { MetadataRoute } from "next";
 
 /** Newest publishedAt in a set of posts, or undefined when there are none. */
 function newestDate(posts: { metadata: { publishedAt: string } }[]): string | undefined {
-  const dates = posts.map((post) => post.metadata.publishedAt).filter(Boolean).sort();
+  const dates = posts
+    .map((post) => post.metadata.publishedAt)
+    .filter(Boolean)
+    .sort();
   return dates.at(-1);
 }
 
@@ -45,9 +48,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   };
 
   const activeRoutes = Object.keys(routesConfig).filter(
-    (route) =>
-      routesConfig[route as keyof typeof routesConfig] &&
-      !protectedRoutes[route as keyof typeof protectedRoutes],
+    (route) => routesConfig[route as keyof typeof routesConfig],
   );
 
   const staticRoutes = activeRoutes.map((route) => {

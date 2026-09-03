@@ -4,9 +4,19 @@ import "@/resources/custom.css";
 
 import classNames from "classnames";
 
-import { Footer, Header, Providers, RouteGuard } from "@/components";
+import { Footer, Header, Providers } from "@/components";
 import { JsonLd } from "@/components/JsonLd";
-import { about, baseURL, dataStyle, effects, fonts, home, person, social, style } from "@/resources";
+import {
+  about,
+  baseURL,
+  dataStyle,
+  effects,
+  fonts,
+  home,
+  person,
+  social,
+  style,
+} from "@/resources";
 import {
   Background,
   Column,
@@ -263,7 +273,7 @@ export default async function RootLayout({
           <Header />
           <Flex zIndex={0} fillWidth padding="l" horizontal="center" flex={1}>
             <Flex horizontal="center" fillWidth minHeight="0">
-              <RouteGuard>{children}</RouteGuard>
+              {children}
             </Flex>
           </Flex>
           <Footer />

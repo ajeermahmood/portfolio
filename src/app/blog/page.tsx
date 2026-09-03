@@ -1,7 +1,6 @@
-import { Mailchimp } from "@/components";
 import { Posts } from "@/components/blog/Posts";
 import { JsonLd } from "@/components/JsonLd";
-import { baseURL, blog, newsletter } from "@/resources";
+import { baseURL, blog } from "@/resources";
 import { requireRouteEnabled } from "@/utils/routes";
 import { generateMeta } from "@/utils/seo";
 import { getPosts } from "@/utils/utils";
@@ -78,7 +77,6 @@ export default function Blog() {
       <Column fillWidth flex={1} gap="40">
         <Posts range={[1, 1]} thumbnail />
         {postCount > 1 && <Posts range={[2, 3]} columns="2" thumbnail direction="column" />}
-        {newsletter.display && <Mailchimp marginBottom="l" />}
         {postCount > 3 && (
           <>
             <Heading as="h2" variant="heading-strong-xl" marginLeft="l">

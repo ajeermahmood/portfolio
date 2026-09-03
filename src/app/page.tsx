@@ -1,4 +1,3 @@
-import { Mailchimp } from "@/components";
 import { ContactCTA } from "@/components/ContactCTA";
 import { JsonLd } from "@/components/JsonLd";
 import { Posts } from "@/components/blog/Posts";
@@ -136,7 +135,6 @@ export default function Home() {
         </Column>
       )}
       <Projects range={[2]} />
-      <Mailchimp />
       <ContactCTA />
     </Column>
   );

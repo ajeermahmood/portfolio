@@ -3,8 +3,6 @@ import type {
   DisplayConfig,
   EffectsConfig,
   FontsConfig,
-  MailchimpConfig,
-  ProtectedRoutesConfig,
   RoutesConfig,
   SameAsConfig,
   SchemaConfig,
@@ -23,8 +21,6 @@ const routes: RoutesConfig = {
   "/work": true,
   "/blog": true,
   "/contact": true,
-  // no photo set to show yet
-  "/gallery": false,
 };
 
 const display: DisplayConfig = {
@@ -32,13 +28,6 @@ const display: DisplayConfig = {
   time: false,
   themeSwitcher: true,
 };
-
-// Enable password protection on selected routes
-// Set password in the .env file, refer to .env.example
-// Client work can be published behind a password and the password handed to
-// recruiters, rather than left open to search engines. Set PAGE_ACCESS_PASSWORD
-// in .env to use this.
-const protectedRoutes: ProtectedRoutesConfig = {};
 
 // Import and set font for each variant
 import { Geist } from "next/font/google";
@@ -144,50 +133,6 @@ const effects: EffectsConfig = {
   },
 };
 
-const mailchimp: MailchimpConfig = {
-  action: "https://url/subscribe/post?parameters",
-  effects: {
-    mask: {
-      cursor: true,
-      x: 50,
-      y: 0,
-      radius: 100,
-    },
-    gradient: {
-      display: true,
-      opacity: 90,
-      x: 50,
-      y: 0,
-      width: 50,
-      height: 50,
-      tilt: 0,
-      colorStart: "accent-background-strong",
-      colorEnd: "static-transparent",
-    },
-    dots: {
-      display: true,
-      opacity: 20,
-      size: "2",
-      color: "brand-on-background-weak",
-    },
-    grid: {
-      display: false,
-      opacity: 100,
-      color: "neutral-alpha-medium",
-      width: "0.25rem",
-      height: "0.25rem",
-    },
-    lines: {
-      display: false,
-      opacity: 100,
-      color: "neutral-alpha-medium",
-      size: "16",
-      thickness: 1,
-      angle: 90,
-    },
-  },
-};
-
 // default schema data — pulls from content.tsx so there's one source of truth
 const schema: SchemaConfig = {
   logo: "",
@@ -222,9 +167,7 @@ const socialSharing: SocialSharingConfig = {
 
 export {
   display,
-  mailchimp,
   routes,
-  protectedRoutes,
   baseURL,
   fonts,
   style,
