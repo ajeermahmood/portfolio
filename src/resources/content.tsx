@@ -2,9 +2,7 @@ import type {
   About,
   Blog,
   Contact,
-  Gallery,
   Home,
-  Newsletter,
   Person,
   Social,
   Work,
@@ -22,12 +20,6 @@ const person: Person = {
   locationLabel: "India",
   languages: [],
   locale: "en",
-};
-
-const newsletter: Newsletter = {
-  display: false,
-  title: <>Subscribe to {person.firstName}'s Newsletter</>,
-  description: <>Occasional notes on building and running production systems</>,
 };
 
 const social: Social = [
@@ -201,10 +193,14 @@ const about: About = {
             .NET and SQL.
           </>,
           <>
-            Built two interactive pieces for Novartis and Nestlé: a talking avatar chatbot that
-            answered product questions for healthcare professionals, using Next.js, Python, Google
-            TTS and a fine-tuned model, and a live camera segmentation app with full-body tracking
-            for product demos, using React, Redux, Electron and MediaPipe.
+            Built the interactive pieces for Nestlé's Ascenda launch at the Ritz-Carlton, Jeddah: a
+            full-body-tracking growth wall where guests watched themselves grow on a 4 metre screen,
+            then printed or shared the photo, and a Mario-style runner played on an Xbox controller.
+            More than 150 guests used them in one evening. Electron, React, Redux and MediaPipe.
+          </>,
+          <>
+            Built a talking avatar chatbot for Novartis that answered product questions for
+            healthcare professionals, using Next.js, Python, Google TTS and a fine-tuned model.
           </>,
         ],
         images: [],
@@ -411,12 +407,4 @@ const contact: Contact = {
   description: `Get in touch with ${person.name}, ${person.role}, by email`,
 };
 
-const gallery: Gallery = {
-  path: "/gallery",
-  label: "Gallery",
-  title: `Gallery - ${person.name}`,
-  description: `A photo collection by ${person.name}`,
-  images: [],
-};
-
-export { person, social, newsletter, home, about, blog, work, contact, gallery };
+export { person, social, home, about, blog, work, contact };

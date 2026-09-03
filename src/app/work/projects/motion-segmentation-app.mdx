@@ -1,12 +1,14 @@
 ---
-title: "A motion tracking and segmentation desktop app"
+title: "Nestlé Ascenda, an interactive growth wall and a running game for a Jeddah launch"
 publishedAt: "2024-11-25"
-summary: "Full-body tracking through a webcam for live product demonstrations, running as a desktop app on Windows and Mac."
+summary: "Two pieces for Nestlé's Ascenda launch at the Ritz-Carlton, Jeddah: a webcam wall where guests watched themselves grow taller on a 4 metre screen, then printed or shared the photo, and a Mario-style runner played on an Xbox controller. More than 150 guests used them in one evening."
+description: "A full-body-tracking growth wall and a Mario-style runner built for Nestlé's Ascenda launch in Jeddah, used by more than 150 guests in one evening."
 images:
-  - "/images/projects/motion-segmentation-app/01.webp"
-  - "/images/projects/motion-segmentation-app/02.webp"
-  - "/images/projects/motion-segmentation-app/03.webp"
-  - "/images/projects/motion-segmentation-app/04.webp"
+  - "/images/projects/motion-segmentation-app/growth-wall-guest.webp"
+  - "/images/projects/motion-segmentation-app/growth-wall-ballroom.webp"
+  - "/images/projects/motion-segmentation-app/game-kiosks.webp"
+  - "/images/projects/motion-segmentation-app/game-kiosks-stage.webp"
+  - "/images/projects/motion-segmentation-app/ballroom.webp"
 github: "https://github.com/ajeermahmood/image-segmentation-app"
 stack:
   - "Electron"
@@ -18,20 +20,34 @@ stack:
 
 ## Overview
 
-A desktop application used for product demonstrations. It reads a webcam feed, tracks the person in front of it, separates them from their background, and lets them trigger things by moving.
+Ascenda is a Nestlé nutrition product for children, and its pitch is height. For the launch to healthcare professionals at the Ritz-Carlton in Jeddah, Saudi Arabia, the brief was to let guests feel that pitch rather than read it. I built two pieces for the ballroom, delivered through NTAM Group.
 
-It runs on Windows and Mac from one codebase, built with Electron around a Next.js and React frontend, with MediaPipe Holistic doing the tracking.
+- **A growth wall.** A webcam and a wall-sized LED screen. A guest steps in front of it, the app tracks their body, and on screen they stretch taller as the Ascenda "effect" kicks in. They capture the moment and print it or share it on the spot.
+- **A running game.** A Mario-inspired side-scroller, also built in Electron, on three kiosks and played with an Xbox controller. The runner grows taller by collecting Ascenda and shrinks when hit by sugar molecules, which is the product's message turned into a game mechanic.
 
-## Key features
+More than 150 guests used the two pieces over the evening.
 
-- **Full-body tracking.** Pose, hands and face through MediaPipe Holistic, so interaction can respond to where someone is and what they are doing rather than only to clicks.
-- **Background replacement.** Segmentation separates the subject from whatever is actually behind them, and any image can be put in its place.
-- **Motion-triggered actions.** Specific movements fire specific actions in the app.
-- **Capture and share.** Stills of the tracked view can be captured and shared on the spot.
-- **Windows and Mac.** One Electron build covering both.
+## The growth wall
+
+It is a desktop application that reads the webcam, tracks the person in front of it and separates them from the background, so the ballroom behind them is replaced by the campaign artwork and their body can be stretched without the wall stretching with them.
+
+- **Full-body tracking.** Pose, hands and face through MediaPipe Holistic, so the growth animation follows the actual person and the capture triggers on a raised arm rather than on a click.
+- **Background replacement.** Segmentation separates the subject from whatever is actually behind them, and the campaign artwork takes its place.
+- **Capture, print and share.** A still of the finished frame goes to a printer at the stand and to a QR code for the guest's phone.
+- **Windows and Mac.** One Electron build covering both, because the venue hardware was not known until the week before.
 
 ## Why a desktop app
 
-This runs at events on hardware someone else set up, and it needs a camera, predictable performance, and no dependency on the venue's network. A browser tab is the wrong shape for that. Electron gives it direct access to the camera and a fixed runtime, so behaviour on the day matches behaviour in testing.
+This runs at an event on hardware someone else set up. It needs a camera, predictable frame rate and no dependency on the venue's network. A browser tab is the wrong shape for that. Electron gives it direct access to the camera and a fixed runtime, so behaviour on the night matches behaviour in testing.
 
-Redux carries the tracking state, which changes many times a second and is read by several parts of the interface at once. Keeping that in one place rather than threading it through components is what keeps the frame rate usable.
+Redux carries the tracking state, which changes many times a second and is read by several parts of the interface at once. Keeping that in one place rather than threading it through components is what keeps the frame rate usable on a 4 metre screen.
+
+## The game
+
+The runner is a second Electron app, a Mario-inspired side-scroller I wrote from scratch for the three kiosks. The character grows taller by collecting Ascenda and shrinks when hit by sugar molecules, and the only input is an Xbox controller read through the browser's Gamepad API inside the Electron shell.
+
+It was built for a kiosk, which changes the design more than it sounds. There is no keyboard, the session has to reset itself when a child walks away mid-run, and a queue is forming behind every player. So each run is short, the controller is the only input, and the attract screen comes back on its own after a few seconds of nothing happening.
+
+## What I would do differently
+
+Test on the real screen earlier. The tracking was tuned on a laptop, and a 4 metre LED wall with stage lighting behind the guest is a different segmentation problem. It held up, but the first hour at the venue went on lighting rather than on the app.
