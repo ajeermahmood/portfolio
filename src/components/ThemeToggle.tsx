@@ -1,29 +1,23 @@
 "use client";
 
-import { Row, ToggleButton, useTheme } from "@once-ui-system/core";
+import { ToggleButton, useTheme } from "@once-ui-system/core";
 import type React from "react";
 import { useEffect, useState } from "react";
 
 export const ThemeToggle: React.FC = () => {
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const [currentTheme, setCurrentTheme] = useState("light");
 
-  useEffect(() => {
-    setMounted(true);
-    setCurrentTheme(document.documentElement.getAttribute("data-theme") || "light");
-  }, []);
+  // The server cannot know the visitor's theme, so the first client render must
+  // match its output; the real icon appears once the provider has resolved it.
+  useEffect(() => setMounted(true), []);
 
-  useEffect(() => {
-    setCurrentTheme(document.documentElement.getAttribute("data-theme") || "light");
-  }, [theme]);
-
-  const icon = currentTheme === "dark" ? "light" : "dark";
-  const nextTheme = currentTheme === "light" ? "dark" : "light";
+  const current = mounted ? resolvedTheme : "light";
+  const nextTheme = current === "dark" ? "light" : "dark";
 
   return (
     <ToggleButton
-      prefixIcon={icon}
+      prefixIcon={nextTheme}
       onClick={() => setTheme(nextTheme)}
       aria-label={`Switch to ${nextTheme} mode`}
     />

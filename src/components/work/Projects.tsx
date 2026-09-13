@@ -5,9 +5,11 @@ import { Column } from "@once-ui-system/core";
 interface ProjectsProps {
   range?: [number, number?];
   exclude?: string[];
+  /** Rank by how many stack entries a project shares with these, newest first as the tiebreak. */
+  similarTo?: string[];
 }
 
-export function Projects({ range, exclude }: ProjectsProps) {
+export function Projects({ range, exclude, similarTo }: ProjectsProps) {
   let allProjects = getPosts(["src", "app", "work", "projects"]);
 
   // Exclude by slug (exact match)
@@ -15,9 +17,15 @@ export function Projects({ range, exclude }: ProjectsProps) {
     allProjects = allProjects.filter((post) => !exclude.includes(post.slug));
   }
 
-  const sortedProjects = allProjects.sort((a, b) => {
-    return new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime();
-  });
+  const byDate = (a: (typeof allProjects)[number], b: (typeof allProjects)[number]) =>
+    new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime();
+
+  const overlap = (stack: string[] = []) =>
+    similarTo ? stack.filter((item) => similarTo.includes(item)).length : 0;
+
+  const sortedProjects = [...allProjects].sort(
+    (a, b) => overlap(b.metadata.stack) - overlap(a.metadata.stack) || byDate(a, b),
+  );
 
   const displayedProjects = range
     ? sortedProjects.slice(range[0] - 1, range[1] ?? sortedProjects.length)

@@ -35,7 +35,7 @@ export async function GET(request: Request) {
 
     if (resource) {
       const response = await fetch(resource[1]);
-      if (response.status == 200) {
+      if (response.status === 200) {
         return await response.arrayBuffer();
       }
     }
@@ -87,6 +87,7 @@ export async function GET(request: Request) {
         >
           <img
             src={avatar}
+            alt=""
             style={{
               width: "12rem",
               height: "12rem",
@@ -127,8 +128,11 @@ export async function GET(request: Request) {
       </div>
     </div>,
     {
-      width: 1280,
-      height: 720,
+      width: 1200,
+      height: 630,
+      headers: {
+        "Cache-Control": "public, max-age=86400, s-maxage=31536000, stale-while-revalidate=86400",
+      },
       fonts: [
         {
           name: "Geist",

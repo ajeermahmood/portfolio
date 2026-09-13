@@ -2,7 +2,10 @@ import { person } from "@/resources";
 import { Meta } from "@once-ui-system/core";
 import type { Metadata } from "next";
 
-type MetaArgs = Parameters<typeof Meta.generate>[0];
+type MetaArgs = Parameters<typeof Meta.generate>[0] & {
+  /** article:modified_time. Meta.generate has no prop for it, so it is added here. */
+  modifiedTime?: string;
+};
 
 /**
  * Site-wide crawler directives. `index, follow` is already the default when no
@@ -30,10 +33,10 @@ const OG_LOCALE = "en_US";
 export function generateMeta(args: MetaArgs): Metadata {
   // Only default the robots directives when the caller has expressed no
   // opinion. Passing them alongside `noindex` would override the noindex.
-  const robots =
-    args.robots ?? (args.noindex || args.nofollow ? undefined : DEFAULT_ROBOTS);
+  const robots = args.robots ?? (args.noindex || args.nofollow ? undefined : DEFAULT_ROBOTS);
 
-  const meta = Meta.generate({ ...args, robots });
+  const { modifiedTime, ...rest } = args;
+  const meta = Meta.generate({ ...rest, robots });
 
   const base = args.baseURL.replace(/\/+$/, "");
   const path = args.path ? (args.path.startsWith("/") ? args.path : `/${args.path}`) : "";
@@ -45,6 +48,7 @@ export function generateMeta(args: MetaArgs): Metadata {
       ...(meta.openGraph ?? {}),
       siteName: SITE_NAME,
       locale: OG_LOCALE,
+      ...(modifiedTime ? { modifiedTime } : {}),
     },
     alternates: {
       ...(meta.alternates ?? {}),

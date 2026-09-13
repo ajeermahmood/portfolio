@@ -7,7 +7,6 @@
   },
   "scripts": {
     "dev": "next dev",
-    "export": "next export",
     "build": "next build",
     "biome-write": "npx @biomejs/biome format --write .",
     "start": "next start",
@@ -19,7 +18,6 @@
     "@once-ui-system/core": "^1.8.4",
     "@vercel/analytics": "^2.0.1",
     "classnames": "^2.5.1",
-    "cookie": "^1.0.2",
     "gray-matter": "^4.0.3",
     "lint-staged": "^16.1.5",
     "next": "^16.0.10",
@@ -33,7 +31,6 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
-    "@types/cookie": "^0.6.0",
     "@types/node": "^24.13.3",
     "@types/react": "^19.2.4",
     "@types/react-dom": "^19.2.3",

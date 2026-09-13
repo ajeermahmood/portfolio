@@ -3,11 +3,14 @@ import { getPosts } from "@/utils/utils";
 import type { MetadataRoute } from "next";
 
 /** Newest publishedAt in a set of posts, or undefined when there are none. */
-function newestDate(posts: { metadata: { publishedAt: string } }[]): string | undefined {
-  const dates = posts
-    .map((post) => post.metadata.publishedAt)
-    .filter(Boolean)
-    .sort();
+type Dated = { metadata: { publishedAt: string; updatedAt?: string } };
+
+function lastModifiedOf(post: Dated): string {
+  return post.metadata.updatedAt || post.metadata.publishedAt;
+}
+
+function newestDate(posts: Dated[]): string | undefined {
+  const dates = posts.map(lastModifiedOf).filter(Boolean).sort();
   return dates.at(-1);
 }
 
@@ -17,14 +20,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const blogs = posts.map((post) => ({
     url: `${baseURL}/blog/${post.slug}`,
-    lastModified: post.metadata.publishedAt,
+    lastModified: lastModifiedOf(post),
     changeFrequency: "yearly" as const,
     priority: 0.7,
   }));
 
   const works = projects.map((post) => ({
     url: `${baseURL}/work/${post.slug}`,
-    lastModified: post.metadata.publishedAt,
+    lastModified: lastModifiedOf(post),
     changeFrequency: "yearly" as const,
     priority: 0.7,
   }));

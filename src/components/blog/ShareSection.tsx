@@ -21,7 +21,7 @@ const socialPlatforms: Record<string, SocialPlatform> = {
     icon: "twitter",
     label: "X",
     generateUrl: (title, url) =>
-      `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`,
+      `https://x.com/intent/post?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`,
   },
   linkedin: {
     name: "linkedin",
@@ -115,11 +115,18 @@ export function ShareSection({ title, url }: ShareSectionProps) {
             size="s"
             href={platform.generateUrl(title, url)}
             prefixIcon={platform.icon}
+            aria-label={`Share on ${platform.label}`}
           />
         ))}
 
         {socialSharing.platforms.copyLink && (
-          <Button variant="secondary" size="s" onClick={handleCopy} prefixIcon="openLink" />
+          <Button
+            variant="secondary"
+            size="s"
+            onClick={handleCopy}
+            prefixIcon="openLink"
+            aria-label="Copy link"
+          />
         )}
       </Row>
     </Row>

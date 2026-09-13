@@ -1,12 +1,4 @@
-import type {
-  About,
-  Blog,
-  Contact,
-  Home,
-  Person,
-  Social,
-  Work,
-} from "@/types";
+import type { About, Blog, Contact, Home, Person, Social, Work } from "@/types";
 import { Line, Row, SmartLink, Text } from "@once-ui-system/core";
 
 const person: Person = {
@@ -104,9 +96,11 @@ const about: About = {
         platform and an AI shopping assistant, where the work covers architecture, planning, cost
         decisions and code review for a team of 4 to 6 developers. Past projects have shipped to a
         US state health department, international pharmaceutical brands, and retail businesses in
-        India, the UAE and the United States. I also publish open-source developer tooling: two
-        command-line tools for catching expensive mistakes in a build rather than in production.
-        Based in India and open to relocation and remote roles.
+        India, the UAE and the United States. I also publish open-source developer tooling:{" "}
+        <SmartLink href="/work/bouncer">bouncer</SmartLink> and{" "}
+        <SmartLink href="/work/estate">estate</SmartLink>, two command-line tools for catching
+        expensive mistakes in a build rather than in production. Based in India and open to
+        relocation and remote roles.
       </>
     ),
   },
@@ -352,13 +346,13 @@ const about: About = {
         title: "Open source",
         description: (
           <>
-            <SmartLink href="https://github.com/ajeermahmood/bouncer">bouncer</SmartLink> is a set
-            of five CI gates that block expensive mistakes before they merge: hardcoded secrets,
-            database access that reaches around the tenant-scoped client, float arithmetic on
-            currency, migrations that break the running app mid-deploy, and documentation links
-            pointing at deleted files. Each gate is a pure function, so one implementation runs in
-            the CLI, in a Cloudflare Worker, as a Node service and in the browser. Zero runtime
-            dependencies and 86 tests, published as{" "}
+            <SmartLink href="https://github.com/ajeermahmood/bouncer">bouncer</SmartLink> checks
+            every code change for five expensive mistakes before they merge: leaked secrets,
+            database queries that cross tenants, money maths on floats, migrations that break the
+            running app mid-deploy, and documentation links pointing at deleted files. Each gate is
+            a pure function, so one implementation runs in CI, inside Claude Code and Cursor as an
+            MCP server and post-edit hook, in a Cloudflare Worker and in the browser. Zero runtime
+            dependencies and 115 tests, published as{" "}
             <SmartLink href="https://www.npmjs.com/package/bouncer-gates">bouncer-gates</SmartLink>.
             Most of the work went into being wrong less often: 45 findings on a real repository, 32
             of them false positives, brought down to 13 that were all genuine.{" "}

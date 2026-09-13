@@ -4,6 +4,7 @@ import { Posts } from "@/components/blog/Posts";
 import { ShareSection } from "@/components/blog/ShareSection";
 import { about, baseURL, blog, person, social } from "@/resources";
 import { formatDate } from "@/utils/formatDate";
+import { readingTime } from "@/utils/readingTime";
 import { requireRouteEnabled } from "@/utils/routes";
 import { generateMeta } from "@/utils/seo";
 import { getPosts } from "@/utils/utils";
@@ -15,7 +16,6 @@ import {
   Icon,
   Line,
   Media,
-  Meta,
   Row,
   SmartLink,
   Text,
@@ -52,6 +52,7 @@ export async function generateMetadata({
     baseURL: baseURL,
     type: "article",
     publishedTime: post.metadata.publishedAt,
+    modifiedTime: post.metadata.updatedAt || post.metadata.publishedAt,
     author: {
       name: person.name,
       url: `${baseURL}${about.path}`,
@@ -77,10 +78,7 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
     notFound();
   }
 
-  const avatars =
-    post.metadata.team?.map((person) => ({
-      src: person.avatar,
-    })) || [];
+  const minutes = readingTime(post.content);
 
   return (
     <>
@@ -122,7 +120,7 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
               : `${baseURL}/api/og/generate?title=${encodeURIComponent(post.metadata.title)}`,
           ],
           datePublished: post.metadata.publishedAt,
-          dateModified: post.metadata.publishedAt,
+          dateModified: post.metadata.updatedAt || post.metadata.publishedAt,
           inLanguage: "en",
           ...(post.metadata.tag ? { keywords: post.metadata.tag } : {}),
           author: {
@@ -150,6 +148,8 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
               </SmartLink>
               <Text variant="body-default-xs" onBackground="neutral-weak" marginBottom="12">
                 {post.metadata.publishedAt && formatDate(post.metadata.publishedAt)}
+                {post.metadata.updatedAt && ` · Updated ${formatDate(post.metadata.updatedAt)}`}
+                {` · ${minutes} min read`}
               </Text>
               <Heading variant="display-strong-m">{post.metadata.title}</Heading>
               {post.metadata.subtitle && (
@@ -177,7 +177,7 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
                 alt={post.metadata.title}
                 aspectRatio="16/9"
                 priority
-                sizes="(min-width: 768px) 100vw, 768px"
+                sizes="(max-width: 768px) 100vw, 768px"
                 border="neutral-alpha-weak"
                 radius="l"
                 marginTop="12"

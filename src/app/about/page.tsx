@@ -13,7 +13,6 @@ import {
   Icon,
   IconButton,
   Media,
-  Meta,
   Row,
   Tag,
   Text,

@@ -15,9 +15,9 @@ import {
   Heading,
   Line,
   Media,
-  Meta,
   Row,
   SmartLink,
+  Tag,
   Text,
 } from "@once-ui-system/core";
 import type { Metadata } from "next";
@@ -51,6 +51,7 @@ export async function generateMetadata({
     baseURL: baseURL,
     type: "article",
     publishedTime: post.metadata.publishedAt,
+    modifiedTime: post.metadata.updatedAt || post.metadata.publishedAt,
     author: {
       name: person.name,
       url: `${baseURL}${about.path}`,
@@ -106,7 +107,7 @@ export default async function Project({
               : `${baseURL}/api/og/generate?title=${encodeURIComponent(post.metadata.title)}`,
           ],
           datePublished: post.metadata.publishedAt,
-          dateModified: post.metadata.publishedAt,
+          dateModified: post.metadata.updatedAt || post.metadata.publishedAt,
           inLanguage: "en",
           ...(post.metadata.stack?.length ? { keywords: post.metadata.stack.join(", ") } : {}),
           author: {
@@ -120,6 +121,20 @@ export default async function Project({
           publisher: { "@type": "Person", name: person.name, url: baseURL },
         }}
       />
+      {post.metadata.github && (
+        <JsonLd
+          data={{
+            "@context": "https://schema.org",
+            "@type": "SoftwareSourceCode",
+            name: post.metadata.title,
+            description: post.metadata.description || post.metadata.summary,
+            url: `${baseURL}${work.path}/${post.slug}`,
+            codeRepository: post.metadata.github,
+            ...(post.metadata.stack?.length ? { programmingLanguage: post.metadata.stack[0] } : {}),
+            author: { "@type": "Person", name: person.name, url: `${baseURL}${about.path}` },
+          }}
+        />
+      )}
       <JsonLd
         data={{
           "@context": "https://schema.org",
@@ -148,8 +163,16 @@ export default async function Project({
           </SmartLink>
           <Text variant="body-default-xs" onBackground="neutral-weak" marginBottom="12">
             {post.metadata.publishedAt && formatDate(post.metadata.publishedAt)}
+            {post.metadata.updatedAt && ` · Updated ${formatDate(post.metadata.updatedAt)}`}
           </Text>
           <Heading variant="display-strong-m">{post.metadata.title}</Heading>
+          {post.metadata.stack && post.metadata.stack.length > 0 && (
+            <Row gap="8" wrap horizontal="center" marginTop="8">
+              {post.metadata.stack.map((item) => (
+                <Tag key={item} size="m" label={item} />
+              ))}
+            </Row>
+          )}
         </Column>
         {post.metadata.team?.length > 0 && (
           <Row marginBottom="32" horizontal="center">
@@ -198,7 +221,7 @@ export default async function Project({
             priority
             aspectRatio="16 / 9"
             radius="m"
-            alt="image"
+            alt={`${post.metadata.title} screenshot`}
             src={post.metadata.images[0]}
           />
         )}
@@ -231,7 +254,7 @@ export default async function Project({
           <Heading as="h2" variant="heading-strong-xl" marginBottom="24">
             Related projects
           </Heading>
-          <Projects exclude={[post.slug]} range={[1, 2]} />
+          <Projects exclude={[post.slug]} range={[1, 2]} similarTo={post.metadata.stack} />
         </Column>
         <ScrollToHash />
       </Column>

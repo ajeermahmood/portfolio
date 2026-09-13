@@ -1,16 +1,17 @@
 ---
 title: "Making a codebase safe for AI coding agents"
 subtitle: "Instructions tell an agent what you want. Gates decide what actually lands."
-summary: "Why AGENTS.md instructions are not enough to let AI coding agents work in a production repository, and how to write the CI gates that actually hold. With examples."
-description: "Why AGENTS.md is not enough to let AI coding agents work in a production repository, and how to write the CI gates that actually hold. With examples."
+summary: "Why an AGENTS.md file is not enough to let AI coding agents work safely in a real codebase, and how to write the checks that actually hold: in CI, and now inside the editor too. With examples."
+description: "Why AGENTS.md is not enough to let AI coding agents work safely in a real codebase, and how to write the CI and editor checks that actually hold."
 image: "/images/og/coding-agents.png"
 publishedAt: "2026-08-30"
+updatedAt: "2026-09-13"
 tag: "Agentic engineering"
 ---
 
 ## Three things share one name
 
-By 2026, three fairly different activities all get called AI engineering, and they are not worth the same.
+By 2026, three fairly different activities all get called AI engineering, and they are not worth the same. (An agent here means a tool like Claude Code or Cursor that reads your repository and writes code into it on its own.)
 
 1. **Using an agent to write code.** Table stakes. Nearly every working developer does it. On a CV it adds nothing.
 2. **Building agentic systems that run in production.** Tool calling, retrieval, streaming, provider fallback. Real engineering, real demand.
@@ -79,7 +80,7 @@ On a shared-database multi-tenant platform, the expensive mistake is a query tha
 
 So that rule moved out of the instructions file and into the build. Every pull request runs a check that looks at data access and fails when it finds a query that could cross a tenant boundary.
 
-The shape of it, using `ts-morph` to walk the AST rather than grepping:
+The shape of it, using `ts-morph` to walk the parsed code (the AST) rather than grepping for text, which is what keeps it from firing on comments and strings:
 
 ```ts
 import { Project, SyntaxKind } from "ts-morph";
@@ -186,9 +187,24 @@ The repository-specific gates stay where they are. Tenant isolation cannot be fa
 
 Though "cannot be factored out" turned out to be too strong. The *rule* is specific to a codebase; the *shape* of the check is not. Every multi-tenant application has some scoped client and some way of reaching around it, and the difference between one codebase and the next is a list of model names, which is configuration rather than code. Same for money: every system that handles currency has somewhere it converts to minor units, and the mistake is always the same two mistakes.
 
-So I extracted those too, into [bouncer](/work/bouncer). Five gates, configured rather than rewritten per repository. Pointing it at a real 1,209 file codebase was the useful part and not for the reason I expected: it reported 45 blocking findings, and reading every one by hand showed 32 of them were wrong. Test fixtures that contain credentials on purpose. Percentages that look exactly like currency conversions, because `Math.round(x * 100)` is genuinely both. A `postgres://postgres:postgres@localhost` in a setup script's help text.
+So I extracted those too, into [bouncer](/work/bouncer). Five gates, configured rather than rewritten per repository. You can try it with one command, `npx bouncer-gates`, and it will explain every finding with a file, a line, and what to do instead. Pointing it at a real 1,209 file codebase was the useful part and not for the reason I expected: it reported 45 blocking findings, and reading every one by hand showed 32 of them were wrong. Test fixtures that contain credentials on purpose. Percentages that look exactly like currency conversions, because `Math.round(x * 100)` is genuinely both. A `postgres://postgres:postgres@localhost` in a setup script's help text.
 
 That ratio is the whole thing. A gate that is wrong a third of the time gets switched off within a month, and then it protects nothing while still sitting in the workflow file making everybody feel covered. Writing the rule is the easy half. Not crying wolf is the half that decides whether any of it survives.
+
+## Move the gate next to the agent
+
+Everything above runs in CI, which means the agent finds out it was wrong after the pull request exists. That is late. By then it has built three more things on top of the unscoped query, and the fix is a rewrite instead of a one-line correction.
+
+An agentic editor can be told in the same turn. Two mechanisms make that possible, and both are cheap:
+
+- **A post-edit hook.** Claude Code can run a command every time the agent edits a file. The command scans that one file and exits non-zero with the findings. The agent reads them like any other error and fixes the line before moving on.
+- **An MCP server.** The Model Context Protocol is the standard way to give an editor a tool it can call. Serving the gates over it means the agent can ask "what would block this?" before it commits, and can ask what a rule means and how to excuse a case.
+
+bouncer ships both, and `npx bouncer-gates --init-agents` wires them into Claude Code and Cursor for a repository in one go. The same five gates, the same code, one turn earlier.
+
+Two rules carry over from CI unchanged. A gate that could not run has to say so next to the findings, because an agent told "clean" when the scope check never ran will learn the wrong lesson. And the hook uses the same scan function as the CLI, not a copy, because the copy is the one that would let a throwing gate read as clean.
+
+CI stays. The editor check is for speed, the CI check is the one nobody can skip.
 
 ## The one rule I would keep
 
@@ -214,7 +230,7 @@ In this order, which is the reverse of what most teams do:
 
 1. Write down the one thing that would be most expensive to get wrong. One, not a list.
 2. Work out whether a machine can detect it. Usually yes, and more cheaply than you expect.
-3. Put that check in CI where it blocks the merge, and make it apply to everyone.
+3. Put that check in CI where it blocks the merge, and make it apply to everyone. If your editor can run it too, do that as well.
 4. Only then write the instructions file, for the things a machine cannot check.
 
 Most people start at step 4 with a long instructions file and hope. That is the easy half, and it is the half that does not hold.

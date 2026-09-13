@@ -1,5 +1,5 @@
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 import matter from "gray-matter";
 
 type Team = {
@@ -13,6 +13,8 @@ type Metadata = {
   title: string;
   subtitle?: string;
   publishedAt: string;
+  /** Set when the page is materially revised. Feeds dateModified and the sitemap. */
+  updatedAt?: string;
   /** Shown on the listing cards and at the top of the page. */
   summary: string;
   /**
@@ -32,6 +34,7 @@ type Metadata = {
 };
 
 import { notFound } from "next/navigation";
+import { cache } from "react";
 
 function getMDXFiles(dir: string) {
   if (!fs.existsSync(dir)) {
@@ -53,11 +56,12 @@ function readMDXFile(filePath: string) {
     title: data.title || "",
     subtitle: data.subtitle || "",
     publishedAt: data.publishedAt,
+    updatedAt: data.updatedAt || undefined,
     summary: data.summary || "",
     description: data.description || "",
     image: data.image || "",
     images: data.images || [],
-    tag: data.tag || [],
+    tag: data.tag || "",
     team: data.team || [],
     link: data.link || "",
     github: data.github || "",
@@ -97,7 +101,11 @@ const CONTENT_DIRS = {
 
 type ContentKey = keyof typeof CONTENT_DIRS;
 
-export function getPosts(segments: readonly string[]) {
+/**
+ * Memoised per request: the home page and every detail page read the same
+ * directory several times, and parsing the MDX once per render is enough.
+ */
+export const getPosts = cache((segments: readonly string[]) => {
   const key = segments.join("/") as ContentKey;
   const resolve = CONTENT_DIRS[key];
 
@@ -108,4 +116,4 @@ export function getPosts(segments: readonly string[]) {
   }
 
   return getMDXData(resolve());
-}
+});

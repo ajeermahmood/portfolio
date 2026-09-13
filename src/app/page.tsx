@@ -12,7 +12,6 @@ import {
   Column,
   Heading,
   Line,
-  Meta,
   RevealFx,
   Row,
   Text,
