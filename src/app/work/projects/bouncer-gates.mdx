@@ -1,7 +1,7 @@
 ---
-title: "bouncer, a safety check for your codebase that anyone can pass"
+title: "bouncer-gates, a safety check for your codebase that anyone can pass"
 publishedAt: "2026-08-31"
-updatedAt: "2026-09-13"
+updatedAt: "2026-09-20"
 summary: "A small open source tool that checks every code change for five expensive mistakes: leaked secrets, queries that cross tenants, money maths on floats, migrations that break the running app, and dead doc links. It runs in CI, in the editor next to an AI agent, in a Cloudflare Worker and in the browser. On a real 1,209 file codebase it went from 45 findings to 13, all 13 real."
 description: "An open source tool that checks every code change for five expensive mistakes. Runs in CI, in your editor next to an AI agent, and in the browser."
 images:
@@ -13,15 +13,15 @@ stack:
   - "GitHub Actions"
   - "MCP"
   - "Vitest"
-link: "https://bouncer.ajeermdk001.workers.dev"
-github: "https://github.com/ajeermahmood/bouncer"
+link: "https://bouncer-gates.ajeermdk001.workers.dev"
+github: "https://github.com/ajeermahmood/bouncer-gates"
 ---
 
 ## What it is, in one minute
 
 More people can write code now than a year ago. A designer can ship a page, a support lead can fix their own copy, and an AI agent can open twenty pull requests before lunch. Code review did not get faster to match. So the hard part moved: it is no longer writing the change, it is knowing the change is safe.
 
-`bouncer` is a small tool that stands at the door of your main branch and checks every change for a short list of mistakes that are expensive when they reach production. If it finds one, it tells you the file, the line, and what to do instead. You do not need to already know that the `orders` table is tenant-scoped, or that you cannot store money in a float. The tool knows, and it tells you.
+`bouncer-gates` is a small tool that stands at the door of your main branch and checks every change for a short list of mistakes that are expensive when they reach production. If it finds one, it tells you the file, the line, and what to do instead. You do not need to already know that the `orders` table is tenant-scoped, or that you cannot store money in a float. The tool knows, and it tells you.
 
 Try it in ten seconds:
 
@@ -29,7 +29,7 @@ Try it in ten seconds:
 npx bouncer-gates
 ```
 
-Or paste some code into the [playground](https://bouncer.ajeermdk001.workers.dev) and watch it run. It is MIT licensed and on npm as [`bouncer-gates`](https://www.npmjs.com/package/bouncer-gates). The rules come from running these same checks across eight production codebases, mostly a multi-tenant e-commerce platform. The longer story of why checks beat instructions is in [Making a codebase safe for AI coding agents](/blog/coding-agents-in-production-repositories).
+Or paste some code into the [playground](https://bouncer-gates.ajeermdk001.workers.dev) and watch it run. It is MIT licensed, on npm as [`bouncer-gates`](https://www.npmjs.com/package/bouncer-gates), and listed in the official [MCP Registry](https://registry.modelcontextprotocol.io) as `io.github.ajeermahmood/bouncer-gates`, so any MCP client can install it in one step. The rules come from running these same checks across eight production codebases, mostly a multi-tenant e-commerce platform. The longer story of why checks beat instructions is in [Making a codebase safe for AI coding agents](/blog/coding-agents-in-production-repositories).
 
 ## The five things it checks
 
@@ -47,7 +47,7 @@ That is the whole list on purpose. Anything a formatter, a linter or a compiler 
 
 The same five gates run in four places, and it is the same code in all four:
 
-- **In CI.** A GitHub Action, `uses: ajeermahmood/bouncer@v0`, blocks the merge and can post findings to the GitHub Security tab.
+- **In CI.** A GitHub Action, `uses: ajeermahmood/bouncer-gates@v0`, blocks the merge and can post findings to the GitHub Security tab.
 - **In your editor, next to the AI agent.** This is the newest part. CI sees a mistake after the pull request exists. An agentic editor like Claude Code or Cursor can see it in the same turn the mistake was made. `npx bouncer-gates --init-agents` wires the gates in as an MCP server and a post-edit hook, so the agent gets told "this query is not tenant scoped" the moment it writes the line, not twenty minutes later in a red CI check.
 - **In a Cloudflare Worker and on Railway.** The playground on the site sends your snippet to the worker, and a hosted API on Railway serves teams that want the checks over HTTP without running Node.
 - **In the browser.** If the worker is unreachable, the playground runs the same gate code locally and the footer says so.
@@ -59,7 +59,7 @@ Each gate is a plain function: files in, findings out. No filesystem, no git, no
 Two commands:
 
 ```
-npx bouncer-gates --init          # writes a starter bouncer.config.json
+npx bouncer-gates --init          # writes a starter bouncer-gates.config.json
 npx bouncer-gates --init-agents   # wires the gates into Claude Code and Cursor
 ```
 
@@ -70,7 +70,7 @@ An old codebase will already have things wrong in it. Nobody fixes two hundred f
 If a gate is wrong about one specific line, you tell it so on the line:
 
 ```js
-// bouncer-ok(scope): finance dashboard, spans all tenants by design
+// bouncer-gates-ok(scope): finance dashboard, spans all tenants by design
 ```
 
 The reason is required. A bare marker suppresses nothing. That way the excuse lives in the file where the next reader will find it, not in a pull request nobody will open again. There is deliberately no switch to turn a gate off across the whole repository. If a gate is wrong that often, the gate is what needs fixing.
@@ -87,7 +87,7 @@ The false positives came in three families:
 - **Percentages.** `Math.round(x * 100)` is both the classic money bug and the normal way to render a percentage. The tell is a division inside the rounded expression. A percentage is a part over a whole. Money conversion never divides before it scales.
 - **Local dev credentials.** `postgres:postgres@localhost` in a setup script's help text grants nothing to anyone.
 
-After fixing those, the same repository reports 13 findings and all 13 are real. Every one of the 32 false positives is now a test that asserts the gate stays quiet, named for what the mistake actually was. The suite is at 115 tests, and the most valuable ones are the ones that document a mistake the tool really made.
+After fixing those, the same repository reports 13 findings and all 13 are real. Every one of the 32 false positives is now a test that asserts the gate stays quiet, named for what the mistake actually was. The suite is at 159 tests, and the most valuable ones are the ones that document a mistake the tool really made.
 
 ## One rule everything else serves: never fail open
 
@@ -116,4 +116,4 @@ Every gate documents what it misses, and those lists are the specification. The 
 
 ## Anonymous telemetry, and how to turn it off
 
-One ping a day: a random id, the version, the runtime, the OS and the Node major. Nothing about your code. `BOUNCER_TELEMETRY=0` or `DO_NOT_TRACK=1` switches it off, the first run says so, and the [full list of what it sends](https://github.com/ajeermahmood/bouncer/blob/main/docs/telemetry.md) is in the repository.
+One ping a day: a random id, the version, the runtime, the OS and the Node major. Nothing about your code. `BOUNCER_TELEMETRY=0` or `DO_NOT_TRACK=1` switches it off, the first run says so, and the [full list of what it sends](https://github.com/ajeermahmood/bouncer-gates/blob/main/docs/telemetry.md) is in the repository.

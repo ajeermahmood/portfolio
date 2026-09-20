@@ -97,7 +97,7 @@ const about: About = {
         decisions and code review for a team of 4 to 6 developers. Past projects have shipped to a
         US state health department, international pharmaceutical brands, and retail businesses in
         India, the UAE and the United States. I also publish open-source developer tooling:{" "}
-        <SmartLink href="/work/bouncer">bouncer</SmartLink> and{" "}
+        <SmartLink href="/work/bouncer-gates">bouncer-gates</SmartLink> and{" "}
         <SmartLink href="/work/estate">estate</SmartLink>, two command-line tools for catching
         expensive mistakes in a build rather than in production. Based in India and open to
         relocation and remote roles.
@@ -160,7 +160,7 @@ const about: About = {
             repositories, including automated audit, tenant-check and review-watcher scripts. Agents
             pass through the same gates the team does, so their changes still get reviewed and
             verified before they land. The generalised version of those gates is open source as{" "}
-            <SmartLink href="/work/bouncer">bouncer</SmartLink>.
+            <SmartLink href="/work/bouncer-gates">bouncer-gates</SmartLink>.
           </>,
           <>
             Handled deployment and day-to-day operations across all of it: Docker images, GitHub
@@ -346,13 +346,13 @@ const about: About = {
         title: "Open source",
         description: (
           <>
-            <SmartLink href="https://github.com/ajeermahmood/bouncer">bouncer</SmartLink> checks
+            <SmartLink href="https://github.com/ajeermahmood/bouncer-gates">bouncer-gates</SmartLink> checks
             every code change for five expensive mistakes before they merge: leaked secrets,
             database queries that cross tenants, money maths on floats, migrations that break the
             running app mid-deploy, and documentation links pointing at deleted files. Each gate is
             a pure function, so one implementation runs in CI, inside Claude Code and Cursor as an
             MCP server and post-edit hook, in a Cloudflare Worker and in the browser. Zero runtime
-            dependencies and 115 tests, published as{" "}
+            dependencies and 159 tests, published as{" "}
             <SmartLink href="https://www.npmjs.com/package/bouncer-gates">bouncer-gates</SmartLink>.
             Most of the work went into being wrong less often: 45 findings on a real repository, 32
             of them false positives, brought down to 13 that were all genuine.{" "}

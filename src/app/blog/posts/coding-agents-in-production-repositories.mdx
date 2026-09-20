@@ -187,7 +187,7 @@ The repository-specific gates stay where they are. Tenant isolation cannot be fa
 
 Though "cannot be factored out" turned out to be too strong. The *rule* is specific to a codebase; the *shape* of the check is not. Every multi-tenant application has some scoped client and some way of reaching around it, and the difference between one codebase and the next is a list of model names, which is configuration rather than code. Same for money: every system that handles currency has somewhere it converts to minor units, and the mistake is always the same two mistakes.
 
-So I extracted those too, into [bouncer](/work/bouncer). Five gates, configured rather than rewritten per repository. You can try it with one command, `npx bouncer-gates`, and it will explain every finding with a file, a line, and what to do instead. Pointing it at a real 1,209 file codebase was the useful part and not for the reason I expected: it reported 45 blocking findings, and reading every one by hand showed 32 of them were wrong. Test fixtures that contain credentials on purpose. Percentages that look exactly like currency conversions, because `Math.round(x * 100)` is genuinely both. A `postgres://postgres:postgres@localhost` in a setup script's help text.
+So I extracted those too, into [bouncer-gates](/work/bouncer-gates). Five gates, configured rather than rewritten per repository. You can try it with one command, `npx bouncer-gates`, and it will explain every finding with a file, a line, and what to do instead. Pointing it at a real 1,209 file codebase was the useful part and not for the reason I expected: it reported 45 blocking findings, and reading every one by hand showed 32 of them were wrong. Test fixtures that contain credentials on purpose. Percentages that look exactly like currency conversions, because `Math.round(x * 100)` is genuinely both. A `postgres://postgres:postgres@localhost` in a setup script's help text.
 
 That ratio is the whole thing. A gate that is wrong a third of the time gets switched off within a month, and then it protects nothing while still sitting in the workflow file making everybody feel covered. Writing the rule is the easy half. Not crying wolf is the half that decides whether any of it survives.
 
@@ -200,7 +200,7 @@ An agentic editor can be told in the same turn. Two mechanisms make that possibl
 - **A post-edit hook.** Claude Code can run a command every time the agent edits a file. The command scans that one file and exits non-zero with the findings. The agent reads them like any other error and fixes the line before moving on.
 - **An MCP server.** The Model Context Protocol is the standard way to give an editor a tool it can call. Serving the gates over it means the agent can ask "what would block this?" before it commits, and can ask what a rule means and how to excuse a case.
 
-bouncer ships both, and `npx bouncer-gates --init-agents` wires them into Claude Code and Cursor for a repository in one go. The same five gates, the same code, one turn earlier.
+bouncer-gates ships both, and `npx bouncer-gates --init-agents` wires them into Claude Code and Cursor for a repository in one go. The same five gates, the same code, one turn earlier.
 
 Two rules carry over from CI unchanged. A gate that could not run has to say so next to the findings, because an agent told "clean" when the scope check never ran will learn the wrong lesson. And the hook uses the same scan function as the CLI, not a copy, because the copy is the one that would let a throwing gate read as clean.
 
