@@ -1,8 +1,10 @@
 ---
-title: "Enrixa AI, a shopping assistant for Shopify"
+title: "Enrixa AI, a shopping agent with a regression eval suite"
 publishedAt: "2026-05-01"
-summary: "A tool-calling agent that answers shopper questions against a live product catalog, streamed over SSE, with a chat widget that cannot collide with the store's own CSS."
-description: "A tool-calling agent answering shopper questions against a live product catalog, streamed over SSE, in a widget that cannot collide with the store's CSS."
+order: 3
+updatedAt: "2026-10-09"
+summary: "A tool-calling agent that answers shopper questions against a live product catalog, with a provider fallback chain, a widget that cannot collide with the store's own CSS, and 132 regression evals that run the real agent before a deploy."
+description: "A tool-calling shopping agent for Shopify with a provider fallback chain and 132 regression evals that run the real agent against a seeded store."
 images:
   - "/images/projects/enrixa-ai/01.webp"
 stack:
@@ -12,19 +14,41 @@ stack:
   - "Redis"
   - "Preact"
   - "LLM tool calling"
+  - "LLM evals"
+  - "Claude Code"
 ---
 
 ## Overview
 
 Enrixa AI is a shopping assistant that merchants add to their Shopify storefront. A shopper asks a question in plain language, and the assistant answers using the merchant's actual catalog rather than a generic model response.
 
-It is SEA Media's second product, and I wrote the product and technical plan behind it, including the cost model and the scaling approach. The service is around 15,500 lines.
+It is SEA Media's second product. I wrote the product and technical plan behind it, including the cost model and the scaling approach, and built it the same way as the platform it sits next to: 178 of my 202 commits on it were written with Claude Code. The service is around 19,000 lines of TypeScript.
 
 ## How it works
 
 The service is Fastify. Replies stream back to the browser over server-sent events, so the shopper sees an answer forming instead of waiting on a complete response. The model is given tools rather than a pre-built prompt full of catalog text, so it can look up a product, check variants, or check stock as part of answering.
 
 BullMQ workers keep the catalog and its embeddings in sync in the background. This is the part that decides whether the assistant is useful: an assistant that recommends a product the merchant stopped selling last week is worse than no assistant, so catalog freshness is a queue-backed job rather than something that happens on request.
+
+## Models in tiers, with a fallback chain
+
+Not every turn needs the same model. A cheap, fast model classifies each message. The tool-calling agent, where instruction-following and tool discipline actually matter, runs on a Claude model with prompt caching on the system prefix.
+
+If Anthropic is rate-limited or down, the agent falls back to Gemini, and then to Claude Sonnet as the last resort. Every model's price per token sits in one table that the cost model reads, so a change of model is a change to the margin maths, made on purpose.
+
+## Regression evals that run the real agent
+
+An agent that worked yesterday can regress today from a prompt tweak, a new tool, or a different model answering because the first one was busy. Unit tests do not catch that, because the behaviour lives in the model's choices, not in the code.
+
+So there is a regression suite of 132 cases across two sets: single- and multi-turn conversations, and the behaviours that change by store type. Each case runs the real agent, with its router, its model calls and its tools, against a seeded demo store in an in-process Postgres, and asserts on behaviour rather than wording:
+
+- Did a product question show products, and an out-of-catalog request show none?
+- Did "the first one" resolve to the right product from earlier in the conversation?
+- Did a budget phrased loosely, like "a jacket, my budget is 150 at most", become a real price filter, so nothing over budget appears?
+- On a pharmacy store, did it refuse a prescription bypass and dosing advice, while a general store still answers "how many should I wear per day" normally?
+- Did an order lookup for someone else's phone number get refused?
+
+Two rules keep the suite honest. Every chat failure seen in production becomes a case, so a fixed bug stays fixed. And a provider error such as a rate limit is reported as a skip, never a pass, because a suite that passes when it could not run is worse than no suite. Any failure exits non-zero, so the suite can block a deploy.
 
 ## The widget
 

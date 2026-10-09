@@ -1,11 +1,11 @@
 import { ProjectCard } from "@/components";
-import { getPosts } from "@/utils/utils";
+import { byRankThenDate, getPosts } from "@/utils/utils";
 import { Column } from "@once-ui-system/core";
 
 interface ProjectsProps {
   range?: [number, number?];
   exclude?: string[];
-  /** Rank by how many stack entries a project shares with these, newest first as the tiebreak. */
+  /** Rank by how many stack entries a project shares with these, work-page order as the tiebreak. */
   similarTo?: string[];
 }
 
@@ -17,14 +17,11 @@ export function Projects({ range, exclude, similarTo }: ProjectsProps) {
     allProjects = allProjects.filter((post) => !exclude.includes(post.slug));
   }
 
-  const byDate = (a: (typeof allProjects)[number], b: (typeof allProjects)[number]) =>
-    new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime();
-
   const overlap = (stack: string[] = []) =>
     similarTo ? stack.filter((item) => similarTo.includes(item)).length : 0;
 
   const sortedProjects = [...allProjects].sort(
-    (a, b) => overlap(b.metadata.stack) - overlap(a.metadata.stack) || byDate(a, b),
+    (a, b) => overlap(b.metadata.stack) - overlap(a.metadata.stack) || byRankThenDate(a, b),
   );
 
   const displayedProjects = range

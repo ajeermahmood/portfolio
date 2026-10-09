@@ -5,7 +5,7 @@ summary: "Why an AGENTS.md file is not enough to let AI coding agents work safel
 description: "Why AGENTS.md is not enough to let AI coding agents work safely in a real codebase, and how to write the CI and editor checks that actually hold."
 image: "/images/og/coding-agents.png"
 publishedAt: "2026-08-30"
-updatedAt: "2026-09-13"
+updatedAt: "2026-10-09"
 tag: "Agentic engineering"
 ---
 
@@ -17,7 +17,7 @@ By 2026, three fairly different activities all get called AI engineering, and th
 2. **Building agentic systems that run in production.** Tool calling, retrieval, streaming, provider fallback. Real engineering, real demand.
 3. **Setting up a codebase so agents can work in it safely.** Talked about least. Not prompting better. Changing the repository so that the consequences of an agent being wrong are contained.
 
-This post is about the third one. I have spent much of the last year on it across 8 production repositories, most of that on a multi-tenant e-commerce platform. Everything below is what I would tell someone starting on Monday.
+This post is about the third one. I have set it up in 8 production repositories this year, in most depth on a multi-tenant e-commerce platform where most of the code is now written by an agent. Everything below is what I would tell someone starting on Monday.
 
 ## The problem is not that the code is bad
 
@@ -78,7 +78,7 @@ But an instruction is a request. It is followed most of the time, which sounds f
 
 On a shared-database multi-tenant platform, the expensive mistake is a query that forgets its tenant filter. It reads fine in review. It passes tests written against a single tenant. It shows up when one merchant sees another merchant's orders.
 
-So that rule moved out of the instructions file and into the build. Every pull request runs a check that looks at data access and fails when it finds a query that could cross a tenant boundary.
+So that rule moved out of the instructions file and into the build. Every push runs a check that looks at data access and fails when it finds a query that could cross a tenant boundary.
 
 The shape of it, using `ts-morph` to walk the parsed code (the AST) rather than grepping for text, which is what keeps it from firing on comments and strings:
 
@@ -155,7 +155,7 @@ Three details matter more than the code itself.
 
 **Start narrower than feels useful.** My first version had false positives, and a gate that cries wolf gets disabled. Cover the four models that actually matter, then widen.
 
-The second gate diffs migrations against `main` and fails on changes that would break an already deployed client. Same idea, different expensive mistake, across a schema that has now taken 83 migrations.
+The second gate diffs migrations against `main` and fails on changes that would break an already deployed client. Same idea, different expensive mistake, across a schema that has now taken 91 migrations.
 
 ## What is worth gating
 
@@ -234,3 +234,5 @@ In this order, which is the reverse of what most teams do:
 4. Only then write the instructions file, for the things a machine cannot check.
 
 Most people start at step 4 with a long instructions file and hope. That is the easy half, and it is the half that does not hold.
+
+The follow-ups: [how the whole workflow fits together, with the numbers](/how-i-work), and [what my coding agents got wrong, and what caught it](/blog/what-my-coding-agents-got-wrong).

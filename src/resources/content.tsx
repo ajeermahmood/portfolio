@@ -1,4 +1,4 @@
-import type { About, Blog, Contact, Home, Person, Social, Work } from "@/types";
+import type { About, Blog, Contact, Home, HowIWork, Person, Social, Work } from "@/types";
 import { Line, Row, SmartLink, Text } from "@once-ui-system/core";
 
 const person: Person = {
@@ -46,26 +46,26 @@ const home: Home = {
   image: "/images/og/home.png",
   label: "Home",
   title: `${person.name}, ${person.role}`,
-  description: `Senior full-stack engineer. Multi-tenant e-commerce, AI shopping assistants and mobile apps, shipped to a US state health agency and global brands.`,
-  headline: <>I build it, then I keep it running</>,
+  description: `Senior full-stack engineer shipping production software with AI coding agents, and the CI gates, hooks and evals that keep it safe to merge.`,
+  headline: <>I ship with AI agents, and make it safe to merge</>,
   featured: {
     display: true,
     title: (
       <Row gap="12" vertical="center">
-        <strong className="ml-4">Enrixa Store</strong>{" "}
+        <strong className="ml-4">How I build with agents</strong>{" "}
         <Line background="brand-alpha-strong" vert height="20" />
         <Text marginRight="4" onBackground="brand-medium">
-          Featured work
+          The workflow
         </Text>
       </Row>
     ),
-    href: "/work/enrixa-store",
+    href: "/how-i-work",
   },
   subline: (
     <>
-      I'm {person.firstName}, a full-stack engineer. Right now that means a multi-tenant e-commerce
-      platform and an AI shopping assistant, plus the pipelines, containers and databases that keep
-      them up.
+      I'm {person.firstName}, a senior full-stack engineer. Since July 2026, about nine in ten of my
+      commits are written with a coding agent. My part is the architecture, the review, and the
+      gates that stop its mistakes reaching production.
     </>
   ),
 };
@@ -91,16 +91,19 @@ const about: About = {
     title: "Introduction",
     description: (
       <>
-        Full-stack engineer building production web, mobile and AI systems, and running the
-        infrastructure behind them. Currently the lead developer on a multi-tenant e-commerce
-        platform and an AI shopping assistant, where the work covers architecture, planning, cost
-        decisions and code review for a team of 4 to 6 developers. Past projects have shipped to a
-        US state health department, international pharmaceutical brands, and retail businesses in
-        India, the UAE and the United States. I also publish open-source developer tooling:{" "}
+        Senior full-stack engineer who builds production software with AI coding agents. I design
+        the workflow around them: the instructions they read, the hook that stops them reading
+        secrets, and the CI gates that fail a build when a query could leak one merchant's data
+        into another store. On the multi-tenant platform I lead, 1,276 of my 1,357 commits were
+        written this way, and every push ran through the same gates as the rest of the team's.{" "}
+        <SmartLink href="/how-i-work">How that works, with the numbers</SmartLink>. I also build
+        agentic systems, including an AI shopping assistant with a regression eval suite built to
+        block a deploy on any failure. Earlier work shipped to a US state health department,
+        international pharmaceutical brands, and retailers in India, the UAE and the United States.
+        The guardrails are open source as{" "}
         <SmartLink href="/work/bouncer-gates">bouncer-gates</SmartLink> and{" "}
-        <SmartLink href="/work/estate">estate</SmartLink>, two command-line tools for catching
-        expensive mistakes in a build rather than in production. Based in India and open to
-        relocation and remote roles.
+        <SmartLink href="/work/estate">estate</SmartLink>. Based in India and open to relocation
+        and remote roles.
       </>
     ),
   },
@@ -114,26 +117,27 @@ const about: About = {
         role: "Senior Full-Stack Engineer and Project Partner",
         achievements: [
           <>
-            Enrixa Store: built a multi-tenant e-commerce platform, now 56 data models and 259 REST
-            endpoints across 48 controllers, where every merchant runs an isolated store on its own
-            subdomain. NestJS, Prisma, PostgreSQL and Redis on the backend, with separate Next.js
-            apps for the merchant admin and the customer storefront. Set the tenancy model, the
-            payments layer covering Razorpay and cash on delivery, and the release plan.
+            Enrixa Store: built a multi-tenant e-commerce platform, now 60 data models and 287 REST
+            endpoints across 52 controllers, where every merchant runs an isolated store on its own
+            subdomain. NestJS, Prisma and PostgreSQL on the backend, with separate Next.js apps for
+            the merchant admin and the customer storefront. Set the tenancy model, the payments
+            layer covering Razorpay and cash on delivery, and the release plan.
           </>,
           <>
-            Closed the platform's biggest security risk by turning tenant isolation into a build
-            requirement. Every pull request runs an automated isolation check and a migration
-            compatibility diff against main across a schema that has taken 83 migrations, so a query
-            that could leak one merchant's data into another store fails CI rather than reaching
-            customers.
+            Built it agent-first with Claude Code: 1,276 of my 1,357 commits were agent co-authored.
+            Closed the platform's biggest risk by turning tenant isolation into a build requirement:
+            every push runs an isolation check and a migration compatibility check across a schema
+            that has taken 91 migrations, so a query that could leak one merchant's data into
+            another store fails CI rather than reaching customers, whoever wrote it.
           </>,
           <>
-            Enrixa AI: shipped an AI shopping assistant for Shopify. A Fastify service streams
-            tool-calling agent replies over SSE, BullMQ workers keep the product catalog and its
-            embeddings in sync, and the storefront chat widget runs inside a shadow DOM so it never
-            collides with theme CSS. Wrote the product and technical plan behind it, including the
-            cost model and the scaling approach, and kept a decision log for choices that would be
-            expensive to reverse.
+            Enrixa AI: shipped a tool-calling shopping assistant for Shopify. A Fastify service
+            streams replies over SSE with a provider fallback chain across Claude Haiku, Gemini and
+            Claude Sonnet, BullMQ workers keep the catalog and its embeddings in sync, and the
+            widget runs inside a shadow DOM so it never collides with theme CSS. Built a regression
+            eval suite that runs the real agent against a seeded store, including pharmacy-safety
+            refusals, and fails on any regression. Wrote the product plan, the cost model and a
+            decision log for choices that would be expensive to reverse.
           </>,
           <>
             W.I.N.S, Alabama Department of Public Health: led a two-repository build for an infant
@@ -156,17 +160,18 @@ const about: About = {
             a dry run until the merchant approves it.
           </>,
           <>
-            Wrote the agent instructions and CI gates that let AI coding agents work in 8 production
-            repositories, including automated audit, tenant-check and review-watcher scripts. Agents
-            pass through the same gates the team does, so their changes still get reviewed and
-            verified before they land. The generalised version of those gates is open source as{" "}
+            Designed the guardrails that make agent-written code safe to merge: a pre-tool hook that
+            stops the agent reading secret files, a tenant-isolation review skill for what the static
+            check cannot see, and blocking CI. Rebuilt the agent setup after sessions kept being
+            refused, cutting 662 permission rules to 62. Agent instructions in 8 production
+            repositories; the generalised gates are open source as{" "}
             <SmartLink href="/work/bouncer-gates">bouncer-gates</SmartLink>.
           </>,
           <>
             Handled deployment and day-to-day operations across all of it: Docker images, GitHub
             Actions pipelines, Vercel and Shopify Oxygen releases, PM2 process management, and the
-            managed PostgreSQL and Redis instances. Keep roughly 185 test files green across the
-            portfolio.
+            managed PostgreSQL and Redis instances. More than 250 test files across the client
+            repositories.
           </>,
         ],
         images: [],
@@ -303,10 +308,11 @@ const about: About = {
         title: "AI and agentic engineering",
         description: (
           <>
-            LLM integration across Claude, Gemini and Groq, retrieval with vector search and
-            embeddings, tool-calling agents, SSE streaming and provider fallback. Also the rarer
-            half: writing agent instructions, safety gates and verification harnesses so coding
-            agents can work inside a production repository without breaking it.
+            Building software with coding agents, and making it safe: Claude Code with project
+            instructions, skills, pre-tool hooks and a tight permission policy, MCP servers, and CI
+            gates that hold an agent to the same bar as a person. Building agentic systems:
+            tool-calling agents, retrieval with embeddings, SSE streaming, provider fallback across
+            Claude and Gemini, and regression evals that run the real agent rather than a mock.
           </>
         ),
         tags: [
@@ -353,7 +359,8 @@ const about: About = {
             a pure function, so one implementation runs in CI, inside Claude Code and Cursor as an
             MCP server and post-edit hook, in a Cloudflare Worker and in the browser. Zero runtime
             dependencies and 159 tests, published as{" "}
-            <SmartLink href="https://www.npmjs.com/package/bouncer-gates">bouncer-gates</SmartLink>.
+            <SmartLink href="https://www.npmjs.com/package/bouncer-gates">bouncer-gates</SmartLink>{" "}
+            and listed in the official MCP Registry.
             Most of the work went into being wrong less often: 45 findings on a real repository, 32
             of them false positives, brought down to 13 that were all genuine.{" "}
             <SmartLink href="https://github.com/ajeermahmood/estate">estate</SmartLink> is a linter
@@ -391,7 +398,14 @@ const work: Work = {
   path: "/work",
   label: "Work",
   title: `Projects - ${person.name}`,
-  description: `Production work by ${person.name}: a multi-tenant e-commerce platform, an AI shopping assistant, Shopify Hydrogen storefronts and open-source CI tooling.`,
+  description: `Production work by ${person.name}: a multi-tenant platform built with AI coding agents and the gates that keep it safe, an LLM shopping assistant with regression evals, and open-source agent guardrails.`,
+};
+
+const howIWork: HowIWork = {
+  path: "/how-i-work",
+  label: "How I work",
+  title: "How I build software with AI agents",
+  description: `How ${person.name} ships production software with AI coding agents: the instructions, hooks, review skills and CI gates around them, and the numbers.`,
 };
 
 const contact: Contact = {
@@ -401,4 +415,4 @@ const contact: Contact = {
   description: `Get in touch with ${person.name}, ${person.role}, by email`,
 };
 
-export { person, social, home, about, blog, work, contact };
+export { person, social, home, about, blog, work, howIWork, contact };

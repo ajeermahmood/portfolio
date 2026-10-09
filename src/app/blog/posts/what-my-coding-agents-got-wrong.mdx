@@ -1,0 +1,94 @@
+---
+title: "What my coding agents got wrong, and what caught it"
+subtitle: "Six real mistakes from agent-written code, and the check that found each one. None of them was the agent noticing."
+summary: "Six real mistakes from agent-written code in an open-source tool: a rename that produced invalid JavaScript, a crash that only happened on a first run, a version number that lied, a demo that found nothing, a fake key that looked real, and a package that was not what its name said. What caught each one, and what I changed."
+description: "Six real mistakes from agent-written code, from a rename that broke JavaScript to a crash that only showed on a first run, and the check that caught each."
+publishedAt: "2026-10-09"
+tag: "Agentic engineering"
+---
+
+Most of my code is now written with a coding agent. Since July 2026, about nine in ten of my commits carry a `Co-Authored-By: Claude` line. I wrote up the [workflow around that](/how-i-work) separately. This post is the other half: the mistakes.
+
+Every one below happened in [bouncer-gates](/work/bouncer-gates), an open-source tool, in commits an agent co-authored. So you can read the actual diffs. I picked these six because each was caught by something different, and the pattern in what caught them is the useful part.
+
+## 1. A rename that produced invalid JavaScript
+
+The project was renamed from `bouncer` to `bouncer-gates` everywhere. The agent did it with one careful replacement that skipped strings already containing the new name. It looked right and touched 49 files.
+
+It also turned an object key, `bouncerFingerprint`, into `bouncer-gatesFingerprint`, and a property access, `mcpServers.bouncer`, into `mcpServers.bouncer-gates`. Both are invalid JavaScript. A hyphen is fine in a string and a syntax error in an identifier, and a text replacement cannot tell the two apart.
+
+**What caught it:** the tool scanning its own repository, which is part of every check run. It failed to even start.
+
+**What nearly hid it:** the verification itself. To save output, the check filtered the test run down to its summary line, which said 115 passed. The suite had been at 152. One test file had stopped parsing, so its 37 tests were not failed but absent, and the summary line counted only what ran. The number going down was the only clue.
+
+**What changed:** I read the test count now, not just the colour. That one is a habit rather than a check, which makes it the weakest fix on this list.
+
+## 2. A crash that only happened on a first run
+
+The tool sends one anonymous usage ping a day. On Windows, the first run after installing printed this after a scan that had already succeeded, then exited 127:
+
+```
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+```
+
+The ping used `fetch`, which in Node keeps its socket pooled after the response. The program called `process.exit()` straight afterwards, tearing that handle down while it was still closing. It only happened on a first run because the daily throttle means later runs send nothing. So the one run that showed it was the run where someone had just installed the tool and was deciding whether to trust it.
+
+**What caught it:** deleting the local state directory while verifying an unrelated change, which made it a first run again.
+
+**What did not fix it:** the agent's first theory, which was to drain the response body. It was plausible and wrong. What worked was cutting the problem down to a five-line reproduction outside the tool: fetch, read the body, exit, crash. With that in hand the fix was obvious: a plain `https` request with connection reuse off.
+
+**What changed:** a test now fails if the ping goes back to `fetch`.
+
+## 3. A version number that lied
+
+The release was bumped by replacing the version string in the files that held it. In one file, the constant had moved to a shared module a release earlier. The replacement matched nothing, and a replacement that matches nothing exits successfully.
+
+So `--version`, the security report's tool version and the editor integration's handshake all said 0.4.0 while the package said 0.4.1. Nothing failed, which is exactly why nobody noticed.
+
+**What caught it:** reading the editor integration's handshake during a smoke test, rather than checking that it returned at all.
+
+**What changed:** the version is now read from the package file, so there is one source of truth instead of two, and a test asserts it.
+
+## 4. A demo that found nothing
+
+The tool's scope check gained a new mode for codebases without a tenant-scoped database client, which is most codebases. The public playground runs the real checks with a demo configuration, and that configuration was never updated for the new mode.
+
+For two releases, the playground answered "nothing wrong" to the single most likely thing a visitor would paste:
+
+```ts
+prisma.order.findMany({ where: { status: "paid" } })
+```
+
+The check was right. The demo was misconfigured. That is the worse failure, because a visitor concludes the tool does not catch much and leaves.
+
+**What caught it:** scanning that exact snippet against the live deployment after a release, instead of trusting that the deploy succeeded.
+
+**What changed:** a test now fails if the demo configuration is missing a setting the check reads.
+
+## 5. A fake key that looked real
+
+The agent rewrote the documentation and gave every rule a bad example and a fixed one. The bad example for the Stripe rule was a live-format Stripe key. It was invented, but it was invented well.
+
+**What caught it:** GitHub's push protection, which refused the push as a leaked secret. A tool whose job includes catching committed secrets had its own documentation blocked for containing one.
+
+**What changed:** examples in the docs now use an obviously truncated shape, `sk_live_...`, which reads as an example to a person and a scanner alike.
+
+## 6. A package that was not what its name said
+
+Publishing to the official MCP Registry needs a publisher tool. The agent named the package to install. The name it gave did not exist. A search then turned up an npm package with exactly the right name, `mcp-publisher`.
+
+It was an unrelated browser-automation tool by a third party. The official publisher is a Go binary from the registry's own repository. The next step would have been to run it and authorise it against my GitHub account.
+
+**What caught it:** reading the package's maintainer and description before installing it.
+
+**What changed:** nothing new is installed from a name alone. Anything that asks for credentials gets its provenance checked first.
+
+## The pattern
+
+Look at what caught each one: a self-check that failed to start, a clean-state run, reading the output instead of checking for its presence, testing the live deployment, a third-party scanner, and checking a package's provenance.
+
+None of them was the agent noticing its own mistake. In every case it fixed the problem quickly and well once it was pointed at it. But each mistake arrived looking finished, and the ones that mattered most did not fail anything at all.
+
+That is the honest shape of working this way. The agent is fast and usually right, and when it is wrong it is wrong with the same confidence. The job is less about writing code and more about building the places where wrong code shows up: tests that check counts, runs from a clean state, gates on the live system, and a habit of reading what came back rather than whether something came back.
+
+Three of the six are now tests, which is the only kind of fix that holds. The other three are habits, and a lesson I remember is a lesson that decays. Turning those into checks is the next job.

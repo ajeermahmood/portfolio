@@ -1,8 +1,10 @@
 ---
-title: "Enrixa Store, a multi-tenant e-commerce platform"
+title: "Enrixa Store, a multi-tenant platform built with AI agents"
 publishedAt: "2026-08-01"
-summary: "A platform where every merchant runs an isolated store on its own subdomain, and where a query that could leak one merchant's data into another fails CI instead of reaching customers."
-description: "A platform where every merchant runs an isolated store on its own subdomain, and a query that could leak one merchant's data into another fails CI."
+order: 1
+updatedAt: "2026-10-09"
+summary: "A multi-tenant e-commerce platform built agent-first: 1,276 of my 1,357 commits were written with Claude Code, and every push runs gates that fail the build on a query that could leak one merchant's data into another store."
+description: "A multi-tenant e-commerce platform built agent-first with Claude Code, where a query that could leak one merchant's data fails CI instead of reaching customers."
 images:
   - "/images/projects/enrixa-store/01.webp"
   - "/images/projects/enrixa-store/02.webp"
@@ -11,31 +13,49 @@ stack:
   - "NestJS"
   - "Prisma"
   - "PostgreSQL"
-  - "Redis"
   - "Next.js"
   - "TypeScript"
+  - "Claude Code"
 ---
 
 ## Overview
 
 Enrixa Store is SEA Media's own e-commerce platform. Each merchant gets an isolated store on its own subdomain, sharing one deployment and one database. I am the lead developer on it and set the tenancy model, the payments layer and the release plan.
 
-As of this writing the codebase is around 135,000 lines. The data layer has 56 models and 14 enums in Prisma, and 83 SQL migrations have been applied to it. The API exposes 259 REST endpoints across 48 controllers. There are 71 test files.
+As of October 2026 the codebase is about 164,000 lines of TypeScript. The data layer has 60 models and 14 enums in Prisma, and 91 SQL migrations have been applied to it. The API exposes 287 REST endpoints across 52 controllers, and there are 145 test files.
 
-The backend is NestJS with Prisma over PostgreSQL and Redis. The frontend is two separate Next.js applications, one for the merchant admin and one for the customer storefront, so the two can be deployed and scaled apart from each other.
+The backend is NestJS with Prisma over PostgreSQL. The frontend is two separate Next.js applications, one for the merchant admin and one for the customer storefront, so the two can be deployed and scaled apart from each other.
+
+## Built agent-first
+
+Most of this platform was written by a coding agent. Of the 1,357 commits I authored on it, 1,276 carry the `Co-Authored-By` line Claude Code adds when it makes a commit. None of the three other developers' commits carry it.
+
+The split of work is deliberate. The agent writes most of the code, the tests, the migrations and the documentation updates. I decide what gets built and how it fits together, write the rules it works under, read every change that touches money, tenancy, authentication or the schema, and own production.
+
+That only works on a system like this because the rules that matter are not left to the agent's memory, or mine. They are checks. The [How I work](/how-i-work) page covers the whole setup, layer by layer, with the parts that went wrong.
 
 ## Tenant isolation as a build requirement
 
-The largest risk in a shared-database platform is a query that forgets its tenant filter. It usually looks fine in review, passes tests written against a single tenant, and only shows itself in production when one merchant sees another merchant's orders.
+The largest risk in a shared-database platform is a query that forgets its tenant filter. It usually looks fine in review, passes tests written against a single tenant, and only shows itself in production when one merchant sees another merchant's orders. Agent-written code makes that risk larger, not because it is worse code, but because there is much more of it, and every change arrives looking equally confident.
 
-Code review is not a reliable defence against that, because it depends on a person noticing a missing clause in a file they are skimming. So I moved the check to a place that cannot be skipped.
+So the rule lives in three places that do not depend on anyone remembering it:
 
-Every pull request now runs two automated gates:
+- **A tenant-scoped database client.** Feature code goes through a client that injects the store filter automatically, and a guard throws at startup if a model has a store column but was never registered as tenant-owned.
+- **A static check on every push.** It inspects data access and fails the build on any query that reaches around the scoped client without a written reason, alongside a migration compatibility check that catches schema changes that would break the running app mid-deploy.
+- **A review skill for what the static check cannot see.** Before any database change is committed, the agent reviews it for the blind spots: a client bound inside a transaction callback, a hoisted filter that sets the wrong store, an exception whose written reason is no longer true.
 
-- **An isolation check** that inspects data access for queries capable of crossing a tenant boundary, and fails the build when it finds one.
-- **A migration compatibility diff** against `main`, which catches schema changes that would break a deployed tenant before they are merged rather than after.
+The practical effect is that this failure mode moved from a customer support incident to a red build, whoever wrote the query. It has held across a schema that has now taken 91 migrations.
 
-The practical effect is that the failure mode moved from a customer support incident to a red build. That is the change I am most confident about on this project, and it holds across a schema that has now taken 83 migrations.
+## Keeping the agent out of trouble
+
+Early on, sessions on this repository kept getting refused or cut short. The deploy tooling had the agent write throwaway scripts with credentials in the source and push encoded blobs to the server. Each step was legitimate, and together they looked exactly like an intrusion.
+
+The fix was structural rather than a better prompt:
+
+- Production access goes through one committed command-line tool that resolves credentials itself, so the agent never sees one.
+- A pre-tool hook blocks any command that would read the contents of a secret file.
+- The agent's permission list went from 662 rules to 62, with deny rules for the old patterns.
+- The instructions file became a short index into the docs. It used to point every session at a single 861 KB log file, about 210,000 tokens, before any work could start.
 
 ## Payments and checkout
 
@@ -47,4 +67,4 @@ Tenant storefronts are built from a shared starter package that consumes a publi
 
 ## What I own
 
-Architecture and the tenancy model, the schema and its migration policy, code review for a team of 4 to 6 developers, and the deployment: Docker images, GitHub Actions pipelines, and the managed PostgreSQL and Redis instances.
+Architecture and the tenancy model, the schema and its migration policy, the agent workflow and its guardrails, code review for a team of 4 to 6 developers, and the deployment: Docker images, GitHub Actions pipelines, and the managed PostgreSQL instance.

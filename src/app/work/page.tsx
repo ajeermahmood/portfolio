@@ -3,7 +3,7 @@ import { Projects } from "@/components/work/Projects";
 import { baseURL, work } from "@/resources";
 import { requireRouteEnabled } from "@/utils/routes";
 import { generateMeta } from "@/utils/seo";
-import { getPosts } from "@/utils/utils";
+import { byRankThenDate, getPosts } from "@/utils/utils";
 import { Column, Heading } from "@once-ui-system/core";
 
 export async function generateMetadata() {
@@ -20,10 +20,9 @@ export async function generateMetadata() {
 export default function Work() {
   requireRouteEnabled(work.path);
 
-  const projects = getPosts(["src", "app", "work", "projects"]).sort(
-    (a, b) =>
-      new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime(),
-  );
+  // Copied before sorting: getPosts is memoised per request, and sorting the
+  // cached array in place would reorder it for every other caller too.
+  const projects = [...getPosts(["src", "app", "work", "projects"])].sort(byRankThenDate);
 
   return (
     <Column maxWidth="m" paddingTop="24">

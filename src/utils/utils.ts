@@ -31,6 +31,13 @@ type Metadata = {
   link?: string;
   github?: string;
   stack?: string[];
+  /**
+   * Position on the work page, lowest first. Ranking lives here rather than in
+   * publishedAt because publishedAt feeds the sitemap and JSON-LD datePublished,
+   * and reordering the portfolio is not the same as the work changing date.
+   * Unset sorts after every ranked entry, newest first.
+   */
+  order?: number;
 };
 
 import { notFound } from "next/navigation";
@@ -66,6 +73,7 @@ function readMDXFile(filePath: string) {
     link: data.link || "",
     github: data.github || "",
     stack: data.stack || [],
+    order: typeof data.order === "number" ? data.order : undefined,
   };
 
   return { metadata, content };
@@ -100,6 +108,17 @@ const CONTENT_DIRS = {
 } as const;
 
 type ContentKey = keyof typeof CONTENT_DIRS;
+
+/** Work-page order: ranked entries first by `order`, the rest newest first. */
+export function byRankThenDate(
+  a: { metadata: { order?: number; publishedAt: string } },
+  b: { metadata: { order?: number; publishedAt: string } },
+): number {
+  const ra = a.metadata.order ?? Number.POSITIVE_INFINITY;
+  const rb = b.metadata.order ?? Number.POSITIVE_INFINITY;
+  if (ra !== rb) return ra - rb;
+  return new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime();
+}
 
 /**
  * Memoised per request: the home page and every detail page read the same

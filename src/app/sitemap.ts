@@ -45,6 +45,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const priorities: Record<string, number> = {
     "/": 1,
     "/work": 0.9,
+    "/how-i-work": 0.9,
     "/about": 0.8,
     "/blog": 0.8,
     "/contact": 0.6,
