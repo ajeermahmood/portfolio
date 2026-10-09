@@ -91,16 +91,16 @@ const about: About = {
     title: "Introduction",
     description: (
       <>
-        Senior full-stack engineer who builds production software with AI coding agents. I design
-        the workflow around them: the instructions they read, the hook that stops them reading
-        secrets, and the CI gates that fail a build when a query could leak one merchant's data
-        into another store. On the multi-tenant platform I lead, 1,276 of my 1,357 commits were
-        written this way, and every push ran through the same gates as the rest of the team's.{" "}
+        Senior full-stack engineer. I build production software with AI coding agents, and I
+        design what keeps their mistakes out of production: the instructions they work from, a
+        hook that stops them opening secret files, and CI checks that fail the build when a query
+        could show one merchant's data to another. On the platform I lead, 94% of my commits are
+        written with an agent, and every push from the whole team goes through the same checks.{" "}
         <SmartLink href="/how-i-work">How that works, with the numbers</SmartLink>. I also build
-        agentic systems, including an AI shopping assistant with a regression eval suite built to
-        block a deploy on any failure. Earlier work shipped to a US state health department,
+        AI products, including a shopping assistant whose 132 behaviour tests run the real
+        assistant and can stop a release. Earlier work shipped to a US state health department,
         international pharmaceutical brands, and retailers in India, the UAE and the United States.
-        The guardrails are open source as{" "}
+        The checks are open source as{" "}
         <SmartLink href="/work/bouncer-gates">bouncer-gates</SmartLink> and{" "}
         <SmartLink href="/work/estate">estate</SmartLink>. Based in India and open to relocation
         and remote roles.
@@ -124,20 +124,20 @@ const about: About = {
             layer covering Razorpay and cash on delivery, and the release plan.
           </>,
           <>
-            Built it agent-first with Claude Code: 1,276 of my 1,357 commits were agent co-authored.
+            Built it mostly with Claude Code: 1,276 of my 1,357 commits were written with the agent.
             Closed the platform's biggest risk by turning tenant isolation into a build requirement:
             every push runs an isolation check and a migration compatibility check across a schema
             that has taken 91 migrations, so a query that could leak one merchant's data into
-            another store fails CI rather than reaching customers, whoever wrote it.
+            another store fails the build rather than reaching customers, whoever wrote it.
           </>,
           <>
-            Enrixa AI: shipped a tool-calling shopping assistant for Shopify. A Fastify service
-            streams replies over SSE with a provider fallback chain across Claude Haiku, Gemini and
-            Claude Sonnet, BullMQ workers keep the catalog and its embeddings in sync, and the
-            widget runs inside a shadow DOM so it never collides with theme CSS. Built a regression
-            eval suite that runs the real agent against a seeded store, including pharmacy-safety
-            refusals, and fails on any regression. Wrote the product plan, the cost model and a
-            decision log for choices that would be expensive to reverse.
+            Enrixa AI: shipped an AI shopping assistant for Shopify that looks up products, variants
+            and stock for itself while it answers. A Fastify service streams each reply as it is
+            written and falls back from Claude Haiku to Gemini to Claude Sonnet when a provider is
+            busy, background jobs keep the catalog in sync, and the widget runs inside a shadow DOM
+            so it never clashes with the store's CSS. Built 132 behaviour tests that run the real
+            assistant against a demo store, including the refusals a pharmacy must make, and stop a
+            release on any failure. Wrote the product plan, the cost model and a decision log.
           </>,
           <>
             W.I.N.S, Alabama Department of Public Health: led a two-repository build for an infant
@@ -160,11 +160,11 @@ const about: About = {
             a dry run until the merchant approves it.
           </>,
           <>
-            Designed the guardrails that make agent-written code safe to merge: a pre-tool hook that
-            stops the agent reading secret files, a tenant-isolation review skill for what the static
-            check cannot see, and blocking CI. Rebuilt the agent setup after sessions kept being
-            refused, cutting 662 permission rules to 62. Agent instructions in 8 production
-            repositories; the generalised gates are open source as{" "}
+            Designed the safety setup that makes agent-written code fit to merge: a hook that stops
+            the agent opening secret files, a review checklist for the tenant leaks a static check
+            cannot see, and CI that blocks the merge. Rebuilt the agent's permissions after sessions
+            kept being refused, from 662 rules down to 62. Agent instructions in 8 production
+            repositories; the reusable checks are open source as{" "}
             <SmartLink href="/work/bouncer-gates">bouncer-gates</SmartLink>.
           </>,
           <>
@@ -305,14 +305,14 @@ const about: About = {
         images: [],
       },
       {
-        title: "AI and agentic engineering",
+        title: "Working with AI agents",
         description: (
           <>
-            Building software with coding agents, and making it safe: Claude Code with project
-            instructions, skills, pre-tool hooks and a tight permission policy, MCP servers, and CI
-            gates that hold an agent to the same bar as a person. Building agentic systems:
-            tool-calling agents, retrieval with embeddings, SSE streaming, provider fallback across
-            Claude and Gemini, and regression evals that run the real agent rather than a mock.
+            Building software with coding agents and keeping it safe: Claude Code project
+            instructions, skills, hooks and permission policy, MCP servers, and CI checks that hold
+            an agent to the same standard as a person. Building AI products: assistants that call
+            tools, search over a product catalog, streamed replies, fallback between Claude and
+            Gemini, and behaviour tests that run the real assistant rather than a mock.
           </>
         ),
         tags: [
@@ -398,14 +398,14 @@ const work: Work = {
   path: "/work",
   label: "Work",
   title: `Projects - ${person.name}`,
-  description: `Production work by ${person.name}: a multi-tenant platform built with AI coding agents and the gates that keep it safe, an LLM shopping assistant with regression evals, and open-source agent guardrails.`,
+  description: `Production work by ${person.name}: a multi-tenant platform built with AI coding agents and the checks that keep it safe, an AI shopping assistant tested against real conversations, and open-source safety checks.`,
 };
 
 const howIWork: HowIWork = {
   path: "/how-i-work",
   label: "How I work",
   title: "How I build software with AI agents",
-  description: `How ${person.name} ships production software with AI coding agents: the instructions, hooks, review skills and CI gates around them, and the numbers.`,
+  description: `How ${person.name} ships production software with AI coding agents: the instructions, hooks, review checklists and CI checks around them, and the numbers.`,
 };
 
 const contact: Contact = {

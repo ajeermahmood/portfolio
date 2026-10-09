@@ -3,8 +3,8 @@ title: "Enrixa Store, a multi-tenant platform built with AI agents"
 publishedAt: "2026-08-01"
 order: 1
 updatedAt: "2026-10-09"
-summary: "A multi-tenant e-commerce platform built agent-first: 1,276 of my 1,357 commits were written with Claude Code, and every push runs gates that fail the build on a query that could leak one merchant's data into another store."
-description: "A multi-tenant e-commerce platform built agent-first with Claude Code, where a query that could leak one merchant's data fails CI instead of reaching customers."
+summary: "A multi-tenant e-commerce platform built mostly by a coding agent: 1,276 of my 1,357 commits were written with Claude Code, and every push runs gates that fail the build on a query that could leak one merchant's data into another store."
+description: "A multi-tenant e-commerce platform built mostly with Claude Code, where a query that could leak one merchant's data fails CI instead of reaching customers."
 images:
   - "/images/projects/enrixa-store/01.webp"
   - "/images/projects/enrixa-store/02.webp"
@@ -26,11 +26,11 @@ As of October 2026 the codebase is about 164,000 lines of TypeScript. The data l
 
 The backend is NestJS with Prisma over PostgreSQL. The frontend is two separate Next.js applications, one for the merchant admin and one for the customer storefront, so the two can be deployed and scaled apart from each other.
 
-## Built agent-first
+## Built mostly by a coding agent
 
 Most of this platform was written by a coding agent. Of the 1,357 commits I authored on it, 1,276 carry the `Co-Authored-By` line Claude Code adds when it makes a commit. None of the three other developers' commits carry it.
 
-The split of work is deliberate. The agent writes most of the code, the tests, the migrations and the documentation updates. I decide what gets built and how it fits together, write the rules it works under, read every change that touches money, tenancy, authentication or the schema, and own production.
+The split of work is deliberate. Claude Code produces most of the changes: features, tests, migrations, and the docs that go with them. I decide what gets built and how it fits together, write the rules it works under, read every change that touches money, tenancy, authentication or the schema, and own production.
 
 That only works on a system like this because the rules that matter are not left to the agent's memory, or mine. They are checks. The [How I work](/how-i-work) page covers the whole setup, layer by layer, with the parts that went wrong.
 
@@ -67,4 +67,4 @@ Tenant storefronts are built from a shared starter package that consumes a publi
 
 ## What I own
 
-Architecture and the tenancy model, the schema and its migration policy, the agent workflow and its guardrails, code review for a team of 4 to 6 developers, and the deployment: Docker images, GitHub Actions pipelines, and the managed PostgreSQL instance.
+Architecture and the tenancy model, the schema and its migration policy, the agent workflow and its safety checks, code review for a team of 4 to 6 developers, and the deployment: Docker images, GitHub Actions pipelines, and the managed PostgreSQL instance.

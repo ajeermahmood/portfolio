@@ -1,10 +1,10 @@
 ---
-title: "Enrixa AI, a shopping agent with a regression eval suite"
+title: "Enrixa AI, a shopping assistant tested against real conversations"
 publishedAt: "2026-05-01"
 order: 3
 updatedAt: "2026-10-09"
-summary: "A tool-calling agent that answers shopper questions against a live product catalog, with a provider fallback chain, a widget that cannot collide with the store's own CSS, and 132 regression evals that run the real agent before a deploy."
-description: "A tool-calling shopping agent for Shopify with a provider fallback chain and 132 regression evals that run the real agent against a seeded store."
+summary: "An AI shopping assistant that looks things up in a live product catalog as it answers, falls back between model providers when one is busy, and is checked by 132 behaviour tests built to stop a release on any failure."
+description: "An AI shopping assistant for Shopify that falls back between model providers, with 132 behaviour tests that run the real assistant against a demo store."
 images:
   - "/images/projects/enrixa-ai/01.webp"
 stack:
@@ -28,19 +28,19 @@ It is SEA Media's second product. I wrote the product and technical plan behind 
 
 The service is Fastify. Replies stream back to the browser over server-sent events, so the shopper sees an answer forming instead of waiting on a complete response. The model is given tools rather than a pre-built prompt full of catalog text, so it can look up a product, check variants, or check stock as part of answering.
 
-BullMQ workers keep the catalog and its embeddings in sync in the background. This is the part that decides whether the assistant is useful: an assistant that recommends a product the merchant stopped selling last week is worse than no assistant, so catalog freshness is a queue-backed job rather than something that happens on request.
+BullMQ workers keep the catalog and its search index in sync in the background. This is the part that decides whether the assistant is useful: an assistant that recommends a product the merchant stopped selling last week is worse than no assistant, so catalog freshness is a queue-backed job rather than something that happens on request.
 
-## Models in tiers, with a fallback chain
+## Models in tiers, with a fallback
 
-Not every turn needs the same model. A cheap, fast model classifies each message. The tool-calling agent, where instruction-following and tool discipline actually matter, runs on a Claude model with prompt caching on the system prefix.
+Not every message needs the same model. A cheap, fast model sorts each message first. The part that answers and looks things up, where following instructions closely actually matters, runs on a Claude model, with the fixed part of its instructions cached so each turn costs less.
 
-If Anthropic is rate-limited or down, the agent falls back to Gemini, and then to Claude Sonnet as the last resort. Every model's price per token sits in one table that the cost model reads, so a change of model is a change to the margin maths, made on purpose.
+If Anthropic is rate-limited or down, the assistant falls back to Gemini, and then to Claude Sonnet as the last resort. Every model's price per token sits in one table that the cost model reads, so a change of model is a change to the margin maths, made on purpose.
 
-## Regression evals that run the real agent
+## Behaviour tests that run the real assistant
 
-An agent that worked yesterday can regress today from a prompt tweak, a new tool, or a different model answering because the first one was busy. Unit tests do not catch that, because the behaviour lives in the model's choices, not in the code.
+An assistant that worked yesterday can get worse today from a small change to its instructions, a new lookup it can make, or a different model answering because the first one was busy. Unit tests do not catch that, because the behaviour lives in the model's choices, not in the code.
 
-So there is a regression suite of 132 cases across two sets: single- and multi-turn conversations, and the behaviours that change by store type. Each case runs the real agent, with its router, its model calls and its tools, against a seeded demo store in an in-process Postgres, and asserts on behaviour rather than wording:
+So there is a suite of 132 behaviour tests in two sets: short and multi-message conversations, and the behaviours that change by type of store. Each test runs the real assistant, with its real model calls and lookups, against a demo store held in an in-memory Postgres, and checks what it did rather than the exact words it used:
 
 - Did a product question show products, and an out-of-catalog request show none?
 - Did "the first one" resolve to the right product from earlier in the conversation?
@@ -58,6 +58,6 @@ That decision is worth explaining, because it is the difference between a widget
 
 ## Decisions worth recording
 
-I kept a decision log on this project for choices that would be expensive to reverse: the streaming protocol, the embedding model, where the tenant boundary sits, and the fallback behaviour when a provider is slow or down. Provider fallback in particular is easy to add early and painful to retrofit, because it constrains how the rest of the service handles partial responses.
+I kept a decision log on this project for choices that would be expensive to reverse: the streaming protocol, the model behind catalog search, where the tenant boundary sits, and the fallback behaviour when a provider is slow or down. Provider fallback in particular is easy to add early and painful to retrofit, because it constrains how the rest of the service handles partial responses.
 
 The log is short. It is only for decisions where the cost of changing course later is high enough to be worth writing down the reasoning at the time.

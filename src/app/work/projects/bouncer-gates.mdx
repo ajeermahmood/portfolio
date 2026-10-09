@@ -30,7 +30,7 @@ Try it in ten seconds:
 npx bouncer-gates
 ```
 
-Or paste some code into the [playground](https://bouncer-gates.ajeermdk001.workers.dev) and watch it run. It is MIT licensed, on npm as [`bouncer-gates`](https://www.npmjs.com/package/bouncer-gates), and listed in the official [MCP Registry](https://registry.modelcontextprotocol.io) as `io.github.ajeermahmood/bouncer-gates`, so any MCP client can install it in one step. The rules come from the checks I run on a multi-tenant e-commerce platform where most of the code is written with a coding agent. [How that workflow fits together](/how-i-work) is written up separately. The longer story of why checks beat instructions is in [Making a codebase safe for AI coding agents](/blog/coding-agents-in-production-repositories).
+The [playground](https://bouncer-gates.ajeermdk001.workers.dev) runs the same checks on any code you paste in. It is MIT licensed, on npm as [`bouncer-gates`](https://www.npmjs.com/package/bouncer-gates), and listed in the official [MCP Registry](https://registry.modelcontextprotocol.io) as `io.github.ajeermahmood/bouncer-gates`, so any MCP client can install it in one step. The rules come from the checks I run on a multi-tenant e-commerce platform where most of the code is written with a coding agent. [How that workflow fits together](/how-i-work) is written up separately. The longer story of why checks beat instructions is in [Making a codebase safe for AI coding agents](/blog/coding-agents-in-production-repositories).
 
 ## The five things it checks
 
@@ -49,7 +49,7 @@ That is the whole list on purpose. Anything a formatter, a linter or a compiler 
 The same five gates run in four places, and it is the same code in all four:
 
 - **In CI.** A GitHub Action, `uses: ajeermahmood/bouncer-gates@v0`, blocks the merge and can post findings to the GitHub Security tab.
-- **In your editor, next to the AI agent.** This is the newest part. CI sees a mistake after the pull request exists. An agentic editor like Claude Code or Cursor can see it in the same turn the mistake was made. `npx bouncer-gates --init-agents` wires the gates in as an MCP server and a post-edit hook, so the agent gets told "this query is not tenant scoped" the moment it writes the line, not twenty minutes later in a red CI check.
+- **In your editor, next to the AI agent.** This is the newest part. CI sees a mistake after the pull request exists. An AI coding editor like Claude Code or Cursor can see it in the same turn the mistake was made. `npx bouncer-gates --init-agents` wires the gates in as an MCP server and a post-edit hook, so the agent gets told "this query is not tenant scoped" the moment it writes the line, not twenty minutes later in a red CI check.
 - **In a Cloudflare Worker and on Railway.** The playground on the site sends your snippet to the worker, and a hosted API on Railway serves teams that want the checks over HTTP without running Node.
 - **In the browser.** If the worker is unreachable, the playground runs the same gate code locally and the footer says so.
 
@@ -80,7 +80,7 @@ The reason is required. A bare marker suppresses nothing. That way the excuse li
 
 Anyone can write a checker that catches the bad case. The hard part is not crying wolf.
 
-I pointed an early build at a real 1,209 file production monorepo. It reported 45 blocking findings. I read all 45 by hand, and 32 were wrong. A tool that is wrong a third of the time gets switched off within a month, and then it protects nothing while still sitting in the workflow file making everyone feel covered.
+I pointed an early build at a real 1,209 file production monorepo. It reported 45 blocking findings. I read all 45 by hand, and 32 were wrong. At that rate a team stops reading the output inside a month, and a check nobody reads is worse than none, because it still looks like protection.
 
 The false positives came in three families:
 

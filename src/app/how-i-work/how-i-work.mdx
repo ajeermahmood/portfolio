@@ -3,7 +3,7 @@ subtitle: "The agent writes most of the code. I decide what gets built, write th
 publishedAt: "2026-10-09"
 ---
 
-Since July 2026, about nine in ten of my commits have been written with a coding agent, almost all of them Claude Code. This page is what that looks like on a real production system: what the agent does, what I do, the guardrails between the two, and the numbers, including the ones that are not flattering.
+Since July 2026, about nine in ten of my commits have been written with a coding agent, almost all of them Claude Code. This page is what that looks like on a real production system: what the agent does, what I do, the checks between the two, and the numbers, including the ones that are not flattering.
 
 ## The numbers
 
@@ -50,13 +50,13 @@ That shape came from a mistake. The entry point used to tell every session to re
 
 ### 2. Rules that matter are checks, not sentences
 
-The instructions file says tenant isolation is sacred, money is integer minor units, and new migrations must not break the running app. An instruction is a request, and a request followed 95% of the time is not a safety mechanism. So each of those rules also exists as a script: `check:tenant`, `check:money`, `check:migrations`, plus `check:safety` for anything shaped like a credential or an attack, and `check:docs` for links that point at deleted files.
+The instructions file says tenant isolation is sacred, money is integer minor units, and new migrations must not break the running app. Instructions get followed most of the time, and for a rule like tenant isolation, most of the time is not good enough. So each of those rules also exists as a script: `check:tenant`, `check:money`, `check:migrations`, plus `check:safety` for anything shaped like a credential or an attack, and `check:docs` for links that point at deleted files.
 
 ### 3. A hook that stops the agent reading secrets
 
 A `PreToolUse` hook runs before every shell command, file read and search the agent makes, and blocks any that would read the contents of a secret file. It checks whether a protected file is the operand of a command that prints contents, not whether the command merely mentions it, so listing or ignoring a `.env` passes and printing it does not.
 
-It is a guardrail against accidents, not a security boundary. Anything running as my user can ultimately read what I can read. But the accident is the leak that actually happens: it happened twice in one day before the hook existed.
+It is there to catch accidents. It would not stop an agent that was trying to get round it, because anything running as me can read what I can read. But accidents are what actually happen: two leaks in one day, before the hook existed.
 
 ### 4. A small permission policy, and one door to production
 
@@ -66,17 +66,17 @@ Production access goes through one committed command-line tool with named subcom
 
 ### 5. Review skills for what a static check cannot see
 
-`check:tenant` catches a query that reaches around the tenant-scoped client. It cannot follow a client bound inside a transaction callback, judge whether a written exception is still true, or notice a new model that never got registered as tenant-owned. A `tenant-check` skill makes the agent do that semantic review on every database change and report findings as file, line, risk and fix. The static check is necessary. The skill is what makes it close to sufficient.
+`check:tenant` catches a query that reaches around the tenant-scoped client. It cannot follow a client bound inside a transaction callback, judge whether a written exception is still true, or notice a new model that never got registered as tenant-owned. A `tenant-check` skill makes the agent read every database change for exactly those cases and report each finding as a file, a line, the risk and the fix. The static check is necessary. The skill is what makes it close to sufficient.
 
 ### 6. CI that treats the agent exactly like a person
 
-Every push runs the tenant check, the migration compatibility check, lint, typecheck, tests and build. There is no lighter path for agent changes. The volume is the reason to have gates, not a reason to relax them. I have been blocked by my own tenant rule, which is the point: a gate that only constrains the agent is one you route around under deadline pressure.
+Every push runs the tenant check, the migration compatibility check, lint, typecheck, tests and build. There is no lighter path for agent changes. More changes arriving faster is a reason for stricter checks, not looser ones. I have been blocked by my own tenant rule, which is the point: a gate that only constrains the agent is one you route around under deadline pressure.
 
 ### 7. A human in the loop who does not have to be at the desk
 
 When the agent asks for permission to do something outside its policy, the request reaches my phone with approve and deny buttons. If that bridge is down or I do not answer in time, it falls back to the normal prompt in the editor. Nothing is ever approved by default.
 
-### 8. Evals, when the agent is the product
+### 8. Behaviour tests, when the agent is the product
 
 Enrixa AI is a shopping assistant that is itself an agent, so it needs a different kind of check. A regression suite of 132 cases runs the real agent, with its router, model calls and tools, against a seeded demo store, and asserts behaviour: did it show products, resolve "the first one", refuse a prescription bypass, respect a budget. Every production chat failure becomes a case, and any failure exits non-zero so it can block a deploy.
 
@@ -92,16 +92,12 @@ These are the failures that shaped the setup above.
 
 More of these, from the open-source side, are in [What my coding agents got wrong, and what caught it](/blog/what-my-coding-agents-got-wrong).
 
-## If you are starting on Monday
+## Where to start
 
-1. Write down the one mistake that would be most expensive to ship. One, not a list.
-2. Work out whether a machine can detect it. Usually it can, more cheaply than you expect.
-3. Put that check in CI, make it block the merge, and make it apply to everyone.
-4. Only then write the instructions file, for the things a machine cannot check.
-5. Read every diff in the areas where being wrong costs money. Skim the rest, and let the gates carry it.
+If I were setting this up again tomorrow, I would not start with the instructions file. I would pick the one mistake that would cost the most if it shipped, make CI catch it for everyone, and write the instructions last, for what a machine cannot check. The longer version of that argument, with an example check, is in the post linked below. And I would decide on day one which areas get a full human read on every change. For me that is money, tenancy, authentication and the schema.
 
 ## The open-source version
 
 The whole setup, minus anything specific to one project, is a template you can copy: [agent-ready-repo](https://github.com/ajeermahmood/agent-ready-repo). It has an index-style `AGENTS.md`, the secret-read hook from layer 3 with tests that check it stays quiet on ordinary work, the tenant-check and ship-check skills, a starting permission policy, and CI.
 
-The gates from layer 2 are generalised and published as [bouncer-gates](/work/bouncer-gates). It runs as a CLI, a GitHub Action, an MCP server and a post-edit hook in Claude Code and Cursor, so the agent hears about a leaked key or a cross-tenant query in the same turn it wrote one. It is on npm and in the official MCP Registry. The longer argument for why checks beat instructions is in [Making a codebase safe for AI coding agents](/blog/coding-agents-in-production-repositories).
+The gates from layer 2 are generalised and published as [bouncer-gates](/work/bouncer-gates). It runs as a CLI, a GitHub Action, an MCP server and a post-edit hook in Claude Code and Cursor, so the agent is told about a problem straight after writing the line, not after a pull request. It is on npm and in the official MCP Registry. The longer argument for why checks beat instructions is in [Making a codebase safe for AI coding agents](/blog/coding-agents-in-production-repositories).

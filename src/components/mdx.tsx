@@ -148,7 +148,24 @@ function createCodeBlock(props: any) {
     );
   }
 
-  // Fallback for other pre tags or empty code blocks
+  // A fence with no language (```) has no className on its <code>. Falling
+  // through to a bare <pre> rendered that <code> with the inline-code style,
+  // which is display:inline-flex with white-space:pre and no overflow, so one
+  // long line widened the whole page: a 70-character error message pushed a
+  // post to 637px on a 360px phone and the browser zoomed everything out.
+  // Prism core ships a plain `text` grammar, so this needs nothing loaded.
+  const inner = props.children?.props;
+  if (inner && typeof inner.children === "string") {
+    return (
+      <CodeBlock
+        marginTop="8"
+        marginBottom="16"
+        codes={[{ code: inner.children, language: "text", label: "Text" }]}
+        copyButton={true}
+      />
+    );
+  }
+
   return <pre {...props} />;
 }
 

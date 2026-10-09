@@ -38,7 +38,7 @@ export function Projects({ range, exclude, similarTo }: ProjectsProps) {
           images={post.metadata.images}
           title={post.metadata.title}
           description={post.metadata.summary}
-          content={post.content}
+          hasCaseStudy={post.content.trim().length > 0}
           avatars={post.metadata.team?.map((member) => ({ src: member.avatar })) || []}
           link={post.metadata.link || ""}
           github={post.metadata.github || ""}

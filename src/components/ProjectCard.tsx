@@ -15,7 +15,13 @@ interface ProjectCardProps {
   priority?: boolean;
   images: string[];
   title: string;
-  content: string;
+  /**
+   * Whether the project has a case study to link to. A boolean on purpose: this
+   * is a client component, so a string prop here is serialised into the page.
+   * It used to receive the full MDX body only to test it for emptiness, which
+   * shipped every case study's text inside the home and work pages' HTML.
+   */
+  hasCaseStudy: boolean;
   description: string;
   avatars: { src: string }[];
   link: string;
@@ -26,7 +32,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   href,
   images = [],
   title,
-  content,
+  hasCaseStudy,
   description,
   avatars,
   link,
@@ -58,7 +64,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             </Heading>
           </Flex>
         )}
-        {(avatars?.length > 0 || description?.trim() || content?.trim()) && (
+        {(avatars?.length > 0 || description?.trim() || hasCaseStudy) && (
           <Column flex={7} gap="16">
             {avatars?.length > 0 && <AvatarGroup avatars={avatars} size="m" reverse />}
             {description?.trim() && (
@@ -67,7 +73,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
               </Text>
             )}
             <Flex gap="24" wrap>
-              {content?.trim() && (
+              {hasCaseStudy && (
                 <SmartLink
                   suffixIcon="arrowRight"
                   style={{ margin: "0", width: "fit-content" }}
