@@ -2,7 +2,7 @@
 title: "Enrixa Store, a multi-tenant platform built with AI agents"
 publishedAt: "2026-08-01"
 order: 1
-updatedAt: "2026-10-09"
+updatedAt: "2026-10-13"
 summary: "A multi-tenant e-commerce platform built mostly by a coding agent: 1,276 of my 1,357 commits were written with Claude Code, and every push runs gates that fail the build on a query that could leak one merchant's data into another store."
 description: "A multi-tenant e-commerce platform built mostly with Claude Code, where a query that could leak one merchant's data fails CI instead of reaching customers."
 images:
@@ -20,7 +20,7 @@ stack:
 
 ## Overview
 
-Enrixa Store is SEA Media's own e-commerce platform. Each merchant gets an isolated store on its own subdomain, sharing one deployment and one database. I am the lead developer on it and set the tenancy model, the payments layer and the release plan.
+Enrixa Store is SEA Media's own e-commerce platform. Each merchant gets an isolated store on its own subdomain, sharing one deployment and one database, and it is now live with its first two merchants. I lead the team of 4 to 6 developers building it and set the tenancy model, the payments layer and the release plan.
 
 As of October 2026 the codebase is about 164,000 lines of TypeScript. The data layer has 60 models and 14 enums in Prisma, and 91 SQL migrations have been applied to it. The API exposes 287 REST endpoints across 52 controllers, and there are 145 test files.
 

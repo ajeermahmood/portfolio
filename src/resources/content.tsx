@@ -46,7 +46,7 @@ const home: Home = {
   image: "/images/og/home.png",
   label: "Home",
   title: `${person.name}, ${person.role}`,
-  description: `Senior full-stack engineer shipping production software with AI coding agents, and the CI gates, hooks and evals that keep it safe to merge.`,
+  description: `Senior full-stack engineer who builds LLM products, and the checks that let AI coding agents work safely on real codebases.`,
   headline: <>I ship with AI agents, and make it safe to merge</>,
   featured: {
     display: true,
@@ -91,19 +91,18 @@ const about: About = {
     title: "Introduction",
     description: (
       <>
-        Senior full-stack engineer. I build production software with AI coding agents, and I
-        design what keeps their mistakes out of production: the instructions they work from, a
-        hook that stops them opening secret files, and CI checks that fail the build when a query
-        could show one merchant's data to another. On the platform I lead, 94% of my commits are
-        written with an agent, and every push from the whole team goes through the same checks.{" "}
-        <SmartLink href="/how-i-work">How that works, with the numbers</SmartLink>. I also build
-        AI products, including a shopping assistant whose 132 behaviour tests run the real
-        assistant and can stop a release. Earlier work shipped to a US state health department,
-        international pharmaceutical brands, and retailers in India, the UAE and the United States.
-        The checks are open source as{" "}
-        <SmartLink href="/work/bouncer-gates">bouncer-gates</SmartLink> and{" "}
-        <SmartLink href="/work/estate">estate</SmartLink>. Based in India and open to relocation
-        and remote roles.
+        I'm a full-stack engineer in India. I build LLM products, and the checks that let AI
+        coding agents work safely on real codebases. Since July 2026 most of my commits are written
+        with Claude Code. My part is the architecture, the review, and the checks that fail the
+        build when something risky slips through, like a query that could show one store's data to
+        another.{" "}
+        <SmartLink href="/how-i-work">How that works, with the numbers</SmartLink>. At SEA Media I
+        lead a team of 4 to 6 developers, and I built Enrixa AI, a shopping assistant that is live
+        for an online pharmacy. Earlier work shipped to a US state health department, international
+        pharmaceutical brands, and retailers in India, the UAE and the United States. The checks
+        are open source as <SmartLink href="/work/bouncer-gates">bouncer-gates</SmartLink> and{" "}
+        <SmartLink href="/work/estate">estate</SmartLink>. Based in India (IST), open to
+        relocation and remote roles.
       </>
     ),
   },
@@ -117,61 +116,49 @@ const about: About = {
         role: "Senior Full-Stack Engineer and Project Partner",
         achievements: [
           <>
-            Enrixa Store: built a multi-tenant e-commerce platform, now 60 data models and 287 REST
-            endpoints across 52 controllers, where every merchant runs an isolated store on its own
-            subdomain. NestJS, Prisma and PostgreSQL on the backend, with separate Next.js apps for
-            the merchant admin and the customer storefront. Set the tenancy model, the payments
-            layer covering Razorpay and cash on delivery, and the release plan.
+            I lead a team of 4 to 6 developers: I plan the architecture, assign the work, review the
+            code and mentor.
           </>,
           <>
-            Built it mostly with Claude Code: 1,276 of my 1,357 commits were written with the agent.
-            Closed the platform's biggest risk by turning tenant isolation into a build requirement:
-            every push runs an isolation check and a migration compatibility check across a schema
-            that has taken 91 migrations, so a query that could leak one merchant's data into
-            another store fails the build rather than reaching customers, whoever wrote it.
+            Enrixa Store: a multi-tenant e-commerce platform where each merchant runs their own
+            store on a subdomain, now live with its first two merchants. NestJS, Prisma and
+            PostgreSQL, with separate Next.js apps for the merchant admin and the storefront; 60
+            data models and 287 endpoints. I set the tenancy model, the payments layer for Razorpay
+            and cash on delivery, and the release plan.
           </>,
           <>
-            Enrixa AI: shipped an AI shopping assistant for Shopify that looks up products, variants
-            and stock for itself while it answers. A Fastify service streams each reply as it is
-            written and falls back from Claude Haiku to Gemini to Claude Sonnet when a provider is
-            busy, background jobs keep the catalog in sync, and the widget runs inside a shadow DOM
-            so it never clashes with the store's CSS. Built 132 behaviour tests that run the real
-            assistant against a demo store, including the refusals a pharmacy must make, and stop a
-            release on any failure. Wrote the product plan, the cost model and a decision log.
-          </>,
-          <>
-            W.I.N.S, Alabama Department of Public Health: led a two-repository build for an infant
-            safety program. A Next.js 16 and React 19 admin CMS on Supabase, plus a Flutter app for
-            parents tracking their child's health, milestones and vaccinations, both sharing one
-            PostgreSQL database of 15 tables across 11 edge functions. Wrote the schema contract and
-            table ownership rules that let two teams work on the same database without breaking each
-            other's features, backed by about 100 test files across the two repositories. Live on
-            the App Store and Google Play since July 2026 as the agency's official app for the
-            program.
-          </>,
-          <>
-            Built a Shopify Hydrogen storefront serving more than 10,000 daily users across India,
-            96 routes on React Router 7, Oxygen and Sanity CMS with four other engineers, and owned
-            the architecture notes and the Oxygen deploy pipeline.
-          </>,
-          <>
-            Built a competitor price monitoring app for Shopify that matches external catalogs
-            against a merchant's own products and adjusts prices by rule, with repricing held behind
-            a dry run until the merchant approves it.
-          </>,
-          <>
-            Designed the safety setup that makes agent-written code fit to merge: a hook that stops
-            the agent opening secret files, a review checklist for the tenant leaks a static check
-            cannot see, and CI that blocks the merge. Rebuilt the agent's permissions after sessions
-            kept being refused, from 662 rules down to 62. Agent instructions in 8 production
-            repositories; the reusable checks are open source as{" "}
+            Most of Enrixa Store is written with Claude Code (1,276 of my 1,357 commits), so I made
+            the risky mistakes fail the build. Every push runs a tenant-isolation check and a
+            migration check, so a query that could show one store's data to another stops CI,
+            whoever wrote it. The agent works inside a setup I designed: a hook that stops it
+            opening secret files, permissions cut from 662 rules to 62, and production reachable
+            only through one committed command. The reusable checks are open source as{" "}
             <SmartLink href="/work/bouncer-gates">bouncer-gates</SmartLink>.
           </>,
           <>
-            Handled deployment and day-to-day operations across all of it: Docker images, GitHub
-            Actions pipelines, Vercel and Shopify Oxygen releases, PM2 process management, and the
-            managed PostgreSQL and Redis instances. More than 250 test files across the client
-            repositories.
+            Enrixa AI: a shopping assistant for Shopify stores, live for an online pharmacy and
+            handling about 600 to 700 conversations a month. It looks up products and live stock
+            while it answers, streams the reply as it is written, and falls back from Claude to
+            Gemini when a provider is busy. 132 tests run the real assistant against a demo store,
+            including the refusals a pharmacy must make, and block a release on any failure. I also
+            wrote its product plan and cost model.
+          </>,
+          <>
+            W.I.N.S: led the Alabama Department of Public Health's infant-safety app, a Next.js
+            admin on Supabase and a Flutter app for parents sharing one PostgreSQL database. Live on
+            the App Store and Google Play since July 2026, with 78 families registered so far. I
+            wrote the schema contract and table ownership rules that let two teams share the
+            database without breaking each other's features.
+          </>,
+          <>
+            Built a Shopify Hydrogen storefront serving more than 10,000 daily users across India
+            with four other engineers, and owned the architecture notes and the Oxygen deploy
+            pipeline.
+          </>,
+          <>
+            Built a competitor price monitoring app for Shopify that changes nothing until the
+            merchant approves a dry run, and ran deployment and operations across all of it: Docker,
+            GitHub Actions, Vercel and Oxygen releases, PM2, and managed PostgreSQL and Redis.
           </>,
         ],
         images: [],
@@ -198,8 +185,8 @@ const about: About = {
             More than 150 guests used them in one evening. Electron, React, Redux and MediaPipe.
           </>,
           <>
-            Built a talking avatar chatbot for Novartis that answered product questions for
-            healthcare professionals, using Next.js, Python, Google TTS and a fine-tuned model.
+            Built a talking avatar chatbot for Novartis that answered healthcare professionals'
+            product questions aloud, on a model I fine-tuned. Next.js, Python and Google TTS.
           </>,
         ],
         images: [],

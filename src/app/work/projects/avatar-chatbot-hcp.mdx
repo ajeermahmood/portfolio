@@ -25,7 +25,7 @@ The obvious version of this is a text chatbot, and it would have been quicker to
 
 ## Build
 
-The frontend is Next.js. Behind it, a Python service handles the language model side and a separate Flask service generates the audio through Google's text-to-speech, returning it to the client to play in sync with the avatar. Node.js handles the rest of the API surface.
+The frontend is Next.js. Behind it, a Python service handles the language model side, running a model I fine-tuned on top of an existing base model, and a separate Flask service generates the audio through Google's text-to-speech, returning it to the client to play in sync with the avatar. Node.js handles the rest of the API surface.
 
 Splitting audio generation into its own service was worth it. Speech synthesis is slow relative to everything else on the page, and it has different scaling behaviour, so keeping it separate meant it could be sized and cached on its own terms rather than holding up the response.
 
